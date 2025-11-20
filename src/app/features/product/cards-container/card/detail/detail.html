@@ -1,1 +1,34 @@
-<p>detail works!</p>
+@if (product) {
+  <div class="detail-container">
+    <h1>{{ product.name }}</h1>
+    <p>ID: {{ product.productId }}</p>
+    <p>Numero: {{ product.productNumber }}</p>
+    <p>Categoria: {{ product.categoryName }}</p>
+    <p>Prezzo: {{ product.listPrice }}</p>
+    <p>Costo standard: {{ product.standardCost }}</p>
+    <p>Colore: {{ product.color ?? '---' }}</p>
+    <p>Taglia: {{ product.size ?? '---' }}</p>
+    <p>Peso: {{ product.weight ?? '---' }}</p>
+    <div>
+      @if (product.thumbNailPhoto) {
+        <img
+          [src]="'data:image/gif;base64,' + product.thumbNailPhoto"
+          alt="Prodotto"
+        />
+      }
+    </div>
+
+    <h3>Recensioni</h3>
+    @for (r of product.reviews; track r.id) {
+      <div class="review">
+        <strong>{{ r.userName }}</strong> ({{ r.rating }})<br />
+        {{ r.text }}<br />
+        <em>{{ r.createdAt | date:'dd/MM/yyyy HH:mm' }}</em>
+      </div>
+    } @empty {
+      <p>Nessuna recensione disponibile.</p>
+    }
+  </div>
+} @else {
+  <div>Caricamento...</div>
+}
