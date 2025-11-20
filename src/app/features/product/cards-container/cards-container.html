@@ -1,1 +1,28 @@
-<p>cards-container works!</p>
+<!-- <p>cards-container works!</p>
+
+<div *ngIf="pagedData as p">
+  <div *ngFor="let product of p.items">
+    <h2>{{ product.name }}</h2>
+    <p>ID: {{ product.productId }}</p>
+    <p>Prezzo: {{ product.listPrice }}</p>
+  </div>
+
+  <div class="pagination">
+    <button (click)="GetProducts(p.currentPage - 1)" [disabled]="!p.hasPrevious">Indietro</button>
+    <span>Pagina {{ p.currentPage }} / {{ p.totalPages }}</span>
+    <button (click)="GetProducts(p.currentPage + 1)" [disabled]="!p.hasNext">Avanti</button>
+  </div>
+</div>
+
+<div *ngIf="!pagedData">Caricamento...</div> -->
+<div *ngIf="pagedData as p">
+  <div *ngFor="let product of p.items">
+    <app-card [product]="product"></app-card>
+  </div>
+
+  <div class="pagination">
+    <button (click)="GetProducts(p.currentPage - 1)" [disabled]="!p.hasPrevious">Indietro</button>
+    <span>Pagina {{ p.currentPage }} / {{ p.totalPages }}</span>
+    <button (click)="GetProducts(p.currentPage + 1)" [disabled]="!p.hasNext">Avanti</button>
+  </div>
+</div>
