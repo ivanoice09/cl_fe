@@ -1,0 +1,46 @@
+div.nav-container {
+  background-color: #8eb055;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+
+  div.logo-box {
+    width: 200px;
+    img {
+        width: 100%;
+      }
+  }
+  div.searchbar {
+    width: 45%;
+
+    form {
+      position: relative;
+      width: 100%;
+
+      input {
+        width: 100%;
+        padding: 17px 12px;
+        border-radius: 24px;
+        border: none;
+      }
+
+      button {
+        position: absolute;
+        right: 0px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #7f8c8d;
+        cursor: pointer;
+      }
+    }
+  }
+
+  div.settings-navbar {
+    display: flex;
+    gap: 15px;
+  }
+}
