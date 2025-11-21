@@ -15,7 +15,6 @@ export class ProductDetail {
     public productId: number,
     public name: string,
     public color: string | null,
-    public standardCost: number,
     public listPrice: number,
     public productCategoryId: number,
     public categoryName: string,
@@ -23,6 +22,7 @@ export class ProductDetail {
     public size: string | null,
     public weight: number | null,
     public productNumber: string,
-    public reviews: Review[]
+    public reviews: Review[],
+    public descriptions: { [key: string]: string }
   ) {}
 }

@@ -1,34 +1,114 @@
+<!-- File: detail.html -->
+
 @if (product) {
-  <div class="detail-container">
-    <h1>{{ product.name }}</h1>
-    <p>ID: {{ product.productId }}</p>
-    <p>Numero: {{ product.productNumber }}</p>
-    <p>Categoria: {{ product.categoryName }}</p>
-    <p>Prezzo: {{ product.listPrice }}</p>
-    <p>Costo standard: {{ product.standardCost }}</p>
-    <p>Colore: {{ product.color ?? '---' }}</p>
-    <p>Taglia: {{ product.size ?? '---' }}</p>
-    <p>Peso: {{ product.weight ?? '---' }}</p>
-    <div>
-      @if (product.thumbNailPhoto) {
+<div class="container my-4">
+  <div class="row g-4">
+    <!-- Colonna sinistra con contenitore custom -->
+    <div class="col-lg-5 col-md-6">
+      <div
+        class="d-flex align-items-center justify-content-center bg-light rounded shadow"
+        style="height: 400px"
+      >
+        @if (product.thumbNailPhoto) {
         <img
           [src]="'data:image/gif;base64,' + product.thumbNailPhoto"
-          alt="Prodotto"
+          alt="{{ product.name }}"
+          style="max-width: 100%; max-height: 100%; object-fit: contain"
         />
-      }
+        } @else {
+        <img
+          src="https://via.placeholder.com/400x400/0066cc/FFFFFF/?text=No+Image"
+          alt="Placeholder"
+          style="max-width: 100%; max-height: 100%; object-fit: contain"
+        />
+        }
+      </div>
     </div>
 
-    <h3>Recensioni</h3>
-    @for (r of product.reviews; track r.id) {
-      <div class="review">
-        <strong>{{ r.userName }}</strong> ({{ r.rating }})<br />
-        {{ r.text }}<br />
-        <em>{{ r.createdAt | date:'dd/MM/yyyy HH:mm' }}</em>
+    <!-- Colonna destra: Card con dettagli -->
+    <div class="col-lg-7 col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h1 class="card-title h3">{{ product.name }}</h1>
+
+          <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item"><strong>ID:</strong> {{ product.productId }}</li>
+            <li class="list-group-item"><strong>Numero:</strong> {{ product.productNumber }}</li>
+            <li class="list-group-item"><strong>Categoria:</strong> {{ product.categoryName }}</li>
+            <li class="list-group-item"><strong>Prezzo:</strong> {{ product.listPrice | currency:'EUR' }}</li>
+            <li class="list-group-item"><strong>Colore:</strong> {{ product.color ?? '---' }}</li>
+            <li class="list-group-item"><strong>Taglia:</strong> {{ product.size ?? '---' }}</li>
+            <li class="list-group-item"><strong>Peso:</strong> {{ product.weight ?? '---' }}</li>
+          </ul>
+        </div>
       </div>
-    } @empty {
-      <p>Nessuna recensione disponibile.</p>
-    }
+    </div>
   </div>
+
+  @if (availableLanguages.length > 0) {
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="card-title mb-0">Descrizione</h3>
+            
+            <!--  SELETTORE LINGUA -->
+            <div class="d-flex align-items-center gap-2">
+              <label for="languageSelector" class="mb-0 me-2">
+                <strong>Lingua:</strong>
+              </label>
+              <select 
+                id="languageSelector"
+                class="form-select form-select-sm"
+                style="width: auto; min-width: 150px"
+                [(ngModel)]="selectedLanguage"
+              >
+                @for (lang of availableLanguages; track lang) {
+                <option [value]="lang">
+                  {{ getLanguageName(lang) }}
+                </option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <p class="text-muted" [style.direction]="selectedLanguage === 'ar' || selectedLanguage === 'he' ? 'rtl' : 'ltr'">
+            {{ currentDescription }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Sezione recensioni (sotto, full-width) -->
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3 class="card-title">Recensioni</h3>
+          @for (r of product.reviews; track r.id) {
+          <div class="border-bottom pb-3 mb-3">
+            <strong>{{ r.userName }}</strong>
+            <span class="badge bg-primary ms-2">{{ r.rating }} ⭐</span>
+            <p class="mt-2 mb-1">{{ r.text }}</p>
+            <em class="text-muted small">{{ r.createdAt | date : 'dd/MM/yyyy HH:mm' }}</em>
+          </div>
+          } @empty {
+          <p class="text-muted">Nessuna recensione disponibile.</p>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 } @else {
-  <div>Caricamento...</div>
+<div class="container my-4">
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Caricamento...</span>
+    </div>
+  </div>
+</div>
 }

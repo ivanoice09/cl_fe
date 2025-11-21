@@ -1,1 +1,35 @@
-<p>sub-category-selection works!</p>
+
+<div class="category-sidebar">
+
+  <h5>Categorie</h5>
+  
+  <!-- Bottone "Tutte" -->
+  <button 
+    class="category-btn"
+    [class.active]="selectedCategoryId === null"
+    (click)="selectCategory(null)"
+  >
+    Tutte le Categorie
+  </button>
+
+  <!-- Prime 5 categorie (o tutte se espanse) -->
+  @for (category of visibleCategories; track category.categoryId) {
+  <button 
+    class="category-btn"
+    [class.active]="selectedCategoryId === category.categoryId"
+    (click)="selectCategory(category.categoryId)"
+  >
+    {{ category.name }} ({{ category.productCount }})
+  </button>
+  }
+
+  <!--Mostra altre/Mostra meno -->
+  @if (hasMoreCategories) {
+  <button 
+    class="show-more-btn"
+    (click)="toggleShowAll()"
+  >
+    {{ showAll ? 'Mostra meno' : 'Mostra altre (' + (categories.length - 5) + ')' }}
+  </button>
+  }
+</div>
