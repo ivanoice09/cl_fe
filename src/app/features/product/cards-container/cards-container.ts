@@ -1,40 +1,60 @@
+// File: cards-container.component.ts
+
 import { Component, OnInit } from '@angular/core';
 import { ProductHttp } from '../../../shared/services/product-http';
 import { CommonModule } from '@angular/common';
 import { Page } from '../../../shared/models/Page';
 import { ProductCard } from '../../../shared/models/ProductCard';
+import { Category } from '../../../shared/models/Category ';
 import { Card } from './card/card';
+import { SubCategorySelection } from '../sub-category-selection/sub-category-selection';
 
 @Component({
   selector: 'app-cards-container',
-  imports: [CommonModule, Card],
+  imports: [CommonModule, Card, SubCategorySelection], 
   templateUrl: './cards-container.html',
   styleUrls: ['./cards-container.css'],
 })
-export class CardsContainer {
+export class CardsContainer implements OnInit {
   pagedData: Page<ProductCard> | null = null;
+  categories: Category[] = []; 
+  selectedCategoryId: number | null = null; 
+  loading = false; 
 
-  constructor(private http: ProductHttp) {
+  constructor(private http: ProductHttp) {}
+
+  ngOnInit(): void {
+    this.LoadCategories(); 
     this.GetProducts();
   }
 
-  GetProducts(pageNumber: number = 1) {
-    this.http.GetProductP(pageNumber).subscribe({
+
+  LoadCategories(): void {
+    this.http.GetCategories().subscribe({
+      next: (categories) => {
+        this.categories = categories;
+        console.log(categories)
+      },
+      error: (err) => {
+        console.error('Errore caricamento categorie:', err);
+      }
+    });
+  }
+
+  GetProducts(pageNumber: number = 1, categoryId: number | null = null): void {
+    this.loading = true;
+    
+    this.http.GetProductP(pageNumber, categoryId ?? undefined).subscribe({
       next: (response) => {
         const items = response.items.map(
           (item: any) =>
             new ProductCard(
               item.productId,
               item.name,
-              item.color,
-              item.standardCost,
               item.listPrice,
               item.productCategoryId,
               item.categoryName,
               item.thumbNailPhoto
-              // item.size,
-              // item.weight,
-              // item.productNumber
             )
         );
         this.pagedData = new Page<ProductCard>(
@@ -46,10 +66,18 @@ export class CardsContainer {
           response.hasNext,
           items
         );
+        this.loading = false;
       },
       error: (err) => {
         console.error('Errore:', err);
+        this.loading = false;
       },
     });
+  }
+
+  // quando figlio cambia categoria
+  onCategoryChange(categoryId: number | null): void {
+    this.selectedCategoryId = categoryId;
+    this.GetProducts(1, categoryId); 
   }
 }

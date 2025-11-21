@@ -1,12 +1,47 @@
-@if (pagedData) {
-  @for (product of pagedData.items; track product.productId) {
-    <app-card [product]="product"></app-card>
-  }
-  <div class="pagination">
-    <button (click)="GetProducts(pagedData.currentPage - 1)" [disabled]="!pagedData.hasPrevious">Indietro</button>
-    <span>Pagina {{ pagedData.currentPage }} / {{ pagedData.totalPages }}</span>
-    <button (click)="GetProducts(pagedData.currentPage + 1)" [disabled]="!pagedData.hasNext">Avanti</button>
+<div class="container-fluid py-4">
+  <div class="row">
+    <!-- ⭐ SINISTRA: Sidebar Categorie (30%) -->
+    <div class="col-lg-3 col-md-4">
+      <app-sub-category-selection
+        [categories]="categories"
+        [selectedCategoryId]="selectedCategoryId"
+        (categoryChange)="onCategoryChange($event)"
+      ></app-sub-category-selection>
+    </div>
+
+    <!-- ⭐ DESTRA: Card Prodotti + Paginazione (70%) -->
+    <div class="col-lg-9 col-md-8">
+      @if (pagedData) {
+      
+      <!-- Grid Card Prodotti -->
+      <div class="row g-3 mb-4">
+        @for (product of pagedData.items; track product.productId) {
+        <div class="col-xl-3 col-lg-4 col-md-6">
+          <app-card [product]="product"></app-card>
+        </div>
+        }
+      </div>
+
+      <!-- Paginazione -->
+      <div class="pagination">
+        <button 
+          (click)="GetProducts(pagedData.currentPage - 1, selectedCategoryId)" 
+          [disabled]="!pagedData.hasPrevious"
+        >
+          Indietro
+        </button>
+        <span>Pagina {{ pagedData.currentPage }} / {{ pagedData.totalPages }}</span>
+        <button 
+          (click)="GetProducts(pagedData.currentPage + 1, selectedCategoryId)" 
+          [disabled]="!pagedData.hasNext"
+        >
+          Avanti
+        </button>
+      </div>
+
+      } @else {
+      <div>Caricamento...</div>
+      }
+    </div>
   </div>
-} @else {
-  <div>Caricamento...</div>
-}
+</div>
