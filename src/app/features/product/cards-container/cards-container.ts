@@ -26,15 +26,10 @@ export class CardsContainer {
             new ProductCard(
               item.productId,
               item.name,
-              item.color,
-              item.standardCost,
               item.listPrice,
               item.productCategoryId,
               item.categoryName,
               item.thumbNailPhoto
-              // item.size,
-              // item.weight,
-              // item.productNumber
             )
         );
         this.pagedData = new Page<ProductCard>(
