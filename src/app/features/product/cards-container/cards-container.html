@@ -1,7 +1,6 @@
-<div class="container-fluid py-4">
+<div class="container py-4">
   <div class="row">
-    <!-- ⭐ SINISTRA: Sidebar Categorie (30%) -->
-    <div class="col-lg-3 col-md-4">
+    <div class="col-12 col-md-4 col-lg-3 mb-4">
       <app-sub-category-selection
         [categories]="categories"
         [selectedCategoryId]="selectedCategoryId"
@@ -9,20 +8,17 @@
       ></app-sub-category-selection>
     </div>
 
-    <!-- ⭐ DESTRA: Card Prodotti + Paginazione (70%) -->
-    <div class="col-lg-9 col-md-8">
+    <div class="col-12 col-md-8 col-lg-9">
       @if (pagedData) {
       
-      <!-- Grid Card Prodotti -->
-      <div class="row g-3 mb-4">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-4 justify-content-center"> 
         @for (product of pagedData.items; track product.productId) {
-        <div class="col-xl-3 col-lg-4 col-md-6">
-          <app-card [product]="product"></app-card>
-        </div>
+          <div class="col">
+            <app-card [product]="product"></app-card>
+          </div>
         }
       </div>
 
-      <!-- Paginazione -->
       <div class="pagination">
         <button 
           (click)="GetProducts(pagedData.currentPage - 1, selectedCategoryId)" 
@@ -40,7 +36,9 @@
       </div>
 
       } @else {
-      <div>Caricamento...</div>
+      <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+        <div>Caricamento...</div>
+      </div>
       }
     </div>
   </div>

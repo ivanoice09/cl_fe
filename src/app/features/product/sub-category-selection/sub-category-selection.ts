@@ -18,19 +18,20 @@ export class SubCategorySelection {
   }
   showAll = false;
 
-  // =categorie ordinate per numero prodotti
   get sortedCategories(): Category[] {
-    return [...this.categories].sort((a, b) => b.productCount - a.productCount);
+    // 1. Filtra l'array per escludere le categorie con productCount === 0
+    const filteredCategories = this.categories.filter((category) => category.productCount > 0);
+
+    // 2. Ordina l'array filtrato per numero prodotti (decrescente)
+    return [...filteredCategories].sort((a, b) => b.productCount - a.productCount);
   }
 
-  // categorie da visualizzare=
   get visibleCategories(): Category[] {
     return this.showAll ? this.sortedCategories : this.sortedCategories.slice(0, 5);
   }
 
-  //  ci sono altre categorie da mostrare?
   get hasMoreCategories(): boolean {
-    return this.categories.length > 5;
+    return this.sortedCategories.length > 5;
   }
 
   // mostra tutto
