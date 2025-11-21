@@ -1,1 +1,8 @@
-<p>main-categories-bar works!</p>
+<div class="main-categories-container">
+  <ul class="categories-list">
+    <li class="nav-link" *ngFor="let link of links">
+      <a [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
+    </li>
+  </ul>
+  <hr />
+</div>
