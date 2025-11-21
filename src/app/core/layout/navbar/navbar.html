@@ -1,24 +1,48 @@
 <section class="upper-nav">
-    <div class="nav-container">
-        <div class="logo-box">
-            <img src="assets/images/logo/logo-nobg-tagliato.png" alt="logo">
-        </div>
-        <div class="searchbar">
-            <form action="get">
-                <input type="text" placeholder="Cerca i prodotti">
-                <button><i class="bi bi-search"></i></button>
-            </form>
-        </div>
-        <div class="settings-navbar">
-            <div class="cart">
-                <i class="bi bi-cart-fill">
-                    <span class="cart-count">0</span>
-                </i>
-            </div>
-            <div class="user-profile">
-                <p>Login</p>
-                <!-- <i class="bi bi-person-fill"></i> -->
-            </div>
-        </div>
+  <div class="nav-container">
+    <div class="logo-box">
+      <a routerLink="/">
+        <img src="assets/images/logo/logo-nobg-tagliato.png" alt="logo" />
+      </a>
     </div>
+    <div class="searchbar">
+      <form action="get">
+        <input type="text" placeholder="Cerca i prodotti" />
+        <button><i class="bi bi-search"></i></button>
+      </form>
+    </div>
+    <div class="settings-navbar">
+      <div class="cart">
+        <i class="bi bi-cart-fill">
+          <span class="cart-count">0</span>
+        </i>
+      </div>
+      <div class="user-profile">
+        <p>Login</p>
+        <i class="bi bi-person-fill"></i>
+      </div>
+      <!-- Pulsante hamburger nel padre -->
+      <button class="hamburger" (click)="toggleMenu()" [class.show]="showHamburgerMenu">☰</button>
+    </div>
+
+    <!-- Tendina hamburger -->
+    <div class="hamburger-window" *ngIf="showHamburgerMenu">
+      <div class="searchbar-mobile">
+        <form action="get">
+          <input type="text" placeholder="Cerca i prodotti" />
+          <button><i class="bi bi-search"></i></button>
+        </form>
+      </div>
+      <ul>
+        <li *ngFor="let link of childLinks">
+          <a [routerLink]="link.path">{{ link.label }}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <hr />
+</section>
+
+<section class="lower-nav">
+  <app-main-categories-bar></app-main-categories-bar>
 </section>
