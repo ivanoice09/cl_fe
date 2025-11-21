@@ -9,8 +9,8 @@ div.nav-container {
   div.logo-box {
     width: 200px;
     img {
-        width: 100%;
-      }
+      width: 100%;
+    }
   }
   div.searchbar {
     width: 45%;
@@ -24,6 +24,12 @@ div.nav-container {
         padding: 17px 12px;
         border-radius: 24px;
         border: none;
+
+        &:focus {
+          outline: none; 
+          border: 2px solid #6f8c3f; // bordo personalizzato
+          box-shadow: 0 0 4px rgba(111, 140, 63, 0.4); // leggero glow (opzionale)
+        }
       }
 
       button {
@@ -39,7 +45,7 @@ div.nav-container {
         i {
           font-size: 24px;
           font-style: bold;
-          color:#8eb055;
+          color: #8eb055;
         }
       }
     }
@@ -47,17 +53,32 @@ div.nav-container {
 
   div.settings-navbar {
     display: flex;
-    gap: 15px;
+    gap: 30px;
     align-items: center;
 
-    div.cart{
-      i{
+    div.cart {
+      i.bi-cart-fill {
         font-size: 24px;
+        position: relative;
+
+        span.cart-count {
+          position: absolute;
+          top: -8px;
+          right: -10px;
+          background-color: #537506;
+          color: white;
+          border-radius: 50%;
+          padding: 0px 6px;
+          font-size: 12px;
+        }
       }
     }
-    div.user-profile{
-      i{
-        font-size: 24px;
+    div.user-profile {
+      p {
+        margin-bottom: 0px;
+        padding: 15px 39px;
+        background-color: #537506;
+        border-radius: 24px;
       }
     }
   }
