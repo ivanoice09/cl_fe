@@ -6,5 +6,5 @@ import { Login } from './features/auth/login/login';
 export const routes: Routes = [
   { path: '', component: CardsContainer },
   { path: 'product/:id', component: Detail },
-  { path: 'login', component: Login}
+  { path: 'login', component: Login, data: { hideNavbar: true } },
 ];
