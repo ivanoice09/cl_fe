@@ -1,11 +1,18 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
+
+  showPassword = false;
+  
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
 
 }
