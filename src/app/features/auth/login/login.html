@@ -1,14 +1,3 @@
-<!-- <div class="loginContainer">
-    <div class="cardStyle">
-        <h2 style="margin-bottom: 30px">LOGIN</h2>
-        <label for="emailAddress">Email Address:</label>
-        <input type="email" class="form-control" id="emailAddress" placeholder="example@email.com" style="margin-bottom: 20px">
-        <label for="password">Password:</label>
-        <input type="password" class="form-control" id="password" placeholder="insert password" style="margin-bottom: 50px">
-        <button class="btn btn-dark">Accedi</button>
-    </div>
-</div> -->
-
 <div class="login-wrapper">
     <div class="login-card">
         <h2>Accedi</h2>
@@ -22,9 +11,9 @@
             </button>
         </div>
 
-        <a class="forgot-password" href="#">Password dimenticato?</a>
-        <button (click)="loginBackend(email, password)" class="btn confirm-btn rounded-pill">Conferma</button>
+        <a class="forgot-password" routerLink="/reset-password">Password dimenticato?</a>
+        <button (click)="loginBackend(email, password)" class="btn btn-primary rounded-pill">Conferma</button>
 
-        <p class="signup-text">Non sei registrato? <a href="#">Registrati.</a></p>
+        <p class="signup-text">Non hai ancora un account? <a href="#">Registrati.</a></p>
     </div>
 </div>

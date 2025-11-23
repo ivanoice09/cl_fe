@@ -1,17 +1,3 @@
-/* .loginContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-}
-
-.cardStyle {
-    border: solid 1px black;
-    border-radius: 20px;
-    padding: 20px;
-    width: 500px;
-} */
-
 .login-wrapper {
 height: 100vh;
 display: flex;
