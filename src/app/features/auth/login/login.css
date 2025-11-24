@@ -95,3 +95,27 @@
 .signup-text {
     font-size: 0.9rem;
 }
+
+/* Stile del modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  width: 320px;
+  text-align: center;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-evenly;
+}
