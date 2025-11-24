@@ -1,9 +1,7 @@
-
 <div class="category-sidebar">
-
   <h5>Categorie</h5>
   
-  <!-- Bottone "Tutte" -->
+  <!-- Bottone "Tutte" (RIMANE FUORI DALLO SCROLL) -->
   <button 
     class="category-btn"
     [class.active]="selectedCategoryId === null"
@@ -12,18 +10,20 @@
     Tutte le Categorie
   </button>
 
-  <!-- Prime 5 categorie (o tutte se espanse) -->
-  @for (category of visibleCategories; track category.categoryId) {
-  <button 
-    class="category-btn"
-    [class.active]="selectedCategoryId === category.categoryId"
-    (click)="selectCategory(category.categoryId)"
-  >
-    {{ category.name }} ({{ category.productCount }})
-  </button>
-  }
+  <!-- WRAPPER SCROLLABILE (SOLO SULLA LISTA DINAMICA) -->
+  <div class="category-list-wrapper">
+      @for (category of visibleCategories; track category.categoryId) {
+      <button 
+        class="category-btn"
+        [class.active]="selectedCategoryId === category.categoryId"
+        (click)="selectCategory(category.categoryId)"
+      >
+        {{ category.name }} ({{ category.productCount }})
+      </button>
+      }
+  </div>
 
-  <!--Mostra altre/Mostra meno -->
+  <!-- Bottone "Mostra altre" (RIMANE FUORI DALLO SCROLL) -->
   @if (hasMoreCategories) {
   <button 
     class="show-more-btn"

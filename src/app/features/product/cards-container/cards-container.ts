@@ -1,6 +1,6 @@
-// File: cards-container.component.ts
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core'; 
+import { ViewportScroller } from '@angular/common';        
 import { ProductHttp } from '../../../shared/services/product-http';
 import { CommonModule } from '@angular/common';
 import { Page } from '../../../shared/models/Page';
@@ -11,29 +11,30 @@ import { SubCategorySelection } from '../sub-category-selection/sub-category-sel
 
 @Component({
   selector: 'app-cards-container',
-  imports: [CommonModule, Card, SubCategorySelection], 
+  imports: [CommonModule, Card, SubCategorySelection],
   templateUrl: './cards-container.html',
   styleUrls: ['./cards-container.css'],
 })
 export class CardsContainer implements OnInit {
+  
+  private viewportScroller = inject(ViewportScroller);
+
   pagedData: Page<ProductCard> | null = null;
-  categories: Category[] = []; 
-  selectedCategoryId: number | null = null; 
-  loading = false; 
+  categories: Category[] = [];
+  selectedCategoryId: number | null = null;
+  loading = false;
 
   constructor(private http: ProductHttp) {}
 
   ngOnInit(): void {
-    this.LoadCategories(); 
+    this.LoadCategories();
     this.GetProducts();
   }
-
 
   LoadCategories(): void {
     this.http.GetCategories().subscribe({
       next: (categories) => {
         this.categories = categories;
-        console.log(categories)
       },
       error: (err) => {
         console.error('Errore caricamento categorie:', err);
@@ -42,8 +43,11 @@ export class CardsContainer implements OnInit {
   }
 
   GetProducts(pageNumber: number = 1, categoryId: number | null = null): void {
+    // SCROLL VERSO L'ALTO 
+    this.viewportScroller.scrollToPosition([0, 0]); 
+
     this.loading = true;
-    
+
     this.http.GetProductP(pageNumber, categoryId ?? undefined).subscribe({
       next: (response) => {
         const items = response.items.map(
@@ -57,7 +61,8 @@ export class CardsContainer implements OnInit {
               item.thumbNailPhoto
             )
         );
-        this.pagedData = new Page<ProductCard>(
+
+        this.pagedData = new Page(
           response.currentPage,
           response.pageSize,
           response.totalItems,

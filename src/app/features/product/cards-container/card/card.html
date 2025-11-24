@@ -1,4 +1,4 @@
-<div class="card product-card" (click)="onSelect()">
+<div class="card product-card" (click)="onSelect($event)">
   <img
     [src]="'data:image/gif;base64,' + product.thumbNailPhoto"
     class="card-img-top img-fluid"
