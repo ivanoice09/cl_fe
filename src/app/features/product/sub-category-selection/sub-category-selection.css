@@ -1,10 +1,11 @@
-/* File: sub-category-selection.css */
-
+/* --- CONTENITORE PRINCIPALE --- */
 .category-sidebar {
   background: white;
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Per evitare che gli elementi "sbordino" durante le animazioni */
+  overflow: hidden; 
 }
 
 .category-sidebar h5 {
@@ -12,6 +13,7 @@
   font-weight: 600;
 }
 
+/* --- STILE BOTTONI --- */
 .category-btn {
   width: 100%;
   padding: 0.75rem 1rem;
@@ -22,6 +24,11 @@
   cursor: pointer;
   text-align: left;
   transition: all 0.2s;
+  
+  /* Evita che il testo vada a capo se troppo lungo, meglio troncarlo */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .category-btn:hover {
@@ -35,7 +42,40 @@
   font-weight: 600;
 }
 
-/* ⭐ Bottone "Mostra altre" */
+/* --- NUOVO: WRAPPER PER LO SCROLL --- */
+.category-list-wrapper {
+
+  max-height: 350px; 
+  
+ 
+  overflow-y: auto;
+  
+ 
+  padding-right: 5px;
+  
+ 
+  margin-bottom: 0.5rem;
+}
+
+/* Stile Scrollbar (Webkit: Chrome, Edge, Safari) */
+.category-list-wrapper::-webkit-scrollbar {
+  width: 6px; 
+}
+
+.category-list-wrapper::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.category-list-wrapper::-webkit-scrollbar-thumb {
+  background-color: #dee2e6; 
+  border-radius: 10px;
+}
+
+.category-list-wrapper::-webkit-scrollbar-thumb:hover {
+  background-color: #adb5bd; 
+}
+
+/* --- BOTTONE "MOSTRA ALTRE" --- */
 .show-more-btn {
   width: 100%;
   padding: 0.75rem 1rem;
