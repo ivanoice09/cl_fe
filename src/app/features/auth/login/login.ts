@@ -14,21 +14,27 @@ import { Auth } from '../../../shared/services/auth';
   styleUrl: './login.css',
 })
 export class Login {
-
   showPassword = false;
+
+  showResetPasswordModal = false;
 
   loginCredentials: LoginCredentials = new LoginCredentials('', '');
   jwtToken: any;
   jwtTokenPayload: any;
-  
+
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
+  }
+
+  goToReset() {
+    this.showResetPasswordModal = false;
+    this.router.navigate(['/reset-password']);
   }
 
   constructor(private http: LoginHttp, private auth: Auth, private router: Router) {}
 
   loginBackend(eml: HTMLInputElement, pwd: HTMLInputElement) {
-    if(eml.value != "" && pwd.value != "") {
+    if (eml.value != '' && pwd.value != '') {
       this.loginCredentials.email = eml.value;
       this.loginCredentials.password = pwd.value;
 
@@ -47,29 +53,37 @@ export class Login {
               console.log('Expiration from token:', this.jwtTokenPayload.exp);
               console.log('Issuer from token:', this.jwtTokenPayload.iss);
               console.log('Audience from token:', this.jwtTokenPayload.aud);
-
               // Prendo l'email dal token
               this.auth.userEmail = this.jwtTokenPayload.email;
-
               // Reinderizza l'utente al profile
               this.router.navigate(['/profile']);
-
               break;
+
             case HttpStatusCode.Unauthorized:
               console.error('Login failed: Unauthorized');
               break;
+
             default:
               console.error('Login failed with status:', response.status);
               break;
           }
         },
         error: (err) => {
-          console.error('Login failed with status:', err);
-        }
+          if (err.status === 409 && err.error?.requiresPasswordUpdate) {
+            console.log('⚠️ CONFLICT triggered (via error block)');
+
+            this.auth.userEmail = eml.value;
+            localStorage.setItem('userEmail', eml.value);
+
+            this.showResetPasswordModal = true;
+            return;
+          }
+
+          console.error('Login failed with status:', err.status);
+        },
       });
     } else {
-      alert("Wrong Credentials!");
+      alert('Wrong Credentials!');
     }
   }
-
 }

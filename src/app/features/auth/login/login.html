@@ -27,3 +27,16 @@
         <p class="signup-text">Non hai ancora un account? <a href="#">Registrati.</a></p>
     </div>
 </div>
+
+@if (showResetPasswordModal) {
+  <div class="modal-backdrop">
+    <div class="modal-card">
+      <p>You need to reset your password.</p>
+
+      <div class="button-group">
+        <button class="btn btn-secondary" (click)="showResetPasswordModal = false">Cancel</button>
+        <button class="btn btn-primary" (click)="goToReset()">Reset password</button>
+      </div>
+    </div>
+  </div>
+}
