@@ -17,13 +17,45 @@
           <span class="cart-count">0</span>
         </i>
       </div>
-      <div
+
+      <!-- 
+        Ho cambiato un po' la logica:
+        Se l'utente è loggato, può fare hover del profile logo
+      -->
+
+      <!-- Ver 1 -->
+      <!-- <div
         class="user-profile"
         (mouseenter)="showUserMenu = true"
         (mouseleave)="showUserMenu = false"
-      >
-        <p routerLink="/login">Login</p>
-        <i class="bi bi-person-circle person-lg"></i>
+      > -->
+
+      <!-- Ver 2 -->
+      <!-- <div
+        class="user-profile"
+        (mouseenter)="onHover(true)"
+        (mouseleave)="onHover(false)"
+      > -->
+
+      <!-- Ver 3 -->
+      <div class="user-profile" (mouseenter)="showMenuNow(true)" (mouseleave)="hideMenuWithDelay()">
+
+        <!-- Aggiunta delle condizioni:
+          Se l'utente non ha fatto l'accesso, vede solo "Login",
+          altrimenti vedrà l'iniziale del suo email
+        -->
+        @if (this.auth.GetLoginStatus() == false) {
+          <p routerLink="/login">Login</p>
+          <i routerLink="/login" class="bi bi-person-circle person-lg"></i>
+        }
+
+        @if (this.auth.GetLoginStatus() == true) {
+          @if (auth.userEmail) {
+            <div class="user-icon">
+              {{ auth.userEmail[0] | uppercase }}
+            </div>
+          }
+        }
 
         <!-- Dropdown -->
         <div class="user-dropdown" *ngIf="showUserMenu">

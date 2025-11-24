@@ -1,11 +1,14 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
-export class AuthJwtHeader {
-  
+export class Auth {
+
+  userEmail: string | null = null;
+
+  // Dichiarazione JwtHeader
   authenticationJwtHeader = new HttpHeaders({
     'content-type': 'application/json',
     'responseType': 'text'
@@ -13,6 +16,7 @@ export class AuthJwtHeader {
 
   public isLoggedIn: boolean = false;
 
+  // Impostare il local e session storage
   SetJwtInfo(isLogged: boolean, token: string='') {
     if(isLogged) {
       this.authenticationJwtHeader = this.authenticationJwtHeader.set('Authorization', `Bearer ${token}`);
@@ -30,4 +34,5 @@ export class AuthJwtHeader {
   public GetLoginStatus(): boolean {
     return this.isLoggedIn;
   }
+  
 }

@@ -2,14 +2,14 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { LoginCredentials } from '../../../shared/models/LoginCredentials';
 import { LoginHttp } from '../../../shared/services/login-http';
-import { AuthJwtHeader } from '../../../shared/services/auth-jwt-header';
 import { HttpStatusCode } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { Auth } from '../../../shared/services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -25,7 +25,7 @@ export class Login {
     this.showPassword = !this.showPassword;
   }
 
-  constructor(private http: LoginHttp, private authJwtHeader: AuthJwtHeader, private router: Router) {}
+  constructor(private http: LoginHttp, private auth: Auth, private router: Router) {}
 
   loginBackend(eml: HTMLInputElement, pwd: HTMLInputElement) {
     if(eml.value != "" && pwd.value != "") {
@@ -39,7 +39,7 @@ export class Login {
               console.log('Login successful');
               this.jwtToken = response.body?.token;
               this.jwtTokenPayload = jwt_decode.jwtDecode(this.jwtToken);
-              this.authJwtHeader.SetJwtInfo(true, this.jwtToken);
+              this.auth.SetJwtInfo(true, this.jwtToken);
               console.log('Decoded JWT payload:', this.jwtTokenPayload);
               console.log('User ID from token:', this.jwtTokenPayload.userId);
               console.log('Email from token:', this.jwtTokenPayload.email);
@@ -48,8 +48,11 @@ export class Login {
               console.log('Issuer from token:', this.jwtTokenPayload.iss);
               console.log('Audience from token:', this.jwtTokenPayload.aud);
 
-              // Reinderizza l'utente al home
-              this.router.navigate(['/home']);
+              // Prendo l'email dal token
+              this.auth.userEmail = this.jwtTokenPayload.email;
+
+              // Reinderizza l'utente al profile
+              this.router.navigate(['/profile']);
 
               break;
             case HttpStatusCode.Unauthorized:
