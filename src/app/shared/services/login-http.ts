@@ -11,6 +11,6 @@ export class LoginHttp {
   constructor(private http: HttpClient) {}
 
   HttpPostLogin(loginCredentials: LoginCredentials): Observable<any> {
-    return this.http.post('https://localhost:7000/api/Auth/Login', loginCredentials, { observe: 'response', withCredentials: true})
+    return this.http.post('https://localhost:7000/api/Auth/Login', loginCredentials, { observe: 'response', withCredentials: true});
   } 
 }
