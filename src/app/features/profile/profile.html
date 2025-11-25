@@ -1,1 +1,58 @@
-<p>profile works!</p>
+<div class="container py-4" *ngIf="!loading; else loadingTemplate">
+  <h2>Profilo Cliente</h2>
+
+  <div *ngIf="profile; else noProfile">
+    <div class="mb-3">
+      <strong>Nome:</strong> {{ profile.firstName }} {{ profile.lastName }}
+    </div>
+    <div class="mb-3">
+      <strong>Email:</strong> {{ profile.emailAddress }}
+    </div>
+    <div class="mb-3">
+      <strong>Telefono:</strong> {{ profile.phone }}
+    </div>
+
+    <h3>Indirizzi</h3>
+    <ul *ngIf="profile.addresses.length > 0; else noAddresses">
+      <li *ngFor="let a of profile.addresses">
+        {{ a.addressLine1 }}, {{ a.city }} - {{ a.postalCode }}
+      </li>
+    </ul>
+    <ng-template #noAddresses>
+      <p>Nessun indirizzo registrato.</p>
+    </ng-template>
+
+    <h3>Ordini</h3>
+    <table *ngIf="profile.orders.length > 0; else noOrders" class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Numero Ordine</th>
+          <th>Data</th>
+          <th>Totale</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let o of profile.orders">
+          <td>{{ o.salesOrderNumber }}</td>
+          <td>{{ o.orderDate | date:'dd/MM/yyyy' }}</td>
+          <td>{{ o.totalDue | currency:'EUR' }}</td>
+          <td>{{ o.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <ng-template #noOrders>
+      <p>Nessun ordine effettuato.</p>
+    </ng-template>
+  </div>
+
+  <ng-template #noProfile>
+    <p>Profilo non trovato.</p>
+  </ng-template>
+</div>
+
+<ng-template #loadingTemplate>
+  <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+    <div>Caricamento...</div>
+  </div>
+</ng-template>
