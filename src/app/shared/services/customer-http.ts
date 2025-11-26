@@ -11,8 +11,8 @@ export class CustomerHttp {
 
   constructor(private http: HttpClient) {}
 
-  getCustomerProfile(customerId: number): Observable<CustomerProfile> {
-    return this.http.get<CustomerProfile>(`${this.apiUrl}/${customerId}`);
+  getCustomerProfile(): Observable<CustomerProfile> {
+    return this.http.get<CustomerProfile>(`${this.apiUrl}/profile`);
   }
   
 }

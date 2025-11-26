@@ -22,9 +22,10 @@ export class Profile implements OnInit {
   }
 
   loadProfile() {
-    this.customerHttp.getCustomerProfile(29847).subscribe({
+    this.customerHttp.getCustomerProfile().subscribe({
       next: (dto) => {
         // Trasforma JSON in classi DTO usando map
+        
         const addresses = dto.addresses.map(a => 
           new AddressCustomer(a.addressId, a.addressLine1, a.city, a.postalCode)
         );
