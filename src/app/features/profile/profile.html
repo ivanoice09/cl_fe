@@ -1,45 +1,26 @@
 <div class="container py-4" *ngIf="!loading; else loadingTemplate">
   <div *ngIf="profile; else noProfile">
-    
-    <div class="row">
+    <div class="row profile-container">
       <!-- Sidebar -->
-      <div class="col-12 col-md-3 mb-3">
+      <div class="col-12 col-md-3 sidebar-box">
         <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-
-          <button 
-            class="nav-link active" 
-            data-bs-toggle="pill" 
-            data-bs-target="#tab-info" 
-            type="button" 
-            role="tab">
+          <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-info" type="button" role="tab">
             Informazioni Personali
           </button>
 
-          <button 
-            class="nav-link" 
-            data-bs-toggle="pill" 
-            data-bs-target="#tab-address" 
-            type="button" 
-            role="tab">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-address" type="button" role="tab">
             Indirizzi
           </button>
 
-          <button 
-            class="nav-link" 
-            data-bs-toggle="pill" 
-            data-bs-target="#tab-orders" 
-            type="button" 
-            role="tab">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-orders" type="button" role="tab">
             Ordini
           </button>
-
         </div>
       </div>
 
       <!-- Contenuto -->
       <div class="col-12 col-md-9">
         <div class="tab-content">
-
           <!-- TAB 1: Info -->
           <div class="tab-pane fade show active" id="tab-info" role="tabpanel">
             <h3>Dati Personali</h3>
@@ -55,8 +36,8 @@
 
             <ul *ngIf="profile.addresses.length > 0; else noAddresses">
               <li *ngFor="let a of profile.addresses">
-                <strong>{{ a.addressLine1 }}</strong>,
-                {{ a.city }} - {{ a.postalCode }}
+                <strong>{{ a.addressLine1 }}</strong
+                >, {{ a.city }} - {{ a.postalCode }}
               </li>
             </ul>
 
@@ -81,8 +62,8 @@
               <tbody>
                 <tr *ngFor="let o of profile.orders">
                   <td>{{ o.salesOrderNumber }}</td>
-                  <td>{{ o.orderDate | date:'dd/MM/yyyy' }}</td>
-                  <td>{{ o.totalDue | currency:'EUR' }}</td>
+                  <td>{{ o.orderDate | date : 'dd/MM/yyyy' }}</td>
+                  <td>{{ o.totalDue | currency : 'EUR' }}</td>
                   <td>{{ o.status }}</td>
                 </tr>
               </tbody>
@@ -92,11 +73,9 @@
               <p>Nessun ordine effettuato.</p>
             </ng-template>
           </div>
-
         </div>
       </div>
     </div>
-
   </div>
 
   <ng-template #noProfile>
@@ -106,7 +85,7 @@
 
 <!-- Loading -->
 <ng-template #loadingTemplate>
-  <div class="d-flex justify-content-center align-items-center" style="height: 200px;">
+  <div class="d-flex justify-content-center align-items-center" style="height: 200px">
     <div>Caricamento...</div>
   </div>
 </ng-template>

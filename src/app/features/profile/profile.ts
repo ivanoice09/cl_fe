@@ -9,7 +9,7 @@ import { OrderCustomer } from '../../shared/models/OrderCustomer';
   selector: 'app-profile',
   imports: [CommonModule],
   templateUrl: './profile.html',
-  styleUrl: './profile.css',
+  styleUrl: './profile.scss',
 })
 export class Profile implements OnInit {
  profile: CustomerProfile | null = null;
