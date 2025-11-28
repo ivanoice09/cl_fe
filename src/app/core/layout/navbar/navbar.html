@@ -45,7 +45,7 @@
     </div>
 
     <!-- Menu Hamburger: search bar VISIBILE solo qui su mobile -->
-    <div class="hamburger-window" *ngIf="showHamburgerMenu">
+<div class="hamburger-window" [class.open]="showHamburgerMenu">
       <div class="search-bar-mobile-wrapper">
         <app-search-bar/>
       </div>

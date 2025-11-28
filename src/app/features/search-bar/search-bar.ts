@@ -32,22 +32,17 @@ export class SearchBar implements AfterViewInit {
     private router: Router
   ) {}
 
-  // ✅ NUOVO: Inizializza gli eventi della modale
   ngAfterViewInit(): void {
     const modalElement = document.getElementById('searchModal');
     if (modalElement) {
-      // Ascolta l'evento di chiusura della modale
       modalElement.addEventListener('hide.bs.modal', () => {
-        // Rimuove il focus dagli elementi interni prima della chiusura
         if (document.activeElement instanceof HTMLElement) {
           document.activeElement.blur();
         }
       });
 
-      // Ascolta quando la modale è completamente chiusa
       modalElement.addEventListener('hidden.bs.modal', () => {
         this.closeFilters();
-        // Sposta il focus al pulsante "Filtri Avanzati" per migliorare UX
         const filterButton = document.querySelector('.btn-brand') as HTMLElement;
         if (filterButton) {
           filterButton.focus();
@@ -70,13 +65,17 @@ export class SearchBar implements AfterViewInit {
     this.products = [];
   }
 
+  // ✅ MODIFICATO: Svuota searchText al click su prodotto dalla lista dropdown
   goToProduct(productId: number): void {
     this.closeDropdown();
+    this.searchText = ''; // ⭐ Svuota il testo della ricerca
     this.router.navigate(['product', productId]);
   }
 
+  // ✅ MODIFICATO: Svuota searchText al click su card nella modale
   goToProductAndCloseModal(productId: number): void {
     this.closeModalSafely();
+    this.searchText = ''; // ⭐ Svuota il testo della ricerca
     setTimeout(() => {
       this.router.navigate(['product', productId]);
     }, 300);
@@ -120,11 +119,9 @@ export class SearchBar implements AfterViewInit {
     this.filteredProducts = [];
   }
 
-  // ✅ MODIFICATO: Chiude la modale in modo sicuro per accessibilità
   private closeModalSafely(): void {
     const modalElement = document.getElementById('searchModal');
     if (modalElement) {
-      // Rimuove il focus prima di chiudere
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
       }
@@ -136,7 +133,6 @@ export class SearchBar implements AfterViewInit {
     }
   }
 
-  // ✅ NUOVO: Metodo pubblico per chiudere la modale (chiamato dai pulsanti)
   closeModalButton(): void {
     this.closeModalSafely();
   }
