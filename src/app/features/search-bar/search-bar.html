@@ -1,1 +1,223 @@
-<p>search-bar works!</p>
+<div class="container my-3 my-md-4">
+  <div class="row g-2 g-md-3 mb-3">
+    
+    <div class="col-10 position-relative search-dropdown-container">
+      <div class="input-group input-group-lg">
+        <span class="input-group-text bg-white border-end-0 border-brand">
+          <i class="bi bi-search text-brand"></i>
+        </span>
+        <input
+          type="text"
+          class="form-control border-start-0 ps-0 border-brand"
+          placeholder="Cerca prodotti per nome o categoria..."
+          [(ngModel)]="searchText"
+          (ngModelChange)="onSearchBase()"
+        />
+      </div>
+
+      @if (products.length > 0 && !filtersActive) {
+        <div
+          class="position-absolute top-100 start-0 end-0 bg-white border rounded-3 shadow-lg mt-2 overflow-auto"
+          style="max-height: 400px; z-index: 1050"
+        >
+          @for (prod of products; track prod.productId) {
+            <div
+              class="d-flex align-items-center justify-content-between p-3 border-bottom list-item-hover"
+              role="button"
+              (click)="goToProduct(prod.productId)"
+              title="Clicca per visualizzare dettagli"
+            >
+              <div
+                class="d-flex flex-column flex-md-row align-items-start align-items-md-center gap-2 flex-grow-1"
+              >
+                <span class="fw-semibold text-dark fs-6 fs-md-5">{{ prod.name }}</span>
+              </div>
+              <img
+                [src]="prod.thumbNailPhoto"
+                [alt]="prod.name"
+                class="rounded ms-3 d-none d-sm-block"
+                style="width: 60px; height: 60px; object-fit: cover"
+              />
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="col-2">
+      <button
+        type="button"
+        class="btn btn-brand btn-lg d-flex align-items-center justify-content-center gap-1 w-100 h-100 px-1"
+        data-bs-toggle="modal"
+        [attr.data-bs-target]="'#' + uniqueId"
+        (click)="openFilters()"
+        aria-label="Filtri avanzati"
+      >
+        <i class="bi bi-sliders fs-5"></i>
+      </button>
+    </div>
+  </div>
+
+  <div
+    class="modal fade"
+    [id]="uniqueId"
+    tabindex="-1"
+    [attr.aria-labelledby]="uniqueId + 'Label'"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-fullscreen-sm-down">
+      <div class="modal-content">
+        <div class="modal-header bg-brand text-white">
+          <h4 class="modal-title d-flex align-items-center gap-2" [id]="uniqueId + 'Label'">
+            <i class="bi bi-funnel-fill"></i>
+            <span class="d-none d-md-inline">Ricerca Avanzata</span>
+            <span class="d-inline d-md-none">Ricerca</span>
+          </h4>
+          <button
+            type="button"
+            class="btn-close btn-close-white"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+
+        <div class="modal-body p-3 p-md-4 bg-light">
+          <div class="mb-4">
+            <div class="input-group input-group-lg">
+              <span class="input-group-text bg-white border-brand">
+                <i class="bi bi-search text-brand"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control border-brand"
+                placeholder="Cerca prodotti..."
+                [(ngModel)]="searchText"
+                (ngModelChange)="onSearchAdvance()"
+              />
+            </div>
+          </div>
+
+          <div class="card shadow-sm mb-4 border-brand">
+            <div class="card-header bg-white border-brand">
+              <h6 class="mb-0 d-flex align-items-center gap-2 text-brand">
+                <i class="bi bi-currency-euro"></i>
+                Filtri Prezzo
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="row g-3 g-md-4">
+                <div class="col-12 col-md-6">
+                  <label
+                    [for]="'minPriceRange' + uniqueId"
+                    class="form-label d-flex justify-content-between align-items-center"
+                  >
+                    <span>Prezzo Minimo</span>
+                    <span class="badge bg-brand fs-6">€{{ minPrice }}</span>
+                  </label>
+                  <input
+                    type="range"
+                    class="form-range range-brand"
+                    min="0"
+                    max="5000"
+                    step="10"
+                    [id]="'minPriceRange' + uniqueId"
+                    [(ngModel)]="minPrice"
+                    (ngModelChange)="onSearchAdvance()"
+                    name="minPrice"
+                  />
+                </div>
+
+                <div class="col-12 col-md-6">
+                  <label
+                    [for]="'maxPriceRange' + uniqueId"
+                    class="form-label d-flex justify-content-between align-items-center"
+                  >
+                    <span>Prezzo Massimo</span>
+                    <span class="badge bg-brand fs-6">€{{ maxPrice }}</span>
+                  </label>
+                  <input
+                    type="range"
+                    class="form-range range-brand"
+                    min="0"
+                    max="5000"
+                    step="10"
+                    [id]="'maxPriceRange' + uniqueId"
+                    [(ngModel)]="maxPrice"
+                    (ngModelChange)="onSearchAdvance()"
+                    name="maxPrice"
+                  />
+                </div>
+              </div>
+
+              <div class="d-grid d-md-flex justify-content-md-end mt-3">
+                <button
+                  type="button"
+                  class="btn btn-outline-brand d-flex align-items-center justify-content-center gap-2"
+                  (click)="resetFilters()"
+                >
+                  <i class="bi bi-arrow-counterclockwise"></i>
+                  Reset Filtri
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card shadow-sm border-brand">
+            <div
+              class="card-header bg-white d-flex align-items-center justify-content-between border-brand"
+            >
+              <h6 class="mb-0 d-flex align-items-center gap-2 text-brand">
+                <i class="bi bi-grid-3x3-gap-fill"></i>
+                <span class="d-none d-md-inline">Prodotti Trovati</span>
+                <span class="d-inline d-md-none">Prodotti</span>
+                @if (filteredProducts.length > 0) {
+                  <span class="badge bg-brand">
+                    {{ filteredProducts.length }}
+                  </span>
+                }
+              </h6>
+            </div>
+            <div class="card-body">
+              @if (filteredProducts.length > 0) {
+                <div
+                  class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 g-3 g-md-4"
+                >
+                  @for (prod of filteredProducts; track prod.productId) {
+                    <div
+                      class="col"
+                      (click)="goToProductAndCloseModal(prod.productId)"
+                      style="cursor: pointer"
+                    >
+                      <app-card [product]="prod"></app-card>
+                    </div>
+                  }
+                </div>
+              }
+
+              @if (filteredProducts.length === 0) {
+                <div class="text-center py-5">
+                  <div class="mb-3">
+                    <i class="bi bi-inbox display-1 text-muted"></i>
+                  </div>
+                  <p class="text-muted fs-5 fs-md-4 mb-0">
+                    Nessun prodotto trovato con i filtri selezionati
+                  </p>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer bg-white border-brand">
+          <button
+            type="button"
+            class="btn btn-secondary px-4"
+            data-bs-dismiss="modal"
+          >
+            Chiudi
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

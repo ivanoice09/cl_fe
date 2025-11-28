@@ -3,11 +3,12 @@ import { MainCategoriesBar } from './main-categories-bar/main-categories-bar';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../../shared/services/auth';
+import { SearchBar } from '../../../features/search-bar/search-bar';
 
 
 @Component({
   selector: 'app-navbar',
-  imports: [MainCategoriesBar, RouterLink, CommonModule],
+  imports: [MainCategoriesBar, RouterLink, CommonModule, SearchBar],
   templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })

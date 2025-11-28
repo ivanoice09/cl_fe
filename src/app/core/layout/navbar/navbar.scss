@@ -4,16 +4,31 @@ div.nav-container {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap; // ⭐ AGGIUNTO per far scorrere il menu
   color: white;
 
   div.logo-box {
     width: 200px;
+    flex: 0 0 auto;
 
     img {
       width: 100%;
     }
   }
 
+  // Wrapper per app-search-bar (desktop)
+  div.search-bar-wrapper {
+    flex: 1 1 auto;
+    min-width: 300px;
+    max-width: 900px;
+    
+    app-search-bar {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  // Vecchio searchbar
   div.searchbar {
     width: 45%;
 
@@ -29,8 +44,8 @@ div.nav-container {
 
         &:focus {
           outline: none;
-          border: 2px solid #6f8c3f; // bordo personalizzato
-          box-shadow: 0 0 4px rgba(111, 140, 63, 0.4); // leggero glow (opzionale)
+          border: 2px solid #6f8c3f;
+          box-shadow: 0 0 4px rgba(111, 140, 63, 0.4);
         }
       }
 
@@ -58,6 +73,7 @@ div.nav-container {
     gap: 30px;
     align-items: center;
     margin-right: 20px;
+    flex: 0 0 auto;
 
     div.cart {
       i.bi-cart-fill {
@@ -93,7 +109,6 @@ div.nav-container {
         color: #ffffff;
       }
 
-      // classe user-icon visto solo quando loggato
       div.user-icon {
         width: 35px;
         height: 35px;
@@ -145,7 +160,7 @@ div.nav-container {
 
           &:hover {
             background-color: #ff5700;
-            color: white; // consigliato per contrasto
+            color: white;
           }
         }
       }
@@ -162,12 +177,74 @@ hr {
   color: white;
 }
 
+// ⭐ Menu hamburger che SCORRE invece di sovrapporsi
+div.hamburger-window {
+  width: 100%;
+  flex-basis: 100%; // ⭐ va a capo
+  background-color: #1e1e1e;
+  display: none; // ⭐ nascosto di default
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  max-height: 0;
+  padding: 0;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+
+  &.open {
+    display: flex; // ⭐ visibile quando aperto
+    max-height: 600px;
+    padding: 1rem 0;
+  }
+
+  div.search-bar-mobile-wrapper {
+    width: 85%;
+    margin: 0 auto 1rem;
+    
+    app-search-bar {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  div.searchbar-mobile {
+    display: none;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    text-align: center;
+
+    li {
+      margin: 5px 0;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      font-size: 16px;
+      display: block;
+      padding: 10px 0;
+
+      &:hover {
+        background-color: #6f8c3f;
+      }
+    }
+  }
+}
+
 @media (max-width: 893px) {
   div.nav-container {
-    position: relative;
-
     div.logo-box {
       width: 180px;
+    }
+
+    div.search-bar-wrapper {
+      max-width: 500px;
+      min-width: 250px;
     }
 
     div.searchbar {
@@ -201,48 +278,6 @@ hr {
 
         div.user-dropdown {
           top: 40px;
-        }
-      }
-    }
-
-    div.hamburger-window {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background-color: #1e1e1e;
-      z-index: 999;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 10px 0;
-
-      div.searchbar-mobile {
-        display: none;
-      }
-
-      ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        width: 100%;
-        text-align: center;
-
-        li {
-          margin: 5px 0;
-        }
-
-        a {
-          text-decoration: none;
-          color: white;
-          font-weight: bold;
-          font-size: 16px;
-          display: block;
-          padding: 10px 0;
-
-          &:hover {
-            background-color: #6f8c3f;
-          }
         }
       }
     }
@@ -286,47 +321,56 @@ hr {
       width: 205px;
     }
 
-    div.searchbar {
+    div.search-bar-wrapper {
       display: none;
     }
 
-    div.hamburger-window {
-      div.searchbar-mobile {
-        display: block;
-        width: 75%;
+    div.searchbar {
+      display: none;
+    }
+  }
 
-        form {
-          position: relative;
+  div.hamburger-window {
+    div.search-bar-mobile-wrapper {
+      display: block;
+      width: 85%;
+    }
+
+    div.searchbar-mobile {
+      display: block;
+      width: 75%;
+
+      form {
+        position: relative;
+        width: 100%;
+
+        input {
           width: 100%;
+          padding: 11px 18px;
+          border-radius: 24px;
+          border: none;
 
-          input {
-            width: 100%;
-            padding: 11px 18px;
-            border-radius: 24px;
-            border: none;
-
-            &:focus {
-              outline: none;
-              border: 2px solid #6f8c3f; // bordo personalizzato
-              box-shadow: 0 0 4px rgba(111, 140, 63, 0.4); // leggero glow (opzionale)
-            }
+          &:focus {
+            outline: none;
+            border: 2px solid #6f8c3f;
+            box-shadow: 0 0 4px rgba(111, 140, 63, 0.4);
           }
+        }
 
-          button {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #7f8c8d;
-            cursor: pointer;
+        button {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #7f8c8d;
+          cursor: pointer;
 
-            i {
-              font-size: 24px;
-              font-style: bold;
-              color: #1e1e1e;
-            }
+          i {
+            font-size: 24px;
+            font-style: bold;
+            color: #1e1e1e;
           }
         }
       }
@@ -337,5 +381,13 @@ hr {
 @media (max-width: 480px) {
   section.lower-nav {
     display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  div.nav-container {
+    div.search-bar-wrapper {
+      max-width: 1200px;
+    }
   }
 }
