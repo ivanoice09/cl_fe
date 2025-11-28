@@ -5,12 +5,12 @@
         <img src="assets/images/logo/logo-nobg-tagliato.png" alt="logo" />
       </a>
     </div>
-    <div class="searchbar">
-      <form action="get">
-        <input type="text" placeholder="Cerca i prodotti" />
-        <button><i class="bi bi-search"></i></button>
-      </form>
+    
+    <!-- Search bar: NASCOSTA su mobile, VISIBILE su desktop -->
+    <div class="d-none d-md-block search-bar-wrapper">
+      <app-search-bar/>
     </div>
+    
     <div class="settings-navbar">
       <div class="cart">
         <i class="bi bi-cart-fill">
@@ -18,32 +18,8 @@
         </i>
       </div>
 
-      <!-- 
-        Ho cambiato un po' la logica:
-        Se l'utente è loggato, può fare hover del profile logo
-      -->
-
-      <!-- Ver 1 -->
-      <!-- <div
-        class="user-profile"
-        (mouseenter)="showUserMenu = true"
-        (mouseleave)="showUserMenu = false"
-      > -->
-
-      <!-- Ver 2 -->
-      <!-- <div
-        class="user-profile"
-        (mouseenter)="onHover(true)"
-        (mouseleave)="onHover(false)"
-      > -->
-
-      <!-- Ver 3 -->
       <div class="user-profile" (mouseenter)="showMenuNow(true)" (mouseleave)="hideMenuWithDelay()">
-
-        <!-- Aggiunta delle condizioni:
-          Se l'utente non ha fatto l'accesso, vede solo "Login",
-          altrimenti vedrà l'iniziale del suo email
-        -->
+        
         @if (this.auth.GetLoginStatus() == false) {
           <p routerLink="/login">Login</p>
           <i routerLink="/login" class="bi bi-person-circle person-lg"></i>
@@ -63,17 +39,17 @@
           <a (click)="logout()"> <i class="bi bi-box-arrow-right"></i>Logout</a>
         </div>
       </div>
-      <!-- Pulsante hamburger nel padre -->
+      
+      <!-- Pulsante hamburger -->
       <button class="hamburger" (click)="toggleMenu()" [class.show]="showHamburgerMenu">☰</button>
     </div>
 
+    <!-- Menu Hamburger: search bar VISIBILE solo qui su mobile -->
     <div class="hamburger-window" *ngIf="showHamburgerMenu">
-      <div class="searchbar-mobile">
-        <form action="get">
-          <input type="text" placeholder="Cerca i prodotti" />
-          <button><i class="bi bi-search"></i></button>
-        </form>
+      <div class="search-bar-mobile-wrapper">
+        <app-search-bar/>
       </div>
+      
       <ul>
         <li *ngFor="let link of childLinks">
           <a [routerLink]="link.path">{{ link.label }}</a>
