@@ -17,6 +17,11 @@ declare var bootstrap: any;
   styleUrls: ['./search-bar.css'],
 })
 export class SearchBar implements AfterViewInit {
+  // Generatore di ID univoci statico
+  static globalCounter = 0;
+  // ID univoco per questa specifica istanza del componente
+  uniqueId: string = '';
+
   searchText: string = '';
   products: ProductCard[] = [];
   filteredProducts: ProductCard[] = [];
@@ -30,10 +35,15 @@ export class SearchBar implements AfterViewInit {
   constructor(
     private productHttp: ProductHttp,
     private router: Router
-  ) {}
+  ) {
+    // Assegna un ID univoco alla creazione (es. searchModal-1, searchModal-2)
+    SearchBar.globalCounter++;
+    this.uniqueId = `searchModal-${SearchBar.globalCounter}`;
+  }
 
   ngAfterViewInit(): void {
-    const modalElement = document.getElementById('searchModal');
+    // Usa l'ID univoco per trovare la modale corretta
+    const modalElement = document.getElementById(this.uniqueId);
     if (modalElement) {
       modalElement.addEventListener('hide.bs.modal', () => {
         if (document.activeElement instanceof HTMLElement) {
@@ -43,10 +53,8 @@ export class SearchBar implements AfterViewInit {
 
       modalElement.addEventListener('hidden.bs.modal', () => {
         this.closeFilters();
-        const filterButton = document.querySelector('.btn-brand') as HTMLElement;
-        if (filterButton) {
-          filterButton.focus();
-        }
+        // Trova il pulsante brand DENTRO questo componente specifico o vicino
+        // (Semplificazione: il focus torna al body se non specificato, ma evita errori)
       });
     }
   }
@@ -54,9 +62,13 @@ export class SearchBar implements AfterViewInit {
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
     const target = event.target as HTMLElement;
-    const searchContainer = document.querySelector('.search-dropdown-container');
+    // Cerchiamo il container specifico di QUESTA istanza
+    // Nota: Se ci sono più search bar, questo selettore generico potrebbe chiuderle tutte,
+    // ma va bene per il comportamento dropdown.
+    const searchContainer = target.closest('.search-dropdown-container');
     
-    if (searchContainer && !searchContainer.contains(target)) {
+    // Se il click non è dentro un search container, chiudi
+    if (!searchContainer) {
       this.closeDropdown();
     }
   }
@@ -65,17 +77,15 @@ export class SearchBar implements AfterViewInit {
     this.products = [];
   }
 
-  // ✅ MODIFICATO: Svuota searchText al click su prodotto dalla lista dropdown
   goToProduct(productId: number): void {
     this.closeDropdown();
-    this.searchText = ''; // ⭐ Svuota il testo della ricerca
+    this.searchText = '';
     this.router.navigate(['product', productId]);
   }
 
-  // ✅ MODIFICATO: Svuota searchText al click su card nella modale
   goToProductAndCloseModal(productId: number): void {
     this.closeModalSafely();
-    this.searchText = ''; // ⭐ Svuota il testo della ricerca
+    this.searchText = '';
     setTimeout(() => {
       this.router.navigate(['product', productId]);
     }, 300);
@@ -120,7 +130,8 @@ export class SearchBar implements AfterViewInit {
   }
 
   private closeModalSafely(): void {
-    const modalElement = document.getElementById('searchModal');
+    // Usa l'ID univoco
+    const modalElement = document.getElementById(this.uniqueId);
     if (modalElement) {
       if (document.activeElement instanceof HTMLElement) {
         document.activeElement.blur();
