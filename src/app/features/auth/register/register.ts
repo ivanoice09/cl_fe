@@ -37,17 +37,17 @@ export class Register {
   ) 
   {
     if (
-      name.value != '' && 
-      surname.value != '' && 
-      middlename.value != '' && 
-      email.value != '' && 
-      password.value != '' && 
-      phone.value != ''
+      name.value.trim() && 
+      surname.value.trim() && 
+      // middlename.value != '' && 
+      email.value.trim() && 
+      password.value.trim() && 
+      phone.value.trim()
     ) {
       const reg = {
         name: name.value,
         surname: surname.value,
-        middlename: '',
+        middlename: middlename.value,
         email: email.value,
         password: password.value,
         phone: phone.value
@@ -70,7 +70,7 @@ export class Register {
               const token = response.body?.token;
 
               const payload = jwt_decode.jwtDecode<IJwtCustomPayload>(token);
-              this.auth.SetJwtInfo(true, token);
+              this.auth.SetJwtInfo(true, token, payload.email);
               // Stampo i claims nel console
               console.log('Decoded JWT payload:', payload);
               console.log('Customer ID from token:', payload.CustomId);
@@ -79,8 +79,6 @@ export class Register {
               console.log('Expiration from token:', payload.exp);
               console.log('Issuer from token:', payload.iss);
               console.log('Audience from token:', payload.aud);
-
-              this.auth.userEmail = payload.email;
 
               this.router.navigate(['/profile']);
               break;
