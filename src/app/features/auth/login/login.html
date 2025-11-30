@@ -1,42 +1,43 @@
 <div class="login-wrapper">
-    <div class="login-card">
-        <h2>Accedi</h2>
+  <div class="login-card">
+    <h2>Accedi</h2>
 
-        <div class="input-group-floating">
-            <input type="email" id="email" placeholder=" " required #email/>
-            <label for="email">Email address</label>
-        </div>
-
-        <div class="input-group-floating password-group">
-            <input 
-                [type]="showPassword ? 'text' : 'password'"
-                id="password"
-                placeholder=" "
-                required 
-                #password
-            />
-            <label for="password">Password</label>
-            <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()">
-                <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-            </button>
-        </div>
-
-        <a class="forgot-password" routerLink="/reset-password">Password dimenticato?</a>
-        <button (click)="loginBackend(email, password)" class="confirm-btn">Conferma</button>
-
-        <p class="signup-text">Non hai ancora un account? <a routerLink="/register">Registrati.</a></p>
+    <div class="input-group-floating">
+      <input type="email" id="email" placeholder=" " required #email />
+      <label for="email">Email address</label>
     </div>
+
+    <div class="input-group-floating password-group">
+      <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder=" " required #password />
+      <label for="password">Password</label>
+      <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()">
+        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+      </button>
+    </div>
+
+    <div class="forgot-pass-persistence-acc-section">
+      <div class="remember-me">
+        <input type="checkbox" id="remember" #remember />
+        <label for="remember">Ricordami</label>
+      </div>
+      <a class="forgot-password" routerLink="/reset-password">Password dimenticata</a>
+    </div>
+
+    <button (click)="loginBackend(email, password, remember)" class="confirm-btn">Conferma</button>
+
+    <p class="signup-text">Non hai ancora un account? <a routerLink="/register">Registrati.</a></p>
+  </div>
 </div>
 
 @if (showResetPasswordModal) {
-  <div class="modal-backdrop">
-    <div class="modal-card">
-      <p>You need to reset your password.</p>
+<div class="modal-backdrop">
+  <div class="modal-card">
+    <p>You need to reset your password.</p>
 
-      <div class="button-group">
-        <button class="btn btn-secondary" (click)="showResetPasswordModal = false">Cancel</button>
-        <button class="btn btn-primary" (click)="goToReset()">Reset password</button>
-      </div>
+    <div class="button-group">
+      <button class="btn btn-secondary" (click)="showResetPasswordModal = false">Cancel</button>
+      <button class="btn btn-primary" (click)="goToReset()">Reset password</button>
     </div>
   </div>
+</div>
 }

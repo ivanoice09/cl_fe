@@ -9,7 +9,7 @@ bootstrapApplication(App, {
     provideHttpClient(
       withInterceptors([
         (req, next) => {
-          const token = localStorage.getItem('jwtToken');
+          const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
 
           if (token) {
             req = req.clone({
