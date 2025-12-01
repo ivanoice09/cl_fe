@@ -14,6 +14,7 @@ import { Auth } from '../../../shared/services/auth';
   styleUrl: './login.css',
 })
 export class Login {
+  
   showPassword = false;
 
   showResetPasswordModal = false;
@@ -33,7 +34,7 @@ export class Login {
 
   constructor(private http: LoginHttp, private auth: Auth, private router: Router) {}
 
-  loginBackend(eml: HTMLInputElement, pwd: HTMLInputElement) {
+  loginBackend(eml: HTMLInputElement, pwd: HTMLInputElement, remember?: HTMLInputElement) {
     if (eml.value != '' && pwd.value != '') {
       this.loginCredentials.email = eml.value;
       this.loginCredentials.password = pwd.value;
@@ -45,7 +46,8 @@ export class Login {
               console.log('Login successful');
               this.jwtToken = response.body?.token;
               this.jwtTokenPayload = jwt_decode.jwtDecode(this.jwtToken);
-              this.auth.SetJwtInfo(true, this.jwtToken);
+              const persistent = remember ? remember.checked : true;
+              this.auth.SetJwtInfo(true, this.jwtToken, this.jwtTokenPayload.email, persistent);
               console.log('Decoded JWT payload:', this.jwtTokenPayload);
               console.log('Customer ID from token:', this.jwtTokenPayload.CustomerId);
               console.log('Email from token:', this.jwtTokenPayload.email);
@@ -53,8 +55,7 @@ export class Login {
               console.log('Expiration from token:', this.jwtTokenPayload.exp);
               console.log('Issuer from token:', this.jwtTokenPayload.iss);
               console.log('Audience from token:', this.jwtTokenPayload.aud);
-              // Prendo l'email dal token
-              this.auth.userEmail = this.jwtTokenPayload.email;
+
               // Reinderizza l'utente al profile
               this.router.navigate(['/profile']);
               break;
@@ -71,7 +72,7 @@ export class Login {
         error: (err) => {
           if (err.status === 409 && err.error?.requiresPasswordUpdate) {
             this.auth.userEmail = eml.value;
-            localStorage.setItem('userEmail', eml.value);
+            // localStorage.setItem('userEmail', eml.value);
             this.showResetPasswordModal = true;
             return;
           }

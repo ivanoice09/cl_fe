@@ -31,7 +31,7 @@ export class ResetPassword {
     const savedEmail = this.auth.userEmail || localStorage.getItem('userEmail');
     if (savedEmail) {
 
-      console.log("🔥 RAW savedEmail:", savedEmail);
+      console.log("Email che verrà passato al login:", savedEmail);
 
       this.email = savedEmail;
     }

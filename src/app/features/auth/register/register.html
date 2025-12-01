@@ -1,0 +1,44 @@
+<div class="login-wrapper">
+  <div class="login-card">
+    <h2>Registrati</h2>
+
+    <div class="fullname-group">
+      <div class="input-group-floating">
+        <input type="text" id="firstName" placeholder=" " #name>
+        <label for="firstName">First name</label>
+      </div>
+
+      <div class="input-group-floating">
+        <input type="text" id="lastName" placeholder=" " #surname>
+        <label for="lastName">Last name</label>
+      </div>
+    </div>
+
+    <div class="input-group-floating">
+      <input type="text" id="middleName" placeholder=" " #middlename>
+      <label for="middleName">Middle name (optional)</label>
+    </div>
+
+    <div class="input-group-floating">
+      <input type="email" id="email" placeholder=" " #email />
+      <label for="email">Email address</label>
+    </div>
+
+    <div class="input-group-floating password-group">
+      <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder=" " #password />
+      <label for="password">Password</label>
+      <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()">
+        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+      </button>
+    </div>
+
+    <div class="input-group-floating">
+      <input type="tel" id="phone" placeholder=" " required #phone />
+      <label for="phone">Phone number</label>
+    </div>
+
+    <button type="button" (click)="registerBackend(name, surname, middlename, email, password, phone)" class="confirm-btn">Conferma</button>
+
+    <p class="signup-text">Hai già un account? <a routerLink="/login">Accedi.</a></p>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+@if (alertState.visible) {
+  <div class="alert-toast" role="alert">
+    <div class="alert-message">{{ alertState.message }}</div>
+    <button class="close-btn" type="button" aria-label="Dismiss alert" (click)="closeAlert()">&times;</button>
+  </div>
+}

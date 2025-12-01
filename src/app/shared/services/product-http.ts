@@ -12,8 +12,8 @@ import { Category } from '../models/Category ';
 export class ProductHttp {
   constructor(
     private http: HttpClient // , private auth: Auth
-  ) { }
-   private baseUrl = 'https://localhost:7000/api/products';
+  ) {}
+  private baseUrl = 'https://localhost:7000/api/products';
 
   GetProduct(): Observable<any> {
     return this.http.get(
@@ -22,16 +22,13 @@ export class ProductHttp {
     );
   }
 
-  GetProductP(
-    pageNumber: number = 1, 
-    categoryId?: number
-  ): Observable<Page<ProductCard>> {
+  GetProductP(pageNumber: number = 1, categoryId?: number): Observable<Page<ProductCard>> {
     let url = `${this.baseUrl}/paged?pageNumber=${pageNumber}`;
-    
+
     if (categoryId !== undefined && categoryId !== null) {
       url += `&categoryId=${categoryId}`;
     }
-    
+
     return this.http.get<Page<ProductCard>>(url);
   }
 
@@ -42,4 +39,19 @@ export class ProductHttp {
   GetProductDetail(id: number): Observable<ProductDetail> {
     return this.http.get<ProductDetail>(`https://localhost:7000/api/Products/${id}`);
   }
+
+  SearchProduct(query: string, minPrice?: number, maxPrice?: number): Observable<Page<ProductCard>> {
+    let url = `https://localhost:7000/api/ProductSearch?query=${query}&pageNumber=1&pageSize=12`;
+
+    if (minPrice !== undefined) {
+        url += `&minPrice=${minPrice}`;
+    }
+
+    if (maxPrice !== undefined) {
+        url += `&maxPrice=${maxPrice}`;
+    }
+
+    return this.http.get<Page<ProductCard>>(url);
+}
+
 }
