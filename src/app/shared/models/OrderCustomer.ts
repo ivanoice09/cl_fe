@@ -5,6 +5,7 @@ export class OrderCustomer {
     public salesOrderNumber: string,
     public orderDate: Date,
     public totalDue: number,
-    public status: string
+    public status: string,
+    public statusDescription: string
   ) {}
 }
