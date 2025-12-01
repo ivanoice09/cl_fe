@@ -1,0 +1,56 @@
+<div *ngIf="loading">Caricamento...</div>
+
+<div *ngIf="!loading && orderDetail">
+
+  <h2>Dettaglio ordine #{{ orderDetail.salesOrderNumber }}</h2>
+
+  <p><strong>Data ordine:</strong> {{ orderDetail.orderDate }}</p>
+  <p><strong>Data spedizione:</strong> {{ orderDetail.shipDate }}</p>
+  <p><strong>Stato:</strong> {{ orderDetail.status }}</p>
+  <p><strong>Metodo spedizione:</strong> {{ orderDetail.shipMethod }}</p>
+
+  <h3>Riepilogo costi</h3>
+  <p><strong>SubTotale:</strong> {{ orderDetail.subTotal }}</p>
+  <p><strong>Tasse:</strong> {{ orderDetail.taxAmt }}</p>
+  <p><strong>Spedizione:</strong> {{ orderDetail.freight }}</p>
+  <p><strong>Totale:</strong> {{ orderDetail.totalDue }}</p>
+
+  <h3>Indirizzo di fatturazione</h3>
+  <div *ngIf="orderDetail.billToAddress; else noBill">
+    <p>{{ orderDetail.billToAddress.addressLine1 }}</p>
+    <p>{{ orderDetail.billToAddress.city }} ({{ orderDetail.billToAddress.postalCode }})</p>
+  </div>
+  <ng-template #noBill><p>Nessun indirizzo di fatturazione</p></ng-template>
+
+  <h3>Indirizzo di spedizione</h3>
+  <div *ngIf="orderDetail.shipToAddress; else noShip">
+    <p>{{ orderDetail.shipToAddress.addressLine1 }}</p>
+    <p>{{ orderDetail.shipToAddress.city }} ({{ orderDetail.shipToAddress.postalCode }})</p>
+  </div>
+  <ng-template #noShip><p>Nessun indirizzo di spedizione</p></ng-template>
+
+  <h3>Articoli nell’ordine</h3>
+  <table border="1" cellpadding="4">
+    <thead>
+      <tr>
+        <th>Prodotto</th>
+        <th>Quantità</th>
+        <th>Prezzo</th>
+        <th>Totale</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of orderDetail.items">
+        <td>{{ item.productName }}</td>
+        <td>{{ item.orderQty }}</td>
+        <td>{{ item.unitPrice }}</td>
+        <td>{{ item.lineTotal }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<div *ngIf="!loading && !orderDetail">
+  <p>Ordine non trovato.</p>
+</div>

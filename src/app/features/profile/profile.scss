@@ -18,5 +18,20 @@ div.container {
         }
       }
     }
+    div.main-content-box{
+      div.tab-content{
+        margin-left: 20px;
+        div.user-icon{
+          width: 140px;
+          height: 140px;
+          background-color: #ff5700;
+          margin-bottom: 20px;
+          color: white;
+          font-size: 85px;
+          border-radius: 50%;
+          text-align: center;
+        }
+      }
+    }
   }
 }

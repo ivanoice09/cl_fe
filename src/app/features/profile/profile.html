@@ -4,35 +4,59 @@
       <!-- Sidebar -->
       <div class="col-12 col-md-3 sidebar-box">
         <div class="nav flex-column nav-pills" role="tablist" aria-orientation="vertical">
-          <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#tab-info" type="button" role="tab">
-            Informazioni Personali
+          <button
+            class="nav-link active"
+            data-bs-toggle="pill"
+            data-bs-target="#tab-info"
+            type="button"
+            role="tab"
+          >
+            Personal Details
           </button>
 
-          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-address" type="button" role="tab">
-            Indirizzi
+          <button
+            class="nav-link"
+            data-bs-toggle="pill"
+            data-bs-target="#tab-address"
+            type="button"
+            role="tab"
+          >
+            Addresses
           </button>
 
-          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#tab-orders" type="button" role="tab">
-            Ordini
+          <button
+            class="nav-link"
+            data-bs-toggle="pill"
+            data-bs-target="#tab-orders"
+            type="button"
+            role="tab"
+          >
+            Orders
           </button>
         </div>
       </div>
 
       <!-- Contenuto -->
-      <div class="col-12 col-md-9">
+      <div class="col-12 col-md-9 main-content-box">
         <div class="tab-content">
           <!-- TAB 1: Info -->
+         
           <div class="tab-pane fade show active" id="tab-info" role="tabpanel">
-            <h3>Dati Personali</h3>
+             @if (this.auth.GetLoginStatus() == true) { @if (auth.userEmail) {
+          <div class="user-icon">
+            {{ auth.userEmail[0] | uppercase }}
+          </div>
+          } }
+            <h3 style="color: #ff5700; margin-bottom: 20px">Personal Details</h3>
 
-            <p><strong>Nome:</strong> {{ profile.firstName }} {{ profile.lastName }}</p>
+            <p><strong>Name:</strong> {{ profile.firstName }} {{ profile.lastName }}</p>
             <p><strong>Email:</strong> {{ profile.emailAddress }}</p>
-            <p><strong>Telefono:</strong> {{ profile.phone }}</p>
+            <p><strong>Phone:</strong> {{ profile.phone }}</p>
           </div>
 
           <!-- TAB 2: Indirizzi -->
           <div class="tab-pane fade" id="tab-address" role="tabpanel">
-            <h3>Indirizzi</h3>
+            <h3 style="color: #ff5700; margin-bottom: 20px">Addresses</h3>
 
             <ul *ngIf="profile.addresses.length > 0; else noAddresses">
               <li *ngFor="let a of profile.addresses">
@@ -48,24 +72,173 @@
 
           <!-- TAB 3: Ordini -->
           <div class="tab-pane fade" id="tab-orders" role="tabpanel">
-            <h3>Storico Ordini</h3>
+            <h3 style="color: #ff5700; margin-bottom: 20px">Order History</h3>
 
             <table *ngIf="profile.orders.length > 0; else noOrders" class="table table-bordered">
               <thead>
                 <tr>
-                  <th>Numero Ordine</th>
-                  <th>Data</th>
-                  <th>Totale</th>
+                  <th>Order Number</th>
+                  <th>Date</th>
+                  <th>Total</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let o of profile.orders">
+                <!-- <tr *ngFor="let o of profile.orders">
                   <td>{{ o.salesOrderNumber }}</td>
                   <td>{{ o.orderDate | date : 'dd/MM/yyyy' }}</td>
                   <td>{{ o.totalDue | currency : 'EUR' }}</td>
-                  <td>{{ o.status }}</td>
-                </tr>
+                  <td>{{ o.status }}</td> -->
+                <!-- <td>
+                    <a [routerLink]="['/orders', o.salesOrderId]">
+                      {{ o.salesOrderId }} Dettagli
+                    </a>
+                  </td> 
+                </tr> -->
+                <ng-container *ngFor="let o of profile.orders">
+                  <!-- Riga ordine -->
+                  <tr (click)="toggleOrder(o.salesOrderId)" style="cursor: pointer">
+                    <td style="color: #ff5700; text-decoration: underline">
+                      {{ o.salesOrderNumber }}
+                    </td>
+                    <td>{{ o.orderDate | date : 'dd/MM/yyyy' }}</td>
+                    <td>{{ o.totalDue | currency : 'EUR' }}</td>
+                    <td>{{ o.statusDescription }}</td>
+                  </tr>
+
+                  <!-- Riga dettaglio ordine espanso -->
+                  <tr *ngIf="expandedOrderId === o.salesOrderId">
+                    <td colspan="4">
+                      <div *ngIf="orderDetails[o.salesOrderId]; else loadingDetail">
+                        <p class="pt-3">
+                          <strong>Shipping Method:</strong>
+                          {{ orderDetails[o.salesOrderId].shipMethod }}
+                        </p>
+
+                        <!-- Sezione indirizzi -->
+                        <div class="order-addresses mb-4">
+                          <h6 class="mb-3"><strong>Addresses</strong></h6>
+
+                          <div class="row">
+                            <!-- Indirizzo di fatturazione -->
+                            <div class="col-md-6 mb-3">
+                              <div class="address-card p-3 border rounded">
+                                <h6 class="mb-2 text-primary"><strong>Billing Address</strong></h6>
+                                <p class="mb-0">
+                                  {{ orderDetails[o.salesOrderId].billToAddress.addressLine1 }}
+                                </p>
+                                <p
+                                  class="mb-0"
+                                  *ngIf="orderDetails[o.salesOrderId].billToAddress.addressLine2"
+                                >
+                                  {{ orderDetails[o.salesOrderId].billToAddress.addressLine2 }}
+                                </p>
+                                <p class="mb-0">
+                                  {{ orderDetails[o.salesOrderId].billToAddress.city }}
+                                  ({{ orderDetails[o.salesOrderId].billToAddress.postalCode }})
+                                </p>
+                                <p
+                                  class="mb-0"
+                                  *ngIf="orderDetails[o.salesOrderId].billToAddress.stateProvince"
+                                >
+                                  {{ orderDetails[o.salesOrderId].billToAddress.stateProvince }}
+                                </p>
+                                <p
+                                  class="mb-0"
+                                  *ngIf="orderDetails[o.salesOrderId].billToAddress.countryRegion"
+                                >
+                                  {{ orderDetails[o.salesOrderId].billToAddress.countryRegion }}
+                                </p>
+                              </div>
+                            </div>
+
+                            <!-- Indirizzo di spedizione -->
+                            <div class="col-md-6 mb-3">
+                              <div class="address-card p-3 border rounded">
+                                <h6 class="mb-2 text-success"><strong>Shipping Address</strong></h6>
+                                <p class="mb-0">
+                                  {{ orderDetails[o.salesOrderId].shipToAddress.addressLine1 }}
+                                </p>
+                                <p
+                                  class="mb-0"
+                                  *ngIf="orderDetails[o.salesOrderId].shipToAddress.addressLine2"
+                                >
+                                  {{ orderDetails[o.salesOrderId].shipToAddress.addressLine2 }}
+                                </p>
+                                <p class="mb-0">
+                                  {{ orderDetails[o.salesOrderId].shipToAddress.city }}
+                                  ({{ orderDetails[o.salesOrderId].shipToAddress.postalCode }})
+                                </p>
+                                <p
+                                  class="mb-0"
+                                  *ngIf="orderDetails[o.salesOrderId].shipToAddress.stateProvince"
+                                >
+                                  {{ orderDetails[o.salesOrderId].shipToAddress.stateProvince }}
+                                </p>
+                                <p
+                                  class="mb-0"
+                                  *ngIf="orderDetails[o.salesOrderId].shipToAddress.countryRegion"
+                                >
+                                  {{ orderDetails[o.salesOrderId].shipToAddress.countryRegion }}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <h6 class="mb-3"><strong>Purchased Items</strong></h6>
+                        <table class="table table-sm table-bordered mb-4">
+                          <thead class="table-light">
+                            <tr>
+                              <th>Product</th>
+                              <th class="text-center">Quantity</th>
+                              <th class="text-end">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of orderDetails[o.salesOrderId].items">
+                              <td>{{ item.productName }}</td>
+                              <td class="text-center">{{ item.orderQty }}</td>
+                              <td class="text-end">{{ item.lineTotal | currency : 'EUR' }}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+
+                        <h6 class="mb-3"><strong>Cost Breakdown</strong></h6>
+                        <table class="table table-sm table-bordered mt-3" style="width: 48%">
+                          <tbody>
+                            <tr>
+                              <th>Subtotal</th>
+                              <td>
+                                {{ orderDetails[o.salesOrderId].subTotal | currency : 'EUR' }}
+                              </td>
+                            </tr>
+                            <tr>
+                              <th>Taxes</th>
+                              <td>{{ orderDetails[o.salesOrderId].taxAmt | currency : 'EUR' }}</td>
+                            </tr>
+                            <tr>
+                              <th>Shipping</th>
+                              <td>{{ orderDetails[o.salesOrderId].freight | currency : 'EUR' }}</td>
+                            </tr>
+                            <tr class="table-info">
+                              <th><strong>Total</strong></th>
+                              <td>
+                                <strong>{{
+                                  orderDetails[o.salesOrderId].totalDue | currency : 'EUR'
+                                }}</strong>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <ng-template #loadingDetail>
+                        <p>Caricamento dettagli...</p>
+                      </ng-template>
+                    </td>
+                  </tr>
+                </ng-container>
               </tbody>
             </table>
 

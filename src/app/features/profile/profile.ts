@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { CustomerProfile } from '../../shared/models/CustomerProfile';
 import { AddressCustomer } from '../../shared/models/AddressCustomer';
 import { OrderCustomer } from '../../shared/models/OrderCustomer';
+//import { RouterLink } from '@angular/router';
+import { OrderDetail } from '../../shared/models/OrderDetail';
+import { OrderHttp } from '../../shared/services/order-http';
+import { Auth } from '../../shared/services/auth';
 
 @Component({
   selector: 'app-profile',
@@ -15,7 +19,14 @@ export class Profile implements OnInit {
  profile: CustomerProfile | null = null;
   loading = true;
 
-  constructor(private customerHttp: CustomerHttp) {}
+  expandedOrderId: number | null = null;
+  orderDetails: { [key: number]: OrderDetail } = {};
+
+  constructor(
+    private customerHttp: CustomerHttp,
+    private orderHttp: OrderHttp,
+    public auth: Auth
+  ) {}
 
   ngOnInit(): void {
     this.loadProfile();
@@ -31,7 +42,7 @@ export class Profile implements OnInit {
         );
 
         const orders = dto.orders.map(o => 
-          new OrderCustomer(o.salesOrderId, o.salesOrderNumber, o.orderDate, o.totalDue, o.status)
+          new OrderCustomer(o.salesOrderId, o.salesOrderNumber, o.orderDate, o.totalDue, o.status, o.statusDescription)
         );
 
         this.profile = new CustomerProfile(
@@ -51,5 +62,23 @@ export class Profile implements OnInit {
         this.loading = false;
       }
     });
+
+    
+  }
+
+  toggleOrder(orderId: number) {
+    if (this.expandedOrderId === orderId) {
+      this.expandedOrderId = null; // chiude se clicchi di nuovo
+    } else {
+      this.expandedOrderId = orderId;
+
+      // carica i dettagli solo se non già presenti
+      if (!this.orderDetails[orderId]) {
+        this.orderHttp.getOrderDetail(orderId).subscribe({
+          next: (detail) => this.orderDetails[orderId] = detail,
+          error: (err) => console.error(err)
+        });
+      }
+    }
   }
 }
