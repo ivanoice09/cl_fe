@@ -1,0 +1,17 @@
+.top-loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, #ff5700, #ff8243);
+  box-shadow: 0 0 10px rgba(255, 172, 77, 0.644);
+  opacity: 0;
+  transition: width 0.25s ease-out, opacity 0.3s ease;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.top-loader.top-loader--active {
+  opacity: 1;
+}
