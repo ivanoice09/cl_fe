@@ -20,15 +20,15 @@
 
       <div class="user-profile" (mouseenter)="showMenuNow(true)" (mouseleave)="hideMenuWithDelay()">
         
-        @if (this.auth.GetLoginStatus() == false) {
+        @if (!isLogged) {
           <p routerLink="/login">Login</p>
           <i routerLink="/login" class="bi bi-person-circle person-lg"></i>
         }
 
-        @if (this.auth.GetLoginStatus() == true) {
-          @if (auth.userEmail) {
+        @if (isLogged) {
+          @if (userEmail) {
             <div class="user-icon">
-              {{ auth.userEmail[0] | uppercase }}
+              {{ userEmail[0] | uppercase }}
             </div>
           }
         }

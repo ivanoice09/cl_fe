@@ -2,9 +2,9 @@ import { Component, HostListener } from '@angular/core';
 import { MainCategoriesBar } from './main-categories-bar/main-categories-bar';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Auth } from '../../../shared/services/auth';
+import { AuthService } from '../../../shared/services/auth-service';
 import { SearchBar } from '../../../features/search-bar/search-bar';
-
+import { AlertService } from '../../../shared/services/alert-service';
 
 @Component({
   selector: 'app-navbar',
@@ -14,30 +14,43 @@ import { SearchBar } from '../../../features/search-bar/search-bar';
 })
 export class Navbar {
 
-  // Costrutto per implementare il logout
-  constructor(private router: Router, public auth: Auth) {}
+  isLogged = false;
+  userEmail: string | null = null;
 
   showHamburgerMenu = false;
+  showUserMenu = false;
+
   childLinks = [
     { label: 'BIKES', path: '/bikes' },
     { label: 'COMPONENT', path: '/component' },
     { label: 'CLOTHING', path: '/clothing' },
     { label: 'ACCESSORIES', path: '/accessories' },
   ];
-
-  showUserMenu = false;
   
-  // Ver 2: L'hover avviene solo quando l'user è loggato
-  onHover(state: boolean) {
-    if (!this.auth.GetLoginStatus()) return;
-    this.showUserMenu = state;
+  // Costrutto per implementare il logout
+  constructor(private router: Router, public authService: AuthService, private alertService: AlertService) {}
+
+  ngOnInit() {
+    // Subscribe to login updates
+    this.authService.logged$.subscribe(v => this.isLogged = v);
+    this.authService.email$.subscribe(e => this.userEmail = e);
   }
 
-  // Ver 3: Metto delay, perché il dropdown si chiude subito
+  logout() {
+    this.authService.logoutBackend().subscribe(() => {
+
+      this.alertService.showAlert('logged out successfully');
+      
+      this.router.navigate(['/login']);
+      console.log('logout successful');
+    });
+  }
+
+  // Hover behavior only when logged in
   private hideTimeout: any;
 
   showMenuNow(state: boolean) {
-    if (!this.auth.GetLoginStatus()) return;
+    if (!this.isLogged) return;
     clearTimeout(this.hideTimeout);
     this.showUserMenu = state;
   }
@@ -60,12 +73,5 @@ export class Navbar {
     this.showHamburgerMenu = !this.showHamburgerMenu;
   }
 
-  logout() {
-    // console.log('Logout...');
-
-    // Implemento il logout
-    this.auth.SetJwtInfo(false, '');
-    this.router.navigate(['/home']);
-    console.log('logout successful');
-  }
+  
 }

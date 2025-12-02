@@ -42,9 +42,9 @@
           <!-- TAB 1: Info -->
          
           <div class="tab-pane fade show active" id="tab-info" role="tabpanel">
-             @if (this.auth.GetLoginStatus() == true) { @if (auth.userEmail) {
+             @if (isLogged) { @if (userEmail) {
           <div class="user-icon">
-            {{ auth.userEmail[0] | uppercase }}
+            {{ userEmail[0] | uppercase }}
           </div>
           } }
             <h3 style="color: #ff5700; margin-bottom: 20px">Personal Details</h3>
