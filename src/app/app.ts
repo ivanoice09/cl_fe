@@ -1,13 +1,14 @@
 import { Component, OnDestroy, signal } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterOutlet } from '@angular/router';
 import { Navbar } from './core/layout/navbar/navbar';
+import { Footer } from './core/layout/footer/footer';
 import { filter } from 'rxjs';
 import { RouterModule } from '@angular/router';
 import { Alert } from './shared/components/alert/alert';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar, RouterModule, Alert],
+  imports: [RouterOutlet, Navbar, RouterModule, Alert, Footer],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
@@ -22,28 +23,6 @@ export class App implements OnDestroy {
   private hideTimeout?: number;
 
   constructor(private router: Router) {
-
-    // Serve a nascondere il navbar in qualsiasi pagina che vogliamo
-    this.router.events
-      // .pipe(filter((e): e is NavigationEnd => e instanceof NavigationEnd))
-      // .subscribe(() => {
-      //   const current = this.router.routerState.root.firstChild;
-      //   this.showNavbar = !current?.snapshot.data['hideNavbar'];
-      .pipe(filter((e): e is NavigationEnd | NavigationStart | NavigationCancel | NavigationError =>
-        e instanceof NavigationEnd || e instanceof NavigationStart || e instanceof NavigationCancel || e instanceof NavigationError))
-      .subscribe((event) => {
-        if (event instanceof NavigationStart) {
-          this.startLoader();
-        } else {
-          this.finishLoader();
-        }
-
-        if (event instanceof NavigationEnd) {
-          const current = this.router.routerState.root.firstChild;
-          this.showNavbar = !current?.snapshot.data['hideNavbar'];
-        }
-
-      });
   }
 
   ngOnDestroy() {
