@@ -6,6 +6,10 @@
     background: #f1f1f1;
 }
 
+h2, a{
+    color: #ff5700;
+}
+
 .login-card {
     background: white;
     padding: 1.7rem;
@@ -80,15 +84,15 @@
     padding: 0.5rem 0;
     border: solid 2px;
     border-radius: 20px;
-    background: transparent;
-    color: black;
+    background: #ff5700;
+    color: white;
     cursor: pointer;
     margin-top: 1.5rem;
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
 }
 
 .confirm-btn:hover {
-    background: black;
+    background: #1e1e1e;
     color: white;
 }
 
