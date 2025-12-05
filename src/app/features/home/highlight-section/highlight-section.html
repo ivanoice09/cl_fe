@@ -1,23 +1,24 @@
 <div class="container-fluid py-5 bg-light">
+  
   <!-- 📂 FEATURED CATEGORIES - LAYOUT VERTICALE A COLONNE -->
   <section class="mb-5">
     <div class="text-center mb-4">
       <h2 class="section-title">📂 Categorie Principali</h2>
       <p class="text-muted">Esplora le nostre categorie più popolari</p>
     </div>
-
+    
     <div class="container">
+      <!-- Centrato con justify-content-center -->
       <div class="row g-3 justify-content-center">
-        <div
-          class="col-6 col-sm-4 col-md-3 col-lg-2"
-          *ngFor="let category of featuredCategories; trackBy: trackByCategory"
-        >
+        <div 
+          class="col-6 col-sm-4 col-md-3 col-lg-2" 
+          *ngFor="let category of featuredCategories; trackBy: trackByCategory">
           <div class="category-card" (click)="onCategoryClick(category)">
             <div class="category-icon">
               <i class="bi bi-grid-3x3-gap"></i>
             </div>
-            <h5 class="category-name">{{ category.name }}</h5>
-            <p class="category-count">{{ category.productCount }} prodotti</p>
+            <h5 class="category-name">{{category.name}}</h5>
+            <p class="category-count">{{category.productCount}} prodotti</p>
           </div>
         </div>
       </div>
@@ -26,69 +27,84 @@
 
   <!-- 🏆 BEST SELLERS -->
   <section class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+    <div class="container mb-4 px-3">
       <h2 class="section-title">🏆 Best Sellers</h2>
-      <div class="carousel-controls">
-        <button
-          class="btn btn-sm btn-outline-primary me-2"
-          (click)="prevBestSeller()"
-          [disabled]="!canGoPrevBestSeller"
-        >
-          <i class="bi bi-chevron-left"></i>
-        </button>
-        <button
-          class="btn btn-sm btn-outline-primary"
-          (click)="nextBestSeller()"
-          [disabled]="!canGoNextBestSeller"
-        >
-          <i class="bi bi-chevron-right"></i>
-        </button>
-      </div>
     </div>
 
-    <div class="carousel-wrapper">
-      <div class="carousel-inner">
-        <div
-          class="carousel-item-custom"
-          *ngFor="let product of visibleBestSellers; trackBy: trackByProduct"
-        >
-          <app-card [product]="product"></app-card>
+    <div class="container">
+      <!-- FLEX CONTAINER: Bottoni ai lati + Carosello al centro -->
+      <div class="d-flex align-items-center">
+        
+        <!-- BOTTONE SINISTRA -->
+        <button 
+          class="btn btn-custom-outline rounded-circle flex-shrink-0 me-3" 
+          (click)="prevBestSeller()" 
+          [disabled]="!canGoPrevBestSeller">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- WRAPPER CAROSELLO -->
+        <div class="carousel-wrapper flex-grow-1">
+          <div class="carousel-inner">
+            <div 
+              class="carousel-item-custom" 
+              *ngFor="let product of visibleBestSellers; trackBy: trackByProduct">
+              <app-card [product]="product"></app-card>
+            </div>
+          </div>
         </div>
+
+        <!-- BOTTONE DESTRA -->
+        <button 
+          class="btn btn-custom-outline rounded-circle flex-shrink-0 ms-3" 
+          (click)="nextBestSeller()" 
+          [disabled]="!canGoNextBestSeller">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+
       </div>
     </div>
   </section>
 
   <!-- ✨ NEW ARRIVALS -->
   <section class="mb-5">
-    <div class="d-flex justify-content-between align-items-center mb-4 px-3">
+    <div class="container mb-4 px-3">
       <h2 class="section-title">✨ Novità</h2>
-      <div class="carousel-controls">
-        <button
-          class="btn btn-sm btn-outline-primary me-2"
-          (click)="prevNewArrival()"
-          [disabled]="!canGoPrevNewArrival"
-        >
-          <i class="bi bi-chevron-left"></i>
-        </button>
-        <button
-          class="btn btn-sm btn-outline-primary"
-          (click)="nextNewArrival()"
-          [disabled]="!canGoNextNewArrival"
-        >
-          <i class="bi bi-chevron-right"></i>
-        </button>
-      </div>
     </div>
 
-    <div class="carousel-wrapper">
-      <div class="carousel-inner">
-        <div
-          class="carousel-item-custom"
-          *ngFor="let product of visibleNewArrivals; trackBy: trackByProduct"
-        >
-          <app-card [product]="product"></app-card>
+    <div class="container">
+      <!-- FLEX CONTAINER: Bottoni ai lati + Carosello al centro -->
+      <div class="d-flex align-items-center">
+        
+        <!-- BOTTONE SINISTRA -->
+        <button 
+          class="btn btn-custom-outline rounded-circle flex-shrink-0 me-3" 
+          (click)="prevNewArrival()" 
+          [disabled]="!canGoPrevNewArrival">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+
+        <!-- WRAPPER CAROSELLO -->
+        <div class="carousel-wrapper flex-grow-1">
+          <div class="carousel-inner">
+            <div 
+              class="carousel-item-custom" 
+              *ngFor="let product of visibleNewArrivals; trackBy: trackByProduct">
+              <app-card [product]="product"></app-card>
+            </div>
+          </div>
         </div>
+
+        <!-- BOTTONE DESTRA -->
+        <button 
+          class="btn btn-custom-outline rounded-circle flex-shrink-0 ms-3" 
+          (click)="nextNewArrival()" 
+          [disabled]="!canGoNextNewArrival">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+
       </div>
     </div>
   </section>
+
 </div>

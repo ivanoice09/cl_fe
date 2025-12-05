@@ -1,3 +1,9 @@
+/* VARIABILI LOCALI (Opzionale, per chiarezza) */
+:host {
+  --main-color: #FF5700;
+  --main-color-hover: #e64a00; /* Un po' più scuro per l'hover */
+}
+
 .section-title {
   font-size: 1.75rem;
   font-weight: 700;
@@ -5,77 +11,75 @@
   margin: 0;
 }
 
-.carousel-controls button {
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
+/* BOTTONI NAVIGAZIONE CUSTOM */
+.btn-custom-outline {
+  width: 40px;
+  height: 40px;
   padding: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid var(--main-color);
+  color: var(--main-color);
+  background: transparent;
   transition: all 0.2s;
 }
 
-.carousel-controls button:disabled {
+.btn-custom-outline:disabled {
   opacity: 0.3;
+  border-color: #ccc;
+  color: #ccc;
   cursor: not-allowed;
 }
 
-.carousel-controls button:not(:disabled):hover {
+.btn-custom-outline:not(:disabled):hover {
+  background-color: var(--main-color);
+  color: white;
   transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(255, 87, 0, 0.2);
 }
 
-/* CAROUSEL CONTAINER (prodotti) */
+/* CAROUSEL CONTAINER */
 .carousel-wrapper {
-  overflow: hidden;
-  padding: 0 2rem;
-  margin: 0 auto;
-  max-width: 1400px;
+  overflow: hidden; /* Nasconde le card che escono lateralmente */
+  width: 100%;
 }
 
 .carousel-inner {
   display: flex;
-  gap: 1rem;
+  /* gap: 1rem; -> Rimosso se usi padding nel container o margin nelle card */
   transition: transform 0.4s ease-in-out;
 }
 
+/* DIMENSIONI CARD RESPONSIVE (Flexbox basis) */
 .carousel-item-custom {
-  flex: 0 0 auto;
-  width: calc(20% - 0.8rem); /* 5 card desktop */
+  flex: 0 0 auto; /* Non si restringono */
+  padding: 0 0.5rem; /* Spaziatura tra le card */
+  
+  /* Calcoli larghezza (puoi aggiustare il divisore in base a quante ne vuoi) */
+  width: 20%; /* 5 card su desktop grande */
 }
 
-/* RESPONSIVE CAROUSEL */
 @media (max-width: 1199px) {
-  .carousel-item-custom {
-    width: calc(25% - 0.75rem); /* 4 card */
-  }
+  .carousel-item-custom { width: 25%; } /* 4 card */
 }
 
 @media (max-width: 991px) {
-  .carousel-item-custom {
-    width: calc(33.333% - 0.67rem); /* 3 card */
-  }
+  .carousel-item-custom { width: 33.333%; } /* 3 card */
 }
 
 @media (max-width: 767px) {
-  .carousel-item-custom {
-    width: calc(50% - 0.5rem); /* 2 card */
-  }
+  .carousel-item-custom { width: 50%; } /* 2 card */
 }
 
 @media (max-width: 575px) {
-  .carousel-item-custom {
-    width: 100%; /* 1 card mobile */
-  }
-  
-  .carousel-wrapper {
-    padding: 0 1rem;
-  }
+  .carousel-item-custom { width: 100%; } /* 1 card */
 }
 
-/* CATEGORY CARDS - GRID LAYOUT */
+/* CATEGORY CARDS - COLORE FF5700 */
 .category-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  /* Gradiente arancione */
+  background: linear-gradient(135deg, #FF5700 0%, #ff8a50 100%);
   color: white;
   border-radius: 12px;
   padding: 1.25rem;
@@ -86,13 +90,13 @@
   justify-content: center;
   align-items: center;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(255, 87, 0, 0.3);
   cursor: pointer;
 }
 
 .category-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 12px 30px rgba(102, 126, 234, 0.5);
+  box-shadow: 0 12px 30px rgba(255, 87, 0, 0.5);
 }
 
 .category-icon {
@@ -116,26 +120,12 @@
 
 /* RESPONSIVE CATEGORIES */
 @media (max-width: 768px) {
-  .section-title {
-    font-size: 1.4rem;
-  }
-  
-  .category-card {
-    height: 130px;
-    padding: 1rem;
-  }
-  
-  .category-icon {
-    font-size: 2rem;
-  }
-  
-  .category-name {
-    font-size: 0.85rem;
-  }
+  .section-title { font-size: 1.4rem; }
+  .category-card { height: 130px; padding: 1rem; }
+  .category-icon { font-size: 2rem; }
+  .category-name { font-size: 0.85rem; }
 }
 
 @media (max-width: 575px) {
-  .category-card {
-    height: 140px;
-  }
+  .category-card { height: 140px; }
 }

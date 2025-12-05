@@ -9,7 +9,7 @@ import { OrderDetailComponent } from './features/orders/order-detail/order-detai
 import { Register } from './features/auth/register/register';
 
 export const routes: Routes = [
-  { path: '', component: CardsContainer },
+  { path: 'products', component: CardsContainer },
   { path: 'product/:id', component: Detail },
   { path: 'login', component: Login, data: { hideNavbar: true } },
   { path: 'reset-password', component: ResetPassword, data: { hideNavbar: true } },

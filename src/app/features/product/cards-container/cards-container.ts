@@ -1,8 +1,8 @@
-
 import { Component, OnInit, inject } from '@angular/core'; 
 import { ViewportScroller } from '@angular/common';        
 import { ProductHttp } from '../../../shared/services/product-http';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router'; // <--- Import aggiunto
 import { Page } from '../../../shared/models/Page';
 import { ProductCard } from '../../../shared/models/ProductCard';
 import { Category } from '../../../shared/models/Category ';
@@ -11,6 +11,7 @@ import { SubCategorySelection } from '../sub-category-selection/sub-category-sel
 
 @Component({
   selector: 'app-cards-container',
+  standalone: true, // Aggiunto standalone true per coerenza con gli imports
   imports: [CommonModule, Card, SubCategorySelection],
   templateUrl: './cards-container.html',
   styleUrls: ['./cards-container.css'],
@@ -24,11 +25,28 @@ export class CardsContainer implements OnInit {
   selectedCategoryId: number | null = null;
   loading = false;
 
-  constructor(private http: ProductHttp) {}
+  constructor(
+    private http: ProductHttp,
+    private route: ActivatedRoute 
+  ) {}
 
   ngOnInit(): void {
     this.LoadCategories();
-    this.GetProducts();
+
+    // Ascolta i parametri della rotta per filtrare all'avvio o al cambio URL
+    this.route.queryParams.subscribe(params => {
+      const categoryIdParam = params['categoryId'];
+      
+      if (categoryIdParam) {
+        // Se c'è il parametro, convertilo e carica
+        this.selectedCategoryId = +categoryIdParam;
+        this.GetProducts(1, this.selectedCategoryId);
+      } else {
+        // Se non c'è, carica tutto (o resetta se stavi filtrando)
+        this.selectedCategoryId = null;
+        this.GetProducts(1, null);
+      }
+    });
   }
 
   LoadCategories(): void {
@@ -80,9 +98,10 @@ export class CardsContainer implements OnInit {
     });
   }
 
-  // quando figlio cambia categoria
+  // quando figlio cambia categoria (selezione manuale dal menu laterale)
   onCategoryChange(categoryId: number | null): void {
     this.selectedCategoryId = categoryId;
     this.GetProducts(1, categoryId); 
+    
   }
 }

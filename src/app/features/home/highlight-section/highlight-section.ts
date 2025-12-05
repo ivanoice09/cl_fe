@@ -71,14 +71,12 @@ export class HighlightSection implements OnInit {
     return this.newArrivals.slice(this.currentNewArrivalIndex, this.currentNewArrivalIndex + 5);
   }
 
-  // STATO FRECCE
   get canGoPrevBestSeller() { return this.currentBestSellerIndex > 0; }
   get canGoNextBestSeller() { return this.currentBestSellerIndex + 5 < this.bestSellers.length; }
   
   get canGoPrevNewArrival() { return this.currentNewArrivalIndex > 0; }
   get canGoNextNewArrival() { return this.currentNewArrivalIndex + 5 < this.newArrivals.length; }
 
-  // CLICK CATEGORIA
   onCategoryClick(category: Category) {
     // Naviga alla pagina prodotti filtrati per categoria
     this.router.navigate(['/products'], { queryParams: { categoryId: category.categoryId } });
