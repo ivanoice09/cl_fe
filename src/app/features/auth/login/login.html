@@ -1,31 +1,77 @@
 <div class="login-wrapper">
   <div class="login-card">
-    <h2>Accedi</h2>
 
-    <div class="input-group-floating">
-      <input type="email" id="email" placeholder=" " required #email />
-      <label for="email">Email address</label>
-    </div>
+    <form class="form-group" [formGroup]="loginForm" (ngSubmit)="loginBackend(remember)">
 
-    <div class="input-group-floating password-group">
-      <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder=" " required #password />
-      <label for="password">Password</label>
-      <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()">
-        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-      </button>
-    </div>
+      <h2>Accedi</h2>
 
-    <div class="forgot-pass-persistence-acc-section">
-      <div class="remember-me">
-        <input type="checkbox" id="remember" #remember />
-        <label for="remember">Ricordami</label>
+      <div class="input-boxes">
+        <div class="input-group-floating"
+          [class.invalid]="submitted && (loginForm.get('email')?.invalid || !!backendEmailError)">
+
+          <input type="email" formControlName="email" id="email" placeholder=" " required #email />
+
+          <label for="email">Email address</label>
+
+          @if(loginForm.get('email')?.hasError('required') && submitted) {
+          <p class="error-text">
+            Email is required
+          </p>
+
+          } @else if (loginForm.get('email')?.hasError('email') && submitted) {
+          <p class="error-text">
+            Invalid email address
+          </p>
+
+          } @else if (backendEmailError && submitted) {
+          <p class="error-text">
+            {{ backendEmailError }}
+          </p>
+          }
+
+        </div>
+
+        <div class="input-group-floating password-group"
+          [class.invalid]="submitted && (loginForm.get('password')?.invalid || !!backendPasswordError)">
+
+          <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password" placeholder=" "
+            required #password />
+
+          <label for="password">Password</label>
+
+          <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()">
+            <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+
+          @if(loginForm.get('password')?.hasError('required') && submitted) {
+          <p class="error-text">
+            Password is required
+          </p>
+          
+          } @else if (backendPasswordError && submitted) {
+          <p class="error-text">
+            {{ backendPasswordError }}
+          </p>
+          }
+
+        </div>
+
       </div>
-      <a class="forgot-password" routerLink="/reset-password">Password dimenticata</a>
-    </div>
 
-    <button (click)="loginBackend(email, password, remember)" class="confirm-btn">Conferma</button>
+      <div class="forgot-pass-persistence-acc-section">
+        <div class="remember-me">
+          <input type="checkbox" id="remember" #remember />
+          <label for="remember">Ricordami</label>
+        </div>
+        <a class="forgot-password" routerLink="/reset-password">Password dimenticata</a>
+      </div>
 
-    <p class="signup-text">Non hai ancora un account? <a routerLink="/register">Registrati.</a></p>
+      <button type="submit" class="confirm-btn">Conferma</button>
+
+      <p class="signup-text">Non hai ancora un account? <a routerLink="/register">Registrati.</a></p>
+
+    </form>
+
   </div>
 </div>
 
@@ -36,7 +82,7 @@
 
     <div class="button-group">
       <button class="btn btn-secondary" (click)="showResetPasswordModal = false">Cancel</button>
-      <button class="btn btn-primary" (click)="goToReset()">Reset password</button>
+      <button class="btn btn-primary" (click)="goToResetPassword()">Reset password</button>
     </div>
   </div>
 </div>
