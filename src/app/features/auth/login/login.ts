@@ -6,6 +6,7 @@ import { HttpStatusCode } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../shared/services/auth-service';
+import { AlertService } from '../../../shared/services/alert-service';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +33,11 @@ export class Login {
     this.router.navigate(['/reset-password']);
   }
 
-  constructor(private httplogin: LoginHttp, private auth: AuthService, private router: Router) {}
+  constructor(
+    private httplogin: LoginHttp, 
+    private auth: AuthService, 
+    private router: Router, 
+    private alertService: AlertService) {}
 
   loginBackend(eml: HTMLInputElement, pwd: HTMLInputElement, remember?: HTMLInputElement) {
     if (eml.value != '' && pwd.value != '') {
@@ -58,6 +63,9 @@ export class Login {
 
               // Reinderizza l'utente al profile
               this.router.navigate(['/profile']);
+
+              // Alert service
+              this.alertService.showAlert('logged in successfully');            
               break;
 
             case HttpStatusCode.Unauthorized:
