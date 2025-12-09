@@ -13,7 +13,16 @@ export class Alert {
   alertState: AlertState = { message: '', visible: false, type: 'info' };
 
   constructor(private alertService: AlertService) {
-    this.alertService.alertState$.subscribe((state) => (this.alertState = state));
+    this.alertService.alertState$.subscribe((state) => {
+      this.alertState = state;
+
+      if (state.visible) {
+        // Auto close after animation finishes
+        setTimeout(() => {
+          this.alertService.dismiss();
+        }, 3500); // 3s delay + 0.5s animation
+      }
+    });
   }
 
   closeAlert() {
