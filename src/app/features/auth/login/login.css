@@ -10,22 +10,32 @@ h2, a{
     color: #ff5700;
 }
 
-
 .login-card {
     background: white;
     padding: 2rem;
     border-radius: 20px;
     width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
 }
 
+/* Adjust form elements spacing */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.input-boxes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+
+    margin-bottom: 0.8rem;
+}
+
 .input-group-floating {
     position: relative;
-    /* margin-top: 1.5rem; */
 }
 
 .input-group-floating input {
@@ -136,3 +146,25 @@ h2, a{
     display: flex;
     justify-content: space-evenly;
 }
+
+/* To make the borders red, when 
+inputs invalid, wrong creds, input box empty */
+.input-group-floating.invalid input {
+    border-color: #e63946;
+}
+
+.input-group-floating.invalid label {
+    top: 0 !important;
+    color: #e63946 !important;
+    font-size: 0.75rem !important;
+
+}
+
+.error-text {
+    color: #e63946;
+    position: absolute;
+    bottom: -35px;   /* moves it below input without pushing layout */
+    left: 2px;
+    font-size: 0.8rem;
+}
+
