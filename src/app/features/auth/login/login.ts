@@ -22,8 +22,7 @@ export class Login {
   submitted = false;
   jwtToken: any;
   jwtTokenPayload: any;
-  backendEmailError = '';
-  backendPasswordError = '';
+  wrongCredentials = false;
 
   // This is needed to implement proper validation errors
   loginForm = new FormGroup({
@@ -51,8 +50,7 @@ export class Login {
 
   loginBackend(remember?: HTMLInputElement) {
     this.submitted = true;
-    this.backendEmailError = '';
-    this.backendPasswordError = '';
+    this.wrongCredentials = false;
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -84,7 +82,7 @@ export class Login {
             this.router.navigate(['/profile']);
 
             // Alert service
-            this.alertService.showAlert('logged in successfully');
+            this.alertService.showAlert('logged in successfully', 'success');
             break;
 
           case HttpStatusCode.Unauthorized:
@@ -97,15 +95,14 @@ export class Login {
         }
       },
       error: (err) => {
-        // Wrong email
-        if (err.status === 401) {
-          this.backendEmailError = 'Email not found';
-          return;
-        }
 
-        // Wrong password
-        if (err.status === 401) {
-          this.backendPasswordError = 'Incorrect password';
+        // Wrong email or password
+        if (err.status === 401) { 
+          this.alertService.showAlert('Invalid email or password', 'error');
+          this.wrongCredentials = true;
+          this.loginForm.get('email')?.markAsTouched();
+          this.loginForm.get('password')?.markAsTouched();
+          this.submitted = false;
           return;
         }
 
@@ -113,6 +110,7 @@ export class Login {
         if (err.status === 409 && err.error?.requiresPasswordUpdate) {
           localStorage.setItem('userEmail', email);
           this.showResetPasswordModal = true;
+          this.submitted = false;
           return;
         }
 

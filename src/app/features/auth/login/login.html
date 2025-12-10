@@ -7,7 +7,7 @@
 
       <div class="input-boxes">
         <div class="input-group-floating"
-          [class.invalid]="submitted && (loginForm.get('email')?.invalid || !!backendEmailError)">
+          [class.invalid]="submitted && (loginForm.get('email')?.invalid || wrongCredentials)">
 
           <input type="email" formControlName="email" id="email" placeholder=" " required #email />
 
@@ -19,20 +19,15 @@
           </p>
 
           } @else if (loginForm.get('email')?.hasError('email') && submitted) {
-          <p class="error-text">
-            Invalid email address
-          </p>
-
-          } @else if (backendEmailError && submitted) {
-          <p class="error-text">
-            {{ backendEmailError }}
-          </p>
+            <p class="error-text">
+              Invalid email address
+            </p>
           }
 
         </div>
 
         <div class="input-group-floating password-group"
-          [class.invalid]="submitted && (loginForm.get('password')?.invalid || !!backendPasswordError)">
+          [class.invalid]="submitted && (loginForm.get('password')?.invalid || wrongCredentials)">
 
           <input [type]="showPassword ? 'text' : 'password'" formControlName="password" id="password" placeholder=" "
             required #password />
@@ -44,14 +39,9 @@
           </button>
 
           @if(loginForm.get('password')?.hasError('required') && submitted) {
-          <p class="error-text">
-            Password is required
-          </p>
-          
-          } @else if (backendPasswordError && submitted) {
-          <p class="error-text">
-            {{ backendPasswordError }}
-          </p>
+            <p class="error-text">
+              Password is required
+            </p>
           }
 
         </div>

@@ -11,7 +11,7 @@
   gap: 0.75rem;
 
   padding: 0.9rem 1.2rem;
-  background: rgb(0, 180, 0);
+  background: rgb(151, 151, 151);
   color: white;
   border-radius: 10px;
   /* border: 1px solid rgba(239, 68, 68, 0.6); */
@@ -21,6 +21,18 @@
   z-index: 2000;
 
   /* opacity: 0; */
+}
+
+.alert-toast.success {
+  background: rgba(16, 185, 129);
+}
+
+.alert-toast.error {
+  background: rgba(239, 68, 68);
+}
+
+.alert-toast.warning {
+  background: rgba(234, 179, 8);
 }
 
 /* Slide down animation */
