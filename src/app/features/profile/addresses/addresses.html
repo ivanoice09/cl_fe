@@ -1,0 +1,99 @@
+<div class="container py-4">
+
+  <h2 style="color:#ff5700">Manage Addresses</h2>
+
+  <button class="btn btn-primary my-3" (click)="isCreating = !isCreating">
+    + Add Address
+  </button>
+
+  <!-- CREATE FORM -->
+  <div *ngIf="isCreating" class="card p-3 mb-4">
+
+    <div class="row">
+      <div class="col-md-6">
+        <input class="form-control mb-2" placeholder="Address line 1"
+          [(ngModel)]="newAddress.addressLine1">
+
+        <input class="form-control mb-2" placeholder="City"
+          [(ngModel)]="newAddress.city">
+
+        <input class="form-control mb-2" placeholder="State/Province"
+          [(ngModel)]="newAddress.stateProvince">
+      </div>
+
+      <div class="col-md-6">
+        <input class="form-control mb-2" placeholder="Country"
+          [(ngModel)]="newAddress.countryRegion">
+
+        <input class="form-control mb-2" placeholder="Postal Code"
+          [(ngModel)]="newAddress.postalCode">
+
+        <select class="form-control mb-2" [(ngModel)]="newAddress.addressType">
+          <option>Home</option>
+          <option>Billing</option>
+          <option>Shipping</option>
+          <option>Main Office</option>
+        </select>
+      </div>
+    </div>
+
+    <button class="btn btn-success mt-2" (click)="createAddress()">Save</button>
+    <button class="btn btn-secondary mt-2" (click)="isCreating = false">Cancel</button>
+  </div>
+
+  <!-- ADDRESS LIST -->
+  <ul *ngIf="addresses.length > 0; else noAddresses">
+    <li *ngFor="let a of addresses" class="mb-3">
+
+      <div *ngIf="isEditing !== a.addressId">
+        <strong>{{ a.addressLine1 }}</strong>,
+        {{ a.city }} - {{ a.postalCode }}
+
+        <button class="btn btn-sm btn-outline-primary ms-2"
+          (click)="startEdit(a)">Edit</button>
+
+        <button class="btn btn-sm btn-outline-danger ms-2"
+          (click)="deleteAddress(a.addressId)">Delete</button>
+      </div>
+
+      <!-- EDIT FORM -->
+      <div *ngIf="isEditing === a.addressId" class="card p-3 mt-2">
+
+  <input class="form-control mb-2" placeholder="Address line 1"
+         [(ngModel)]="editAddress.addressLine1">
+
+  <input class="form-control mb-2" placeholder="City"
+         [(ngModel)]="editAddress.city">
+
+  <input class="form-control mb-2" placeholder="State/Province"
+         [(ngModel)]="editAddress.stateProvince">
+
+  <input class="form-control mb-2" placeholder="Country"
+         [(ngModel)]="editAddress.countryRegion">
+
+  <input class="form-control mb-2" placeholder="Postal Code"
+         [(ngModel)]="editAddress.postalCode">
+
+  <select class="form-control mb-2" [(ngModel)]="editAddress.addressType">
+    <option>Home</option>
+    <option>Billing</option>
+    <option>Shipping</option>
+    <option>Main Office</option>
+  </select>
+
+  <button class="btn btn-success btn-sm mt-2"
+          (click)="saveEdit(a.addressId)">Save</button>
+
+  <button class="btn btn-secondary btn-sm mt-2"
+          (click)="isEditing = null">Cancel</button>
+</div>
+
+    </li>
+  </ul>
+
+  <ng-template #noAddresses>
+    <p>No addresses found.</p>
+  </ng-template>
+
+</div>
+
