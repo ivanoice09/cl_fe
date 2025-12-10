@@ -39,7 +39,7 @@ export class Navbar {
   logout() {
     this.authService.logoutBackend().subscribe(() => {
 
-      this.alertService.showAlert('logged out successfully');
+      this.alertService.showAlert('logged out successfully', 'success');
       
       this.router.navigate(['/login']);
       console.log('logout successful');
