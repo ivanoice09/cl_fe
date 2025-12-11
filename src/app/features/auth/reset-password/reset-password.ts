@@ -21,8 +21,8 @@ export class ResetPassword {
   password: string = "";
 
   showPassword = false;
-
   showPopover = false;
+
   ruleLetter = false;
   ruleNumber = false;
   ruleLength = false;
@@ -36,8 +36,6 @@ export class ResetPassword {
     password: new FormControl('', [Validators.required]),
     confirmPassword: new FormControl('', [Validators.required]),
   });
-
-  // resetPwdCredentials: ResetPwdCredentials = new ResetPwdCredentials('', '');
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
