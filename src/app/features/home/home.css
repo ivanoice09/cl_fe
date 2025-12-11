@@ -4,11 +4,13 @@
 }
 
 .hero-section {
+  /* background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),  */
+              /* url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23667eea" width="1200" height="600"/>ircle fill="%23764ba2" opacity="0.3" cx="300" cy="200" r="150"/>ircle fill="%23f093fb" opacity="0.4" cx="900" cy="400" r="120"/></svg>'); */
   background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
-              url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23667eea" width="1200" height="600"/>ircle fill="%23764ba2" opacity="0.3" cx="300" cy="200" r="150"/>ircle fill="%23f093fb" opacity="0.4" cx="900" cy="400" r="120"/></svg>');
-  background-size: cover;
-  background-position: center;
-  height: 60vh;
+              url('./../../../assets/images/main-banner.jpg');
+              background-size: cover;
+  background-position: right;
+  height: 90vh;
   min-height: 500px;
   display: flex;
   align-items: center;
