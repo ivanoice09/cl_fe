@@ -6,6 +6,7 @@ import { ResetPasswordHttp } from '../../../shared/services/reset-password-http'
 import { AuthService } from '../../../shared/services/auth-service';
 import { HttpStatusCode } from '@angular/common/http';
 import { FormControl, FormGroup, FormsModule, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AlertService } from '../../../shared/services/alert-service';
 
 @Component({
   selector: 'app-reset-password',
@@ -27,7 +28,9 @@ export class ResetPassword {
   ruleNumber = false;
   ruleLength = false;
 
-  confirmPassword: string = "";
+  emailNonExistent = false;
+
+  // confirmPassword: string = "";
   passwordInvalid: boolean = false;
   passwordMismatch: boolean = false;
 
@@ -37,11 +40,15 @@ export class ResetPassword {
     confirmPassword: new FormControl('', [Validators.required]),
   });
 
+  cancelReset() {
+    this.router.navigate(['/login']);
+  }
+
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
   }
 
-  constructor(private http: ResetPasswordHttp, private auth: AuthService, private router: Router) { }
+  constructor(private http: ResetPasswordHttp, private auth: AuthService, private router: Router, private alertService: AlertService) { }
 
   ngOnInit() {
     const savedEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
@@ -93,29 +100,33 @@ export class ResetPassword {
     }
 
     const email = this.resetPasswordForm.value.email!;
-    const pwd = this.resetPasswordForm.value.password!;
+    const newPassword = this.resetPasswordForm.value.password!;
 
-    this.http.HttpPostResetPwd({ email, newPassword: pwd }).subscribe({
+    this.http.HttpPostResetPwd({ email, newPassword }).subscribe({
+
       next: (response) => {
         switch (response.status) {
 
           case HttpStatusCode.Ok:
-            this.submitted = false;
+            this.alertService.showAlert('Password reset successful', 'success');
             console.log('Password reset successful');
             this.router.navigate(['/login']);
             break;
 
           default:
-            this.submitted = false;
             console.error('Password reset failed with status:', response.status);
             break;
 
         }
       },
       error: (err) => {
-        this.submitted = false;
-        console.error('Password reset failed with status:', err);
+        // console.error('Password reset failed with status:', err);
+        if (err.status === 401) {
+          this.emailNonExistent = true;
+          return;
+        }
       },
+
     });
 
   }
