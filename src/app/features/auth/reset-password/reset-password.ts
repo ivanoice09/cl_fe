@@ -23,7 +23,6 @@ export class ResetPassword {
   showPassword = false;
 
   showPopover = false;
-
   ruleLetter = false;
   ruleNumber = false;
   ruleLength = false;
@@ -56,7 +55,7 @@ export class ResetPassword {
     }
   }
 
-  checkPasswordRules() {
+  checkPasswordRules(): boolean {
     const pass = this.resetPasswordForm.get('password')?.value || '';
 
     // Show popover only when typing
@@ -68,6 +67,8 @@ export class ResetPassword {
 
     // final validation flag for submission
     this.passwordInvalid = !(this.ruleLetter && this.ruleNumber && this.ruleLength);
+
+    return this.passwordInvalid;
   }
 
   matchPassword(): boolean {
