@@ -16,7 +16,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './login.css',
 })
 export class Login {
-  // Very useful properties
+
   showPassword = false;
   showResetPasswordModal = false;
   submitted = false;
@@ -24,22 +24,10 @@ export class Login {
   jwtTokenPayload: any;
   wrongCredentials = false;
 
-  // This is needed to implement proper validation errors
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
   });
-
-  // loginCredentials: LoginCredentials = new LoginCredentials('', '');
-
-  togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
-  }
-
-  goToResetPassword() {
-    this.showResetPasswordModal = false;
-    this.router.navigate(['/reset-password']);
-  }
 
   constructor(
     private httplogin: LoginHttp,
@@ -48,22 +36,8 @@ export class Login {
     private alertService: AlertService
   ) {}
 
-  ngOnInit() {
-    const savedEmail = localStorage.getItem('userEmail');
-    if (savedEmail) {
-      this.loginForm.patchValue({email:savedEmail})
-    }
-  }
-
-  clearErrors() {
-    if (this.submitted) {
-      this.submitted = false;
-    }
-  }
-
   loginBackend(remember?: HTMLInputElement) {
     this.submitted = true;
-    // this.wrongCredentials = false;
 
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -77,12 +51,10 @@ export class Login {
       next: (response) => {
         switch (response.status) {
           case HttpStatusCode.Ok:
-            console.log('Login successful');
             this.jwtToken = response.body?.token;
             this.jwtTokenPayload = jwt_decode.jwtDecode(this.jwtToken);
             const persistent = remember ? remember.checked : true;
             this.auth.SetJwtInfo(true, this.jwtToken, this.jwtTokenPayload.email, persistent);
-
             // console.log('Decoded JWT payload:', this.jwtTokenPayload);
             // console.log('Customer ID from token:', this.jwtTokenPayload.CustomerId);
             // console.log('Email from token:', this.jwtTokenPayload.email);
@@ -90,11 +62,7 @@ export class Login {
             // console.log('Expiration from token:', this.jwtTokenPayload.exp);
             // console.log('Issuer from token:', this.jwtTokenPayload.iss);
             // console.log('Audience from token:', this.jwtTokenPayload.aud);
-
-            // Reinderizza l'utente al profile
             this.router.navigate(['/profile']);
-
-            // Alert service
             this.alertService.showAlert('logged in successfully', 'success');
             break;
 
@@ -127,6 +95,35 @@ export class Login {
 
         // console.error('Login failed with status:', err.status);
       },
+
     });
+
   }
+
+  //------------------
+  // Useful functions:
+  //------------------
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
+  goToResetPassword() {
+    this.showResetPasswordModal = false;
+    this.router.navigate(['/reset-password']);
+  }
+
+  ngOnInit() {
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedEmail) {
+      this.loginForm.patchValue({email:savedEmail})
+    }
+  }
+
+  clearErrors() {
+    if (this.submitted) {
+      this.submitted = false;
+    }
+  }
+
 }
