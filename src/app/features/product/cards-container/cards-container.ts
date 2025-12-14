@@ -9,7 +9,6 @@ import { Category } from '../../../shared/models/Category ';
 import { Card } from './card/card';
 import { SubCategorySelection } from '../sub-category-selection/sub-category-selection';
 import { MainCategory } from '../../../shared/models/MainCategory';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cards-container',
