@@ -40,13 +40,18 @@ export class CardsContainer implements OnInit {
       this.selectedCategoryId = null;
 
       this.LoadCategories();
-      this.GetProducts(1, null);
+      // this.GetProducts(1, null);
     });
   }
 
   get mainCategoryLabel(): string | null {
     if (!this.selectedMainCategory) return null;
     return this.selectedMainCategory.charAt(0).toUpperCase() + this.selectedMainCategory.slice(1);
+  }
+
+  // Se incaso un main category non abbia nessun prodotto
+  get isEmpty(): boolean {
+    return !!this.pagedData && this.pagedData.totalItems === 0;
   }
 
   // LoadCategories(): void {
@@ -62,7 +67,17 @@ export class CardsContainer implements OnInit {
 
   LoadCategories(): void {
     this.http.GetCategories(this.selectedMainCategory).subscribe({
-      next: categories => this.categories = categories,
+      next: categories => {
+        this.categories = categories;
+
+        // If we are inside a main category and no sub-category is selected yet
+        if (this.selectedMainCategory && categories.length > 0 && this.selectedCategoryId === null) {
+          const firstCategory = categories[0];
+          this.selectedCategoryId = firstCategory.categoryId;
+          this.GetProducts(1, firstCategory.categoryId, this.selectedMainCategory);
+        }
+
+      }, 
       error: err => console.error(err)
     });
   }
@@ -70,6 +85,7 @@ export class CardsContainer implements OnInit {
   GetProducts(
     pageNumber: number = 1, 
     categoryId: number | null = null,
+    // Aggiungo questo per individuare i main category
     mainCategory: MainCategory | null = null
   ): void {
     // SCROLL VERSO L'ALTO 

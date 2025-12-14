@@ -12,7 +12,7 @@ import { Output, EventEmitter } from '@angular/core';
 export class MainCategoriesBar {
   links = [
     { label: 'BIKES', path: '/products/bikes' },
-    { label: 'COMPONENT', path: 'products/component' },
+    { label: 'COMPONENTS', path: 'products/components' },
     { label: 'CLOTHING', path: 'products/clothing' },
     { label: 'ACCESSORIES', path: 'products/accessories' }
   ];

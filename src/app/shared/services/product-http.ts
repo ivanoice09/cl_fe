@@ -43,6 +43,7 @@ export class ProductHttp {
     );
   }
 
+  // Modificato per aggiungere main cateogry come parametro
   GetCategories(mainCategory?: MainCategory | null): Observable<Category[]> {
     let params: any = {};
     if (mainCategory) params.mainCategory = mainCategory;
