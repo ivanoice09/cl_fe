@@ -18,6 +18,7 @@ export const routes: Routes = [
   { path: 'home', component: Home },
   { path: 'profile', component: Profile },
   { path: "orders/:orderId", component: OrderDetailComponent },
+  { path: 'products/:mainCategory', component: CardsContainer },
 
   { 
     path: 'profile', 

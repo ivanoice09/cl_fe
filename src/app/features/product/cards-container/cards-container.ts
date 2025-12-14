@@ -8,6 +8,8 @@ import { ProductCard } from '../../../shared/models/ProductCard';
 import { Category } from '../../../shared/models/Category ';
 import { Card } from './card/card';
 import { SubCategorySelection } from '../sub-category-selection/sub-category-selection';
+import { MainCategory } from '../../../shared/models/MainCategory';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-cards-container',
@@ -21,34 +23,61 @@ export class CardsContainer implements OnInit {
 
   pagedData: Page<ProductCard> | null = null;
   categories: Category[] = [];
+
+  // 1 per far funzionare la categorizzazione dei prodotti
+  selectedMainCategory: MainCategory | null = null;
+
   selectedCategoryId: number | null = null;
   loading = false;
 
-  constructor(private http: ProductHttp) {}
+  constructor(private http: ProductHttp, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.LoadCategories();
-    this.GetProducts();
-  }
+    this.route.paramMap.subscribe(params => {
+      const mainCategory = params.get('mainCategory') as MainCategory | null;
 
-  LoadCategories(): void {
-    this.http.GetCategories().subscribe({
-      next: (categories) => {
-        this.categories = categories;
-      },
-      error: (err) => {
-        console.error('Errore caricamento categorie:', err);
-      }
+      this.selectedMainCategory = mainCategory;
+      this.selectedCategoryId = null;
+
+      this.LoadCategories();
+      this.GetProducts(1, null);
     });
   }
 
-  GetProducts(pageNumber: number = 1, categoryId: number | null = null): void {
+  get mainCategoryLabel(): string | null {
+    if (!this.selectedMainCategory) return null;
+    return this.selectedMainCategory.charAt(0).toUpperCase() + this.selectedMainCategory.slice(1);
+  }
+
+  // LoadCategories(): void {
+  //   this.http.GetCategories().subscribe({
+  //     next: (categories) => {
+  //       this.categories = categories;
+  //     },
+  //     error: (err) => {
+  //       console.error('Errore caricamento categorie:', err);
+  //     }
+  //   });
+  // }
+
+  LoadCategories(): void {
+    this.http.GetCategories(this.selectedMainCategory).subscribe({
+      next: categories => this.categories = categories,
+      error: err => console.error(err)
+    });
+  }
+
+  GetProducts(
+    pageNumber: number = 1, 
+    categoryId: number | null = null,
+    mainCategory: MainCategory | null = null
+  ): void {
     // SCROLL VERSO L'ALTO 
     this.viewportScroller.scrollToPosition([0, 0]); 
 
     this.loading = true;
 
-    this.http.GetProductP(pageNumber, categoryId ?? undefined).subscribe({
+    this.http.GetProductP(pageNumber, categoryId ?? undefined, mainCategory).subscribe({
       next: (response) => {
         const items = response.items.map(
           (item: any) =>
