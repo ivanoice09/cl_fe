@@ -1,34 +1,84 @@
 div.main-categories-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: #1e1e1e;
+
   button.hamburger {
     display: none;
   }
+
   ul.categories-list {
     display: flex;
     gap: 80px;
     padding: 15px 20px;
     margin: 0;
     list-style: none;
-    background-color:#1e1e1e;
+    // background-color: #1e1e1e;
     justify-content: center;
 
     li.nav-link {
       a {
+        position: relative;
         text-decoration: none;
-        color: rgb(255, 255, 255);
-        //font-weight: bold;
-        font-size: 16px;
-        padding: 8px 12px;
-        border-radius: 4px;
+        font-weight: 700;
+        font-size: 1rem;
+        color: white;
+        padding: 0.25rem 0;
+        transition: color 0.4s ease;
 
-        &.active,
-        &:hover {
-          background-color: #ff5700;
+        .label {
+          position: relative;
+          z-index: 2;
         }
+
+        &:hover {
+          color: #ff5700;
+
+          &::after {
+            width: 100%;
+          }
+        }
+
+        &.active {
+          color: #ff5700;
+
+          &::after {
+            width: 100%;
+          }
+        }
+
       }
     }
+
+  }
+
+  // Admin control
+  .admin-toggle {
+    // margin-left: auto;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    background: transparent;
+    border: 1px solid white;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+    color: white;
+  }
+
+  .admin-toggle:hover {
+    opacity: 1;
   }
 
   hr {
     margin: 0px;
   }
+
 }

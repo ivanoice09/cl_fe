@@ -1,4 +1,4 @@
-.login-wrapper {
+.register-wrapper {
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -10,16 +10,19 @@ h2, a{
     color: #ff5700;
 }
 
-.login-card {
+.register-card {
     background: white;
     padding: 1.7rem;
     border-radius: 20px;
     width: 400px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
     text-align: center;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
 }
 
 .input-group-floating {
@@ -101,5 +104,67 @@ h2, a{
     font-size: 0.9rem;
 }
 
+/* Segnalazione errori (simile al login) */
+.input-group-floating.invalid input {
+    border-color: #e63946;
+}
 
+.input-group-floating.invalid label {
+    top: 0 !important;
+    color: #e63946 !important;
+    font-size: 0.75rem !important;
+}
 
+.error-text {
+    color: #e63946;
+    position: absolute;
+    bottom: -35px;   /* moves it below input without pushing layout */
+    left: 2px;
+    font-size: 0.8rem;
+}
+
+.warning-text {
+    position: absolute;
+    bottom: -35px;
+    left: 2px;
+    font-size: 0.8rem;
+}
+
+/* Popover for password rules */
+.popover-wrapper {
+    position: relative;
+}
+
+.password-popover {
+    position: absolute;
+    right: -230px;
+    top: 0;
+    width: 210px;
+    background: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 6px;
+    box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    font-size: 0.85rem;
+    z-index: 20;
+}
+
+.password-popover p {
+    margin: 0 0 6px 0;
+    font-weight: bold;
+}
+
+.rule {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: red;
+}
+
+.rule.valid {
+    color: green;
+}
+
+.rule span {
+    font-weight: bold;
+}

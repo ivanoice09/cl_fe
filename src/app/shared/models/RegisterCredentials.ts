@@ -1,16 +1,16 @@
 export class RegisterCredentials {
 
-    name: string;
-    surname: string;
-    middlename?: string;
+    firstName: string;
+    lastName: string;
+    middleName?: string;
     email: string;
     password: string;
-    phone: string;
+    phone?: string;
 
-    constructor(name: string, surname: string, middlename: string, email: string, password: string, phone: string) {
-        this.name = name;
-        this.surname = surname;
-        this.middlename = middlename;
+    constructor(firstName: string, lastName: string, middleName: string, email: string, password: string, phone: string) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.middleName = middleName;
         this.email = email;
         this.password = password;
         this.phone = phone;

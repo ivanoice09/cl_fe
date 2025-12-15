@@ -1,7 +1,7 @@
-// File: detail.component.ts
+// detail.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ProductDetail } from '../../../../../shared/models/ProductDetail';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProductHttp } from '../../../../../shared/services/product-http';
 import { CurrencyPipe, DatePipe, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -10,6 +10,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-detail',
   standalone: true,
+  // ❌ Router non va qui
   imports: [DatePipe, CurrencyPipe, CommonModule, FormsModule],
   templateUrl: './detail.html',
   styleUrl: './detail.css',
@@ -29,21 +30,40 @@ export class Detail implements OnInit, OnDestroy {
     'zh-cht': 'Chinese',
   };
 
-  // Subscription per gestire la pulizia della memoria
   private routeSub!: Subscription;
 
-  constructor(private route: ActivatedRoute, private http: ProductHttp) {}
+  constructor(
+    private route: ActivatedRoute,
+    private http: ProductHttp,
+    private router: Router // ✅ qui è giusto
+  ) {}
 
   ngOnInit(): void {
     this.routeSub = this.route.paramMap.subscribe((params) => {
       const idString = params.get('id');
-      if (idString) {
-        const id = Number(idString);
-        if (!isNaN(id)) {
-          this.loadProductData(id);
-        }
+
+      if (!idString) {
+        this.navigateTo404();
+        return;
       }
+
+      const idNumber = Number(idString);
+
+      if (
+        !Number.isInteger(idNumber) ||
+        idNumber <= 0 ||
+        idNumber > 2_147_483_647
+      ) {
+        this.navigateTo404();
+        return;
+      }
+
+      this.loadProductData(idNumber);
     });
+  }
+
+  private navigateTo404() {
+    this.router.navigate(['/404'], { skipLocationChange: true });
   }
 
   loadProductData(id: number) {
@@ -51,7 +71,6 @@ export class Detail implements OnInit, OnDestroy {
       next: (res) => {
         this.product = res;
 
-        // Imposta le lingue disponibili per questo prodotto
         if (res.descriptions) {
           this.availableLanguages = Object.keys(res.descriptions);
         } else {
@@ -68,6 +87,7 @@ export class Detail implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error('Errore caricamento prodotto:', err);
+        
       },
     });
   }

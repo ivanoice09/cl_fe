@@ -15,7 +15,8 @@
             id="email" 
             placeholder=" " 
             required 
-            #email 
+            #email
+            (input)="clearErrors()"
           />
 
           <label for="email">Email address</label>
@@ -28,6 +29,11 @@
           } @else if (loginForm.get('email')?.hasError('email') && submitted) {
             <p class="error-text">
               Invalid email address
+            </p>
+
+          } @else if (wrongCredentials && submitted) {
+            <p class="error-text">
+              Invalid email or password
             </p>
           }
 
@@ -42,7 +48,8 @@
             id="password" 
             placeholder=" "
             required 
-            #password 
+            #password
+            (input)="clearErrors()" 
           />
 
           <label for="password">Password</label>
@@ -54,6 +61,10 @@
           @if(loginForm.get('password')?.hasError('required') && submitted) {
             <p class="error-text">
               Password is required
+            </p>
+          } @else if (wrongCredentials && submitted) {
+            <p class="error-text">
+              Invalid email or password
             </p>
           }
 

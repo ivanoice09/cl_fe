@@ -17,20 +17,14 @@ import { AlertService } from '../../../shared/services/alert-service';
 export class ResetPassword {
 
   submitted = false;
-
   email: string = "";
   password: string = "";
-
   showPassword = false;
   showPopover = false;
-
   ruleLetter = false;
   ruleNumber = false;
   ruleLength = false;
-
   emailNonExistent = false;
-
-  // confirmPassword: string = "";
   passwordInvalid: boolean = false;
   passwordMismatch: boolean = false;
 
@@ -40,55 +34,11 @@ export class ResetPassword {
     confirmPassword: new FormControl('', [Validators.required]),
   });
 
-  cancelReset() {
-    this.router.navigate(['/login']);
-  }
-
-  togglePasswordVisibility() {
-    this.showPassword = !this.showPassword;
-  }
-
-  constructor(private http: ResetPasswordHttp, private auth: AuthService, private router: Router, private alertService: AlertService) { }
-
-  ngOnInit() {
-    const savedEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
-    if (savedEmail) {
-      // console.log("Email che verrà passato al login:", savedEmail);
-      this.resetPasswordForm.patchValue({
-        email: savedEmail
-      });
-    }
-  }
-
-  checkPasswordRules(): boolean {
-    const pass = this.resetPasswordForm.get('password')?.value || '';
-
-    // Show popover only when typing
-    this.showPopover = pass.length > 0;
-
-    this.ruleLetter = /[A-Za-z]/.test(pass);
-    this.ruleNumber = /\d/.test(pass);
-    this.ruleLength = pass.length >= 8;
-
-    // final validation flag for submission
-    this.passwordInvalid = !(this.ruleLetter && this.ruleNumber && this.ruleLength);
-
-    return this.passwordInvalid;
-  }
-
-  matchPassword(): boolean {
-    this.passwordMismatch = this.resetPasswordForm.get('password')?.value !==
-      this.resetPasswordForm.get('confirmPassword')?.value;
-    return !this.passwordMismatch;
-  }
-
-  clearErrors() {
-    if (this.submitted) {
-      this.submitted = false;
-      this.passwordInvalid = false;
-      this.passwordMismatch = false;
-    }
-  }
+  constructor(
+    private http: ResetPasswordHttp,
+    private router: Router, 
+    private alertService: AlertService
+  ) { }
 
   resetPasswordBackend() {
     this.submitted = true;
@@ -130,4 +80,57 @@ export class ResetPassword {
     });
 
   }
+
+  //------------------
+  // Useful functions:
+  //------------------
+
+  checkPasswordRules(): boolean {
+    const pass = this.resetPasswordForm.get('password')?.value || '';
+
+    // Show popover only when typing
+    this.showPopover = pass.length > 0;
+
+    this.ruleLetter = /[A-Za-z]/.test(pass);
+    this.ruleNumber = /\d/.test(pass);
+    this.ruleLength = pass.length >= 8;
+
+    // final validation flag for submission
+    this.passwordInvalid = !(this.ruleLetter && this.ruleNumber && this.ruleLength);
+
+    return this.passwordInvalid;
+  }
+
+  matchPassword(): boolean {
+    this.passwordMismatch = this.resetPasswordForm.get('password')?.value !==
+      this.resetPasswordForm.get('confirmPassword')?.value;
+    return !this.passwordMismatch;
+  }
+
+  clearErrors() {
+    if (this.submitted) {
+      this.submitted = false;
+      this.passwordInvalid = false;
+      this.passwordMismatch = false;
+    }
+  }
+
+  ngOnInit() {
+    const savedEmail = localStorage.getItem('userEmail') || sessionStorage.getItem('userEmail');
+    if (savedEmail) {
+      // console.log("Email che verrà passato al login:", savedEmail);
+      this.resetPasswordForm.patchValue({
+        email: savedEmail
+      });
+    }
+  }
+
+  cancelReset() {
+    this.router.navigate(['/login']);
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
 }

@@ -11,6 +11,10 @@ import { Category } from '../../../shared/models/Category';
 export class SubCategorySelection {
   @Input() categories: Category[] = [];
   @Input() selectedCategoryId: number | null = null;
+
+  // Nascondo il bottone "Tutte le categorie"
+  @Input() showAllButton = true;
+
   @Output() categoryChange = new EventEmitter<number | null>();
 
   selectCategory(categoryId: number | null): void {

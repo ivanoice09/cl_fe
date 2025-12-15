@@ -23,3 +23,9 @@
 .pagination span {
   font-weight: 500;
 }
+
+.product-label {
+  padding: 25px;
+  font-weight: 700;
+  font-size: 40px;
+}

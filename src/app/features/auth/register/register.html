@@ -1,44 +1,202 @@
-<div class="login-wrapper">
-  <div class="login-card">
-    <h2>Registrati</h2>
+<div class="register-wrapper">
+  <div class="register-card">
 
-    <div class="fullname-group">
-      <div class="input-group-floating">
-        <input type="text" id="firstName" placeholder=" " #name>
-        <label for="firstName">First name</label>
+    <form class="form-group" [formGroup]="registerForm" (ngSubmit)="registerBackend()">
+
+      <h2>Registrati</h2>
+
+      <div class="fullname-group">
+        <div class="input-group-floating"
+          [class.invalid]="submitted && registerForm.get('firstName')?.invalid">
+          
+          <input 
+            type="text" 
+            formControlName="firstName" 
+            id="firstName" 
+            placeholder=" "
+            maxlength="50"
+            (input)="autoCapitalize('firstName'); clearErrors();"
+            (keydown)="allowOnlyNameChars($event)"
+          >
+          
+          <label for="firstName">First name</label>
+          
+          @if (submitted && registerForm.get('firstName')?.hasError('required')) {
+            <p class="error-text">
+              Field is required
+            </p>
+          }
+
+          @if (submitted && registerForm.get('firstName')?.hasError('minlength')) {
+            <p class="error-text">
+              Minimum 2 characters
+            </p>
+          }
+        </div>
+
+        <div class="input-group-floating"
+          [class.invalid]="submitted && registerForm.get('lastName')?.invalid">
+
+          <input 
+            type="text" 
+            formControlName="lastName" 
+            id="lastName" 
+            placeholder=" " 
+            maxlength="50"
+            (input)="autoCapitalize('lastName'); clearErrors()"
+            (keydown)="allowOnlyNameChars($event)"
+          >
+
+          <label for="lastName">Last name</label>
+
+          @if (submitted && registerForm.get('lastName')?.hasError('required')) {
+            <p class="error-text">
+              Field is required
+            </p>
+          }
+
+          @if (submitted && registerForm.get('lastName')?.hasError('minlength')) {
+            <p class="error-text">
+              Minimum 2 characters
+            </p>
+          }
+        </div>
       </div>
 
-      <div class="input-group-floating">
-        <input type="text" id="lastName" placeholder=" " #surname>
-        <label for="lastName">Last name</label>
+      <div class="input-group-floating"
+        [class.invalid]="submitted && registerForm.get('middleName')?.invalid">
+
+        <input 
+          type="text" 
+          formControlName="middleName" 
+          id="middleName" 
+          placeholder=" "
+          maxlength="50"
+          (input)="autoCapitalize('middleName'); clearErrors()"
+          (keydown)="allowOnlyNameChars($event)"
+        >
+
+        <label for="middleName">Middle name (optional)</label>
+        
+        @if (submitted && registerForm.get('middleName')?.hasError('minlength')) {
+          <p class="error-text">
+            Minimum 2 characters
+          </p>
+        }
       </div>
-    </div>
 
-    <div class="input-group-floating">
-      <input type="text" id="middleName" placeholder=" " #middlename>
-      <label for="middleName">Middle name (optional)</label>
-    </div>
+      <div class="input-group-floating"
+        [class.invalid]="submitted && (registerForm.get('email')?.invalid)">
 
-    <div class="input-group-floating">
-      <input type="email" id="email" placeholder=" " #email />
-      <label for="email">Email address</label>
-    </div>
+        <input 
+          type="email"
+          formControlName="email"
+          id="email" 
+          placeholder=" "
+          maxlength="50"
+          (input)="clearErrors()"
+        >
 
-    <div class="input-group-floating password-group">
-      <input [type]="showPassword ? 'text' : 'password'" id="password" placeholder=" " #password />
-      <label for="password">Password</label>
-      <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()">
-        <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
-      </button>
-    </div>
+        <label for="email">Email address</label>
 
-    <div class="input-group-floating">
-      <input type="tel" id="phone" placeholder=" " required #phone />
-      <label for="phone">Phone number</label>
-    </div>
+        @if (submitted && registerForm.get('email')?.hasError('required')) {
+          <p class="error-text">
+              Field is required
+          </p>
+        }
 
-    <button type="button" (click)="registerBackend(name, surname, middlename, email, password, phone)" class="confirm-btn">Conferma</button>
+        @if (submitted && emailAlreadyRegistered) {
+          <p class="warning-text">
+            Email already registered.  
+            <a routerLink="/login"> log in</a>
+            instead?
+          </p>
+        }
 
-    <p class="signup-text">Hai già un account? <a routerLink="/login">Accedi.</a></p>
+      </div>
+
+      <div class="input-group-floating password-group"
+        [class.invalid]="submitted && passwordInvalid">
+
+        <input 
+          [type]="showPassword ? 'text' : 'password'"
+          formControlName="password"
+          id="password" 
+          placeholder=" "
+          (input)="checkPasswordRules(); clearErrors()"
+        >
+
+        <label for="password">Password</label>
+
+        <button type="button" class="toggle-btn" (click)="togglePasswordVisibility()">
+          <i class="bi" [ngClass]="showPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+        </button>
+
+        <!-- Popover password rules -->
+        <div class="password-popover" *ngIf="showPopover">
+            <p>Password must contain:</p>
+
+            <div class="rule" [class.valid]="ruleLetter">
+                <span>{{ ruleLetter ? '✔' : '✗' }}</span>
+                At least one letter
+            </div>
+
+            <div class="rule" [class.valid]="ruleNumber">
+                <span>{{ ruleNumber ? '✔' : '✗' }}</span>
+                At least one number
+            </div>
+
+            <div class="rule" [class.valid]="ruleLength">
+                <span>{{ ruleLength ? '✔' : '✗' }}</span>
+                Minimum 8 characters
+            </div>
+        </div>
+
+        @if (submitted && registerForm.get('password')?.hasError('required')) {
+          <p class="error-text">
+            Field is required
+          </p>
+        } @else if (submitted && passwordInvalid) {
+          <p class="error-text">
+            Invalid password
+          </p>
+        }
+
+      </div>
+
+      <div class="input-group-floating"
+        [class.invalid]="submitted && registerForm.get('phone')?.invalid">
+
+        <input 
+          type="tel" 
+          id="phone"
+          formControlName="phone"
+          placeholder=" "
+          maxlength="25"
+          (keydown)="allowOnlyPhoneChars($event)"
+          (paste)="onPhonePaste($event)"
+        >
+        <label for="phone">Phone number</label>
+
+         @if (submitted && registerForm.get('phone')?.hasError('required')) {
+          <p class="error-text">
+            Field is required
+          </p>
+        }
+
+        @if (registerForm.get('phone')?.hasError('minlength')) {
+          <p class="error-text">
+            Minimum 10 digits
+          </p>
+        }
+
+      </div>
+
+      <button type="submit" class="confirm-btn">Conferma</button>
+
+      <p class="signup-text">Hai già un account? <a routerLink="/login">Accedi.</a></p>
+
+    </form>
+
   </div>
 </div>

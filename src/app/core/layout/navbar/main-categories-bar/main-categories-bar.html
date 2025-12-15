@@ -1,8 +1,25 @@
 <div class="main-categories-container">
   <ul class="categories-list">
     <li class="nav-link" *ngFor="let link of links">
-      <a [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
+      <a 
+        [routerLink]="link.path" 
+        routerLinkActive="active" 
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        <span class="label">{{ link.label }}</span>
+      </a>
     </li>
   </ul>
+
+  @if (isAdmin) {
+    <button
+      class="admin-toggle"
+      (click)="toggleAdminMode()"
+      title="Toggle admin mode"
+    >
+      {{ adminMode ? 'SHOP' : 'ADMIN' }}
+    </button>
+  }
+
   <hr />
 </div>
