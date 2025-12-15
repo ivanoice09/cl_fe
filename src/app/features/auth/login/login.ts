@@ -55,13 +55,15 @@ export class Login {
             this.jwtTokenPayload = jwt_decode.jwtDecode(this.jwtToken);
             const persistent = remember ? remember.checked : true;
             this.auth.SetJwtInfo(true, this.jwtToken, this.jwtTokenPayload.email, persistent);
-            // console.log('Decoded JWT payload:', this.jwtTokenPayload);
-            // console.log('Customer ID from token:', this.jwtTokenPayload.CustomerId);
-            // console.log('Email from token:', this.jwtTokenPayload.email);
-            // console.log('Role from token:', this.jwtTokenPayload.role);
-            // console.log('Expiration from token:', this.jwtTokenPayload.exp);
-            // console.log('Issuer from token:', this.jwtTokenPayload.iss);
-            // console.log('Audience from token:', this.jwtTokenPayload.aud);
+
+            console.log('Decoded JWT payload:', this.jwtTokenPayload);
+            console.log('Customer ID from token:', this.jwtTokenPayload.CustomerId);
+            console.log('Email from token:', this.jwtTokenPayload.email);
+            console.log('Role from token:', this.jwtTokenPayload.role);
+            console.log('Expiration from token:', this.jwtTokenPayload.exp);
+            console.log('Issuer from token:', this.jwtTokenPayload.iss);
+            console.log('Audience from token:', this.jwtTokenPayload.aud);
+
             this.router.navigate(['/profile']);
             this.alertService.showAlert('logged in successfully', 'success');
             break;
