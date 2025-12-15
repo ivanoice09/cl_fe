@@ -2,33 +2,58 @@ div.main-categories-container {
   button.hamburger {
     display: none;
   }
+
   ul.categories-list {
     display: flex;
     gap: 80px;
     padding: 15px 20px;
     margin: 0;
     list-style: none;
-    background-color:#1e1e1e;
+    background-color: #1e1e1e;
     justify-content: center;
 
     li.nav-link {
       a {
+        // position: relative;
         text-decoration: none;
-        color: rgb(255, 255, 255);
-        //font-weight: bold;
-        font-size: 16px;
-        padding: 8px 12px;
-        border-radius: 4px;
+        font-weight: 700;
+        font-size: 1rem;
 
-        &.active,
-        &:hover {
-          background-color: #ff5700;
+        .label {
+          --x: 50%;
+          --y: 50%;
+
+          display: inline-block;
+          color: white;
+          
+        }
+
+          &:hover .label {
+            color: transparent;
+
+            transition: color 0.50s ease;
+
+            background-image: radial-gradient(
+                80px circle at var(--x) var(--y),
+                #ff8c00 0%,
+                #ff8c00 40%,
+                #ffffff 60%);
+
+            background-clip: text;
+            -webkit-background-clip: text;
+          }
+
+          &.active .label {
+            color: #ff8c00;
+            background: none;
+          }
+
         }
       }
+
+    }
+
+    hr {
+      margin: 0px;
     }
   }
-
-  hr {
-    margin: 0px;
-  }
-}

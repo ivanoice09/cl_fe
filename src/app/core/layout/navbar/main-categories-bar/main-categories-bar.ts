@@ -17,6 +17,26 @@ export class MainCategoriesBar {
     { label: 'ACCESSORIES', path: 'products/accessories' }
   ];
 
+  onMouseMove(event: MouseEvent) {
+    const link = event.currentTarget as HTMLElement;
+    const label = link.querySelector('.label') as HTMLElement;
+
+    const rect = label.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    label.style.setProperty('--x', `${x}px`);
+    label.style.setProperty('--y', `${y}px`);
+  }
+
+  onMouseLeave(event: MouseEvent) {
+    const link = event.currentTarget as HTMLElement;
+    const label = link.querySelector('.label') as HTMLElement;
+
+    label.style.removeProperty('--x');
+    label.style.removeProperty('--y');
+  }
+
   // evento per comunicare al padre
   // @Output() toggle = new EventEmitter<void>();
 
