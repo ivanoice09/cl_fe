@@ -1,4 +1,9 @@
 div.main-categories-container {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  background-color: #1e1e1e;
+
   button.hamburger {
     display: none;
   }
@@ -9,51 +14,71 @@ div.main-categories-container {
     padding: 15px 20px;
     margin: 0;
     list-style: none;
-    background-color: #1e1e1e;
+    // background-color: #1e1e1e;
     justify-content: center;
 
     li.nav-link {
       a {
-        // position: relative;
+        position: relative;
         text-decoration: none;
         font-weight: 700;
         font-size: 1rem;
+        color: white;
+        padding: 0.25rem 0;
+        transition: color 0.4s ease;
 
         .label {
-          --x: 50%;
-          --y: 50%;
-
-          display: inline-block;
-          color: white;
-          
+          position: relative;
+          z-index: 2;
         }
 
-          &:hover .label {
-            color: transparent;
+        &:hover {
+          color: #ff5700;
 
-            transition: color 0.50s ease;
-
-            background-image: radial-gradient(
-                80px circle at var(--x) var(--y),
-                #ff5700 0%,
-                #ff5700 40%,
-                #ffffff 60%);
-
-            background-clip: text;
-            -webkit-background-clip: text;
+          &::after {
+            width: 100%;
           }
-
-          &.active .label {
-            color: #ff5700;
-            background: none;
-          }
-
         }
+
+        &.active {
+          color: #ff5700;
+
+          &::after {
+            width: 100%;
+          }
+        }
+
       }
-
     }
 
-    hr {
-      margin: 0px;
-    }
   }
+
+  // Admin control
+  .admin-toggle {
+    // margin-left: auto;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+
+    background: transparent;
+    border: 1px solid white;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s ease;
+    color: white;
+  }
+
+  .admin-toggle:hover {
+    opacity: 1;
+  }
+
+  hr {
+    margin: 0px;
+  }
+
+}

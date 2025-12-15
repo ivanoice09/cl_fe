@@ -7,14 +7,23 @@ import { LogoutHttp } from './logout-http';
   providedIn: 'root',
 })
 export class AuthService {
-  
+
   private loggedSubject = new BehaviorSubject<boolean>(this.hasToken());
   public logged$ = this.loggedSubject.asObservable();
 
   private emailSubject = new BehaviorSubject<string | null>(this.getStoredEmail());
   public email$ = this.emailSubject.asObservable();
 
-  constructor(private httpRefresh: RefreshTokenHttp, private httpLogout: LogoutHttp) {}
+  private isAdminSubject = new BehaviorSubject<boolean>(false);
+  public isAdmin$ = this.isAdminSubject.asObservable();
+
+  constructor(private httpRefresh: RefreshTokenHttp, private httpLogout: LogoutHttp) {
+    const token = localStorage.getItem('jwtToken') || sessionStorage.getItem('jwtToken');
+    if (token) {
+      const isAdmin = this.extractIsAdminFromToken(token);
+      this.isAdminSubject.next(isAdmin);
+    }
+  }
 
   private hasToken(): boolean {
     return !!localStorage.getItem('jwtToken') || !!sessionStorage.getItem('jwtToken');
@@ -37,9 +46,13 @@ export class AuthService {
         localStorage.clear();
       }
 
+      const isAdmin = this.extractIsAdminFromToken(token);
+      this.isAdminSubject.next(isAdmin);
+
       // Reactive updates
       this.loggedSubject.next(true);
       if (email) this.emailSubject.next(email);
+
     } else {
       // Clear everything
       localStorage.clear();
@@ -48,6 +61,7 @@ export class AuthService {
       // Reactive updates
       this.loggedSubject.next(false);
       this.emailSubject.next(null);
+      this.isAdminSubject.next(false);
     }
   }
 
@@ -103,8 +117,18 @@ export class AuthService {
 
   logoutBackend() {
     return this.httpLogout.HttpPostLogout()
-    .pipe(
-      tap(() => this.SetJwtInfo(false, '')));
+      .pipe(
+        tap(() => this.SetJwtInfo(false, '')));
   }
+
+  private extractIsAdminFromToken(token: string): boolean {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload?.role === 'Admin';
+    } catch {
+      return false;
+    }
+  }
+
 
 }

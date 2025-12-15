@@ -5,12 +5,21 @@
         [routerLink]="link.path" 
         routerLinkActive="active" 
         [routerLinkActiveOptions]="{ exact: true }"
-        (mousemove)="onMouseMove($event)"
-        (mouseleave)="onMouseLeave($event)"
       >
         <span class="label">{{ link.label }}</span>
       </a>
     </li>
   </ul>
+
+  @if (isAdmin) {
+    <button
+      class="admin-toggle"
+      (click)="toggleAdminMode()"
+      title="Toggle admin mode"
+    >
+      {{ adminMode ? 'SHOP' : 'ADMIN' }}
+    </button>
+  }
+
   <hr />
 </div>

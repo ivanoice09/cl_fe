@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Output, EventEmitter } from '@angular/core';
+import { AuthService } from '../../../../shared/services/auth-service';
 
 @Component({
   selector: 'app-main-categories-bar',
@@ -10,31 +11,42 @@ import { Output, EventEmitter } from '@angular/core';
   styleUrl: './main-categories-bar.scss',
 })
 export class MainCategoriesBar {
-  links = [
-    { label: 'BIKES', path: '/products/bikes' },
-    { label: 'COMPONENTS', path: 'products/components' },
-    { label: 'CLOTHING', path: 'products/clothing' },
-    { label: 'ACCESSORIES', path: 'products/accessories' }
-  ];
 
-  onMouseMove(event: MouseEvent) {
-    const link = event.currentTarget as HTMLElement;
-    const label = link.querySelector('.label') as HTMLElement;
+  constructor(private authService: AuthService) {
 
-    const rect = label.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
-
-    label.style.setProperty('--x', `${x}px`);
-    label.style.setProperty('--y', `${y}px`);
   }
 
-  onMouseLeave(event: MouseEvent) {
-    const link = event.currentTarget as HTMLElement;
-    const label = link.querySelector('.label') as HTMLElement;
+  shopLinks = [
+    { label: 'BIKES', path: '/products/bikes' },
+    { label: 'COMPONENTS', path: '/products/components' },
+    { label: 'CLOTHING', path: '/products/clothing' },
+    { label: 'ACCESSORIES', path: '/products/accessories' }
+  ];
 
-    label.style.removeProperty('--x');
-    label.style.removeProperty('--y');
+  adminLinks = [
+    {label: 'CUSTOMERS', path: '/admin/customers'},
+    {label:'PRODUCTS', path: '/admin/products'}
+  ];
+
+  links = this.shopLinks;
+
+  isAdmin = false;
+  adminMode = false;
+
+  ngOnInit(): void {
+    this.authService.isAdmin$.subscribe(isAdmin => {
+      this.isAdmin = isAdmin;
+
+      if (!isAdmin) {
+        this.adminMode = false;
+        this.links = this.shopLinks;
+      }
+    })
+  }
+
+  toggleAdminMode(): void {
+    this.adminMode = !this.adminMode;
+    this.links = this.adminMode ? this.adminLinks : this.shopLinks;
   }
 
   // evento per comunicare al padre
