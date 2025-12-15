@@ -1,15 +1,32 @@
 <div class="card product-card" (click)="onSelect($event)">
-  <img
-    [src]="'data:image/gif;base64,' + product.thumbNailPhoto"
-    class="card-img-top img-fluid"
-    alt="{{ product.name }}"
-  />
 
-  <div class="card-body">
-    <p class="text-muted small mb-1 text-center">Categoria: {{ product.categoryName }}</p>
-    
-    <h5 class="card-title text-center">{{ product.name }}</h5>
-    
-    <p class="card-text text-center fw-bold">Prezzo: € {{ product.listPrice }}</p>
+  <!-- IMAGE WRAPPER -->
+  <div class="image-wrapper">
+    <img
+      [src]="homeImage ? homeImage : 'data:image/gif;base64,' + product.thumbNailPhoto"
+      alt="{{ product.name }}"
+    />
+
+    <!-- CATEGORY BADGE -->
+    <span class="category-badge">
+      {{ product.categoryName }}
+    </span>
+
+    <!-- HOVER OVERLAY -->
+    <div class="image-overlay">
+      <span>View product</span>
+    </div>
   </div>
+
+  <!-- CONTENT -->
+  <div class="card-body">
+    <h5 class="card-title" title="{{ product.name }}">
+      {{ product.name }}
+    </h5>
+
+    <div class="price-row">
+      <span class="price">€ {{ product.listPrice }}</span>
+    </div>
+  </div>
+
 </div>

@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 })
 export class Card {
   @Input() product!: ProductCard;
+  @Input() homeImage?: string; // nuovo input opzionale
 
   constructor(private router: Router) {}
 
