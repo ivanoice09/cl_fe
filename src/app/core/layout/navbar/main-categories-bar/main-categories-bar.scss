@@ -35,8 +35,8 @@ div.main-categories-container {
 
             background-image: radial-gradient(
                 80px circle at var(--x) var(--y),
-                #ff8c00 0%,
-                #ff8c00 40%,
+                #ff5700 0%,
+                #ff5700 40%,
                 #ffffff 60%);
 
             background-clip: text;
@@ -44,7 +44,7 @@ div.main-categories-container {
           }
 
           &.active .label {
-            color: #ff8c00;
+            color: #ff5700;
             background: none;
           }
 
