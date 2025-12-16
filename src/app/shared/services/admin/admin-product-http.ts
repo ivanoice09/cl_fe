@@ -11,7 +11,19 @@ export class AdminProductHttp {
 
   constructor(private http: HttpClient) {}
 
-  getProducts(): Observable<ProductList[]> {
-    return this.http.get<ProductList[]>(this.apiUrl);
+  getProducts(
+    page: number,
+    pageSize: number,
+    sortBy?: string,
+    sortDirection?: 'asc' | 'desc'
+  ) {
+    return this.http.get<any>(this.apiUrl, {
+      params:  {
+        pageNumber: page,
+        pageSize: pageSize,
+        sortBy: sortBy ?? '',
+        sortDirection: sortDirection ?? 'asc'
+      }
+    });
   }
 }

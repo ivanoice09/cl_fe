@@ -12,21 +12,62 @@ import { CommonModule } from '@angular/common';
 export class Products {
 
   products: ProductList[] = [];
+
+  totalCount = 0;
+
+  page = 1;
+  pageSize = 20;
+
+  sortBy = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   isLoading = true;
 
   constructor(private productService: AdminProductHttp) {}
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe({
-      next: res => {
-        this.products = res;
-        this.isLoading = false;
-      },
-      error: err => {
-        console.error(err);
-        this.isLoading = false;
-      }
-    })
+    this.loadProducts();
+  }
+
+  loadProducts() {
+    this.isLoading = true;
+
+    this.productService
+      .getProducts(this.page, this.pageSize, this.sortBy, this.sortDirection)
+      .subscribe({
+        next: res => {
+          this.products = res.items;
+          this.totalCount = res.totalCount;
+          this.isLoading = false;
+        },
+        error: err => {
+          console.error(err);
+          this.isLoading = false;
+        }
+      });
+  }
+
+  changeSort(column: string) {
+    if (this.sortBy === column) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.loadProducts();
+  }
+
+  nextPage() {
+    this.page++;
+    this.loadProducts();
+  }
+
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.loadProducts();
+    }
   }
 
 }
