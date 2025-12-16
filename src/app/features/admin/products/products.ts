@@ -70,4 +70,8 @@ export class Products {
     }
   }
 
+  get totalPages(): number {
+    return Math.ceil(this.totalCount / this.pageSize)
+  }
+
 }

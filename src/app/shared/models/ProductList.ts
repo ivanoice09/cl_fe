@@ -1,9 +1,8 @@
 export interface ProductList {
   productId: number;
+  productNumber: string;
   name: string;
-  color?: string;
-  standardCost: number;
   listPrice: number;
-  size?: string;
-  weight?: number;
+  categoryName: string;
+  parentCategoryName: string;
 }

@@ -3,6 +3,10 @@
     padding: 1rem;
 }
 
+.big-ass-page {
+    min-height: 100vh;
+}
+
 .prev-next {
     /* padding: 0.5rem; */
     gap: 0.8rem;

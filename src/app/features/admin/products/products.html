@@ -6,42 +6,45 @@
     <thead>
       <tr>
         <th class="sort-by" (click)="changeSort('id')">ID</th>
+        <th>Product Number</th>
         <th class="sort-by" (click)="changeSort('name')">Name</th>
-        <th>Color</th>
-        <th>Standard Cost</th>
         <th class="sort-by" (click)="changeSort('price')">List Price</th>
-        <th>Size</th>
-        <th>Weight</th>
+        <th class="sort-by" (click)="changeSort('category')">Category</th>
+        <th class="sort-by" (click)="changeSort('parentcategory')">Parent Category</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let p of products">
         <td>{{ p.productId }}</td>
+        <td>{{ p.productNumber }}</td>
         <td>{{ p.name }}</td>
-        <td>{{ p.color || '-' }}</td>
-        <td>{{ p.standardCost | currency }}</td>
         <td>{{ p.listPrice | currency }}</td>
-        <td>{{ p.size || '-' }}</td>
-        <td>{{ p.weight || '-' }}</td>
+        <td>{{ p.categoryName }}</td>
+        <td>{{ p.parentCategoryName }}</td>
       </tr>
     </tbody>
   </table>
+
+  <p class="big-ass-page" *ngIf="isLoading">Loading products...</p>
 
   <div class="prev-next d-flex justify-content-center align-items-center mt-3">
     <button class="btn btn-secondary" (click)="prevPage()" [disabled]="page === 1">
       Previous
     </button>
 
-    <span>
+    <!-- <span>
       Page {{ page }} · {{ totalCount }} products
+    </span> -->
+    <span>
+      Page {{ page }} / {{ totalPages }}
     </span>
 
-    <button class="btn btn-secondary" (click)="nextPage()" [disabled]="page * pageSize >= totalCount">
+    <!-- <button class="btn btn-secondary" (click)="nextPage()" [disabled]="page * pageSize >= totalCount">
+      Next
+    </button> -->
+    <button class="btn btn-secondary" (click)="nextPage()" [disabled]="page >= totalPages">
       Next
     </button>
   </div>
-
-  <p *ngIf="isLoading">Loading products...</p>
-
 </div>
 
