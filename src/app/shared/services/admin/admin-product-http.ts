@@ -7,7 +7,7 @@ import { ProductList } from '../../models/ProductList';
   providedIn: 'root',
 })
 export class AdminProductHttp {
-  private readonly apiUrl = 'https://localhost:7000/api/products/admin'
+  private readonly apiUrl = 'https://localhost:7000/api/admin/products'
 
   constructor(private http: HttpClient) {}
 
