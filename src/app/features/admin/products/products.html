@@ -5,11 +5,11 @@
   <table *ngIf="!isLoading" class="table table-striped table-hover">
     <thead>
       <tr>
-        <th (click)="changeSort('id')">ID</th>
-        <th (click)="changeSort('name')">Name</th>
+        <th class="sort-by" (click)="changeSort('id')">ID</th>
+        <th class="sort-by" (click)="changeSort('name')">Name</th>
         <th>Color</th>
         <th>Standard Cost</th>
-        <th (click)="changeSort('price')">List Price</th>
+        <th class="sort-by" (click)="changeSort('price')">List Price</th>
         <th>Size</th>
         <th>Weight</th>
       </tr>
