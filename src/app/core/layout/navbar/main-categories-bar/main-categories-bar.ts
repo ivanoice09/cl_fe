@@ -12,9 +12,7 @@ import { AuthService } from '../../../../shared/services/auth-service';
 })
 export class MainCategoriesBar {
 
-  constructor(private authService: AuthService) {
-
-  }
+  constructor(private authService: AuthService) {}
 
   shopLinks = [
     { label: 'BIKES', path: '/products/bikes' },
@@ -48,12 +46,4 @@ export class MainCategoriesBar {
     this.adminMode = !this.adminMode;
     this.links = this.adminMode ? this.adminLinks : this.shopLinks;
   }
-
-  // evento per comunicare al padre
-  // @Output() toggle = new EventEmitter<void>();
-
-  // funzione chiamata dal button
-  // toggleMenu() {
-  //   this.toggle.emit();
-  // }
 }

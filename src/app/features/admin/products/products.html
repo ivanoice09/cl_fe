@@ -1,1 +1,33 @@
-<p>products works!</p>
+<div class="admin-products">
+
+  <h2>Products</h2>
+
+  <table *ngIf="!isLoading" class="table table-striped table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Color</th>
+        <th>Standard Cost</th>
+        <th>List Price</th>
+        <th>Size</th>
+        <th>Weight</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of products">
+        <td>{{ p.productId }}</td>
+        <td>{{ p.name }}</td>
+        <td>{{ p.color || '-' }}</td>
+        <td>{{ p.standardCost | currency }}</td>
+        <td>{{ p.listPrice | currency }}</td>
+        <td>{{ p.size || '-' }}</td>
+        <td>{{ p.weight || '-' }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="isLoading">Loading products...</p>
+
+</div>
+

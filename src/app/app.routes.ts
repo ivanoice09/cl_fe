@@ -8,6 +8,7 @@ import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { OrderDetailComponent } from './features/orders/order-detail/order-detail';
 import { Register } from './features/auth/register/register';
 import { NotFound } from './pages/not-found/not-found';
+import { Products } from './features/admin/products/products';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'profile', component: Profile },
   { path: "orders/:orderId", component: OrderDetailComponent },
   { path: 'products/:mainCategory', component: CardsContainer },
+  { path: 'admin/products', component: Products },
 
   { 
     path: 'profile', 
