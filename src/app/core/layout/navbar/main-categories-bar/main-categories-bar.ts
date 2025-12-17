@@ -22,7 +22,7 @@ export class MainCategoriesBar {
 
   adminLinks = [
     { label: 'CUSTOMERS', path: '/admin/customers' },
-    { label: 'ORDERS', path: '/admin/customers' },
+    { label: 'ORDERS', path: '/admin/orders' },
     { label: 'PRODUCTS', path: '/admin/products' }
   ];
 
