@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../../../../shared/services/auth-service';
 
 @Component({
@@ -12,9 +11,7 @@ import { AuthService } from '../../../../shared/services/auth-service';
 })
 export class MainCategoriesBar {
 
-  constructor(private authService: AuthService) {
-
-  }
+  constructor(private authService: AuthService) {}
 
   shopLinks = [
     { label: 'BIKES', path: '/products/bikes' },
@@ -24,8 +21,9 @@ export class MainCategoriesBar {
   ];
 
   adminLinks = [
-    {label: 'CUSTOMERS', path: '/admin/customers'},
-    {label:'PRODUCTS', path: '/admin/products'}
+    { label: 'CUSTOMERS', path: '/admin/customers' },
+    { label: 'ORDERS', path: '/admin/customers' },
+    { label: 'PRODUCTS', path: '/admin/products' }
   ];
 
   links = this.shopLinks;
@@ -48,12 +46,4 @@ export class MainCategoriesBar {
     this.adminMode = !this.adminMode;
     this.links = this.adminMode ? this.adminLinks : this.shopLinks;
   }
-
-  // evento per comunicare al padre
-  // @Output() toggle = new EventEmitter<void>();
-
-  // funzione chiamata dal button
-  // toggleMenu() {
-  //   this.toggle.emit();
-  // }
 }
