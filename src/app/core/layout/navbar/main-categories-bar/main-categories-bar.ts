@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../../../../shared/services/auth-service';
 
 @Component({
@@ -22,8 +21,9 @@ export class MainCategoriesBar {
   ];
 
   adminLinks = [
-    {label: 'CUSTOMERS', path: '/admin/customers'},
-    {label:'PRODUCTS', path: '/admin/products'}
+    { label: 'CUSTOMERS', path: '/admin/customers' },
+    { label: 'ORDERS', path: '/admin/customers' },
+    { label: 'PRODUCTS', path: '/admin/products' }
   ];
 
   links = this.shopLinks;
