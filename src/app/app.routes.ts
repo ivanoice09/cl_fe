@@ -10,6 +10,7 @@ import { Register } from './features/auth/register/register';
 import { NotFound } from './pages/not-found/not-found';
 import { Cart } from './pages/cart/cart';
 import { AdminCustomer } from './features/admin/customers/admin-customer';
+import { AdminOrder } from './features/admin/orders/admin-order';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -37,6 +38,7 @@ export const routes: Routes = [
     ],
   },
   { path: 'admin/customers', component: AdminCustomer },
+  { path: 'admin/orders', component: AdminOrder },
 
   { path: '404', component: NotFound },
   { path: '**', component: NotFound },

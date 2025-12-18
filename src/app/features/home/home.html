@@ -1,12 +1,21 @@
 <div class="home-container">
   <!-- Hero Section -->
-  <section class="hero-section">
-    <div class="hero-content">
-      <h1>Benvenuti nel nostro Store</h1>
-      <p>Scopri i migliori prodotti, le novità e le categorie più popolari</p>
-      <button class="cta-button" routerLink="/products">Esplora Prodotti</button>
-    </div>
-  </section>
+<section class="hero-section" 
+  [style.background-image]="'linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(' + slides[currentSlide].image + ')'">
+  
+  <div class="hero-content" [class.fade-in]="isAnimating">
+    <h1>{{ slides[currentSlide].title }}</h1>
+    <p>{{ slides[currentSlide].text }}</p>
+    <button class="cta-button" routerLink="/products">Esplora Prodotti</button>
+  </div>
+
+  <div class="slide-indicators">
+    <span *ngFor="let s of slides; let i = index" 
+          [class.active]="i === currentSlide"
+          (click)="goToSlide(i)">
+    </span>
+  </div>
+</section>
 
   <app-highlight-section></app-highlight-section>
 
