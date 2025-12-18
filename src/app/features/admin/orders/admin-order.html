@@ -1,0 +1,143 @@
+<h2 class="customer-title">Lista Ordini (Admin)</h2>
+
+<div class="search-container">
+  <div class="search-box">
+    <i class="bi bi-search"></i>
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+      placeholder="Cerca per Numero Ordine o Nome Cliente..."
+      class="search-input"
+    />
+    <i class="bi bi-x-lg clear-icon" *ngIf="searchTerm" (click)="searchTerm = ''; onSearch()"></i>
+  </div>
+</div>
+
+<ul *ngIf="orders.length > 0" class="customers-list">
+  <li *ngFor="let o of orders" class="customer-item">
+    <div class="customer-row" (click)="toggleOrderDetails(o.salesOrderId)">
+      <div class="order-info">
+        <span class="customer-name">#{{ o.salesOrderId }} - {{ o.customerName }}</span>
+        <small class="order-date">{{ o.orderDate }}</small>
+      </div>
+
+      <div class="row-actions">
+        <span class="total-badge">{{ o.totalDue | currency : 'EUR' }}</span>
+        <button
+          class="btn-delete-small"
+          (click)="deleteOrder(o.salesOrderId); $event.stopPropagation()"
+        >
+          Elimina
+        </button>
+      </div>
+    </div>
+
+    <div class="customer-details-box" *ngIf="expandedOrderId === o.salesOrderId">
+      <div *ngIf="orderDetails[o.salesOrderId]; else loadingDetail">
+        <div class="view-header">
+          <h4>Dettagli Spedizione</h4>
+          <div class="status-edit-container">
+        <label>Stato: </label>
+        <select 
+          [value]="orderDetails[o.salesOrderId].status" 
+          (change)="updateStatus(o.salesOrderId, $event)"
+          class="status-select">
+          <option [value]="1">In corso</option>
+          <option [value]="2">Approvato</option>
+          <option [value]="3">In attesa</option>
+          <option [value]="4">Spedito</option>
+          <option [value]="5">Annullato</option>
+        </select>
+      </div>
+        </div>
+
+        <p><strong>Metodo di Spedizione:</strong> {{ orderDetails[o.salesOrderId].shipMethod }}</p>
+
+        <div class="address-grid-order">
+          <div class="address-card billing">
+            <h6>Fatturazione</h6>
+            <p>{{ orderDetails[o.salesOrderId].billToAddress.addressLine1 }}</p>
+            <p>
+              {{ orderDetails[o.salesOrderId].billToAddress.city }} ({{
+                orderDetails[o.salesOrderId].billToAddress.postalCode
+              }})
+            </p>
+          </div>
+          <div class="address-card shipping">
+            <h6>Spedizione</h6>
+            <p>{{ orderDetails[o.salesOrderId].shipToAddress.addressLine1 }}</p>
+            <p>
+              {{ orderDetails[o.salesOrderId].shipToAddress.city }} ({{
+                orderDetails[o.salesOrderId].shipToAddress.postalCode
+              }})
+            </p>
+          </div>
+        </div>
+
+        <h4 class="mt-4">Prodotti Acquistati</h4>
+        <div class="table-responsive">
+          <table class="order-items-table">
+            <thead>
+              <tr>
+                <th>Prodotto</th>
+                <th class="text-center">Quantità</th>
+                <th class="text-end">Totale</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of orderDetails[o.salesOrderId].items">
+                <td>{{ item.productName }}</td>
+                <td class="text-center">{{ item.orderQty }}</td>
+                <td class="text-end">{{ item.lineTotal | currency : 'EUR' }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cost-summary">
+          <div class="cost-row">
+            <span>Subtotale:</span>
+            <span>{{ orderDetails[o.salesOrderId].subTotal | currency : 'EUR' }}</span>
+          </div>
+          <div class="cost-row">
+            <span>Tasse:</span>
+            <span>{{ orderDetails[o.salesOrderId].taxAmt | currency : 'EUR' }}</span>
+          </div>
+          <div class="cost-row">
+            <span>Trasporto:</span>
+            <span>{{ orderDetails[o.salesOrderId].freight | currency : 'EUR' }}</span>
+          </div>
+          <div class="cost-row total">
+            <span>Totale:</span>
+            <span>{{ orderDetails[o.salesOrderId].totalDue | currency : 'EUR' }}</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #loadingDetail>
+        <div class="text-center p-3">Caricamento dettagli...</div>
+      </ng-template>
+    </div>
+  </li>
+</ul>
+
+<div *ngIf="orders.length > 0" class="pagination-container">
+  <div class="pagination-wrapper">
+    <button class="btn-pag" (click)="prevPage()" [disabled]="page === 1">
+      <i class="bi bi-chevron-left"></i> Precedente
+    </button>
+    <div class="page-counter">
+      <span
+        >Pagina <strong>{{ page }}</strong> di <strong>{{ totalPages }}</strong></span
+      >
+    </div>
+    <button class="btn-pag" (click)="nextPage()" [disabled]="page === totalPages">
+      Successiva <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="orders.length === 0" class="no-results">
+  <p>Nessun ordine trovato.</p>
+</div>
