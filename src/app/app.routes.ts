@@ -8,13 +8,13 @@ import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { OrderDetailComponent } from './features/orders/order-detail/order-detail';
 import { Register } from './features/auth/register/register';
 import { NotFound } from './pages/not-found/not-found';
+import { AdminCustomer } from './features/admin/customers/admin-customer';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home },
   { path: 'products', component: CardsContainer },
   { path: 'product/:id', component: Detail },
-  
   { path: 'login', component: Login, data: { hideNavbar: true } },
   { path: 'reset-password', component: ResetPassword, data: { hideNavbar: true } },
   { path: 'register', component: Register, data: {hideNavbar: true }},
@@ -22,7 +22,6 @@ export const routes: Routes = [
   { path: 'profile', component: Profile },
   { path: "orders/:orderId", component: OrderDetailComponent },
   { path: 'products/:mainCategory', component: CardsContainer },
-
   { 
     path: 'profile', 
     component: Profile,
@@ -33,6 +32,7 @@ export const routes: Routes = [
       }
     ]
   },
+  { path: 'admin/customers', component: AdminCustomer },
 
   { path: '404', component: NotFound }, 
   { path: '**', component: NotFound }
