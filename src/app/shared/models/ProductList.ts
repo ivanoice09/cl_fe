@@ -5,4 +5,5 @@ export interface ProductList {
   listPrice: number;
   categoryName: string;
   parentCategoryName: string;
+  modifiedDate: string;
 }
