@@ -1,0 +1,177 @@
+:host {
+  /* Definizione colore principale */
+  --primary-color: #ff5700;
+  --primary-color-hover: #e04d00; /* Una tonalità leggermente più scura per l'hover dei bottoni */
+}
+
+.cart-container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* --- OVERRIDE COLORI (Bootstrap) --- */
+/* Forza il colore del testo 'text-primary' al tuo arancione */
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+/* Forza lo stile dei bottoni 'btn-primary' */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color-hover);
+  border-color: var(--primary-color-hover);
+}
+
+/* Colore dello spinner di caricamento */
+.spinner-border.text-primary {
+  color: var(--primary-color) !important;
+}
+
+/* Loading */
+.loading-container {
+  text-align: center;
+  padding: 4rem 0;
+}
+
+/* Carrello Vuoto */
+.empty-cart {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.empty-cart i {
+  font-size: 6rem;
+}
+
+/* Header Carrello */
+.cart-header {
+  margin-bottom: 2rem;
+}
+
+.cart-header h1 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Cart Items */
+.cart-items {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.cart-item {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+.cart-item img {
+  max-height: 100px;
+  object-fit: cover;
+  transition: all 0.3s ease; /* Transizione fluida per l'immagine */
+}
+
+/* --- PRODUCT LINK HOVER EFFECTS --- */
+/* Quando passi sopra il link dell'immagine */
+.cart-item a:hover img {
+  opacity: 0.8;
+  transform: scale(1.05); /* Leggero zoom */
+  cursor: pointer;
+}
+
+/* Quando passi sopra il link del titolo */
+.cart-item h5 a {
+  color: #212529; /* Colore base scuro */
+  transition: color 0.2s ease;
+  text-decoration: none;
+}
+
+.cart-item h5 a:hover {
+  color: var(--primary-color) !important; /* Diventa arancione all'hover */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Quantity Controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quantity-controls button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.quantity-controls button:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+/* Cart Actions */
+.cart-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Cart Actions Buttons Override */
+.cart-actions .btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+/* Opzionale: se vuoi che il bottone "Svuota" diventi arancione/rosso specifico */
+.cart-actions .btn-outline-danger:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Cart Summary */
+.cart-summary {
+  background: #fff;
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 2rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.summary-row.total {
+  padding-top: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cart-item img {
+    max-height: 80px;
+  }
+  
+  .cart-actions {
+    flex-direction: column;
+  }
+  
+  .cart-summary {
+    position: static;
+    margin-top: 2rem;
+  }
+}

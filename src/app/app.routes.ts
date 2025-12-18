@@ -8,32 +8,34 @@ import { ResetPassword } from './features/auth/reset-password/reset-password';
 import { OrderDetailComponent } from './features/orders/order-detail/order-detail';
 import { Register } from './features/auth/register/register';
 import { NotFound } from './pages/not-found/not-found';
-
+import { Cart } from './pages/cart/cart';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: 'home', component: Home },
   { path: 'products', component: CardsContainer },
   { path: 'product/:id', component: Detail },
-  
+
   { path: 'login', component: Login, data: { hideNavbar: true } },
   { path: 'reset-password', component: ResetPassword, data: { hideNavbar: true } },
-  { path: 'register', component: Register, data: {hideNavbar: true }},
+  { path: 'register', component: Register, data: { hideNavbar: true } },
   { path: 'home', component: Home },
   { path: 'profile', component: Profile },
-  { path: "orders/:orderId", component: OrderDetailComponent },
+  { path: 'orders/:orderId', component: OrderDetailComponent },
   { path: 'products/:mainCategory', component: CardsContainer },
+  { path: 'cart', component: Cart },
 
-  { 
-    path: 'profile', 
+  {
+    path: 'profile',
     component: Profile,
     children: [
       {
-        path: 'addresses', 
-        loadComponent: () => import('./features/profile/addresses/addresses').then(m => m.Addresses)
-      }
-    ]
+        path: 'addresses',
+        loadComponent: () =>
+          import('./features/profile/addresses/addresses').then((m) => m.Addresses),
+      },
+    ],
   },
 
-  { path: '404', component: NotFound }, 
-  { path: '**', component: NotFound }
+  { path: '404', component: NotFound },
+  { path: '**', component: NotFound },
 ];
