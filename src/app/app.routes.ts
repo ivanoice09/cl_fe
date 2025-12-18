@@ -10,6 +10,7 @@ import { Register } from './features/auth/register/register';
 import { NotFound } from './pages/not-found/not-found';
 import { Products } from './features/admin/products/products';
 import { EditCreateForm } from './features/admin/products/edit-create-form/edit-create-form';
+import { ProductFormResolver } from './shared/services/admin/product-form-resolver';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -27,8 +28,8 @@ export const routes: Routes = [
 
   // Admin routes:
   { path: 'admin/products', component: Products },
-  { path: 'admin/products/edit/:id', component: EditCreateForm },
-  { path: 'admin/products/create', component: EditCreateForm },
+  { path: 'admin/products/edit/:id', component: EditCreateForm, resolve: { data: ProductFormResolver} },
+  { path: 'admin/products/create', component: EditCreateForm, resolve: { data: ProductFormResolver} },
 
   { 
     path: 'profile', 
