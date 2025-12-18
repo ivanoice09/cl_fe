@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../shared/services/auth-service';
 import { SearchBar } from '../../../features/search-bar/search-bar';
 import { AlertService } from '../../../shared/services/alert-service';
+import { CartBadgeComponent } from '../navbar/cart-badge/cart-badge';
 
 @Component({
   selector: 'app-navbar',
-  imports: [MainCategoriesBar, RouterLink, CommonModule, SearchBar],
-  templateUrl: './navbar.html',
+  imports: [MainCategoriesBar, RouterLink, CommonModule, SearchBar, CartBadgeComponent],
+templateUrl: './navbar.html',
   styleUrl: './navbar.scss',
 })
 export class Navbar {

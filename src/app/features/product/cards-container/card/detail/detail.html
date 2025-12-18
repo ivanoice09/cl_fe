@@ -39,9 +39,24 @@
             <li class="list-group-item"><strong>Peso:</strong> {{ product.weight ?? '---' }}</li>
           </ul>
           
-          <button class="btn fw-bold text-light w-100" style="background-color: #FF5700; ">
-            Aggiungi al Carrello
-          </button>
+          <button 
+    type="button"
+    class="btn-add-to-cart"
+    (click)="addToCart()"
+    [disabled]="isAddingToCart || !product">
+    <span *ngIf="!isAddingToCart">🛒 Aggiungi al Carrello</span>
+    <span *ngIf="isAddingToCart">⏳ Aggiunta in corso...</span>
+  </button>
+
+        <!-- Messaggio Successo -->
+        <div class="alert alert-success" *ngIf="addToCartSuccess">
+          ✅ Prodotto aggiunto al carrello con successo!
+        </div>
+
+        <!-- Messaggio Errore -->
+        <div class="alert alert-error" *ngIf="addToCartError">
+          ❌ {{ addToCartError }}
+        </div>
         </div>
       </div>
     </div>
