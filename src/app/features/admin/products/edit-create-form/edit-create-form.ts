@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ɵInternalFormsSharedModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { AdminProductHttp } from '../../../../shared/services/admin/admin-product-http';
 import { CommonModule } from '@angular/common';
-import { forkJoin } from 'rxjs';
-import { AdminCategory } from '../../../../shared/models/AdminCategory';
-import { AdminProductModel } from '../../../../shared/models/AdminProductModel';
 
 @Component({
   selector: 'app-edit-create-form',
@@ -18,73 +14,91 @@ export class EditCreateForm {
 
   form!: FormGroup;
 
-  productId?: number;
   isEditMode = false;
-
-  // comes from backend
   hasOrders = false;
 
-  categories: AdminCategory[] = [];
-  models: AdminProductModel[] = [];
+  categories: any[] = [];
+  models: any[] = [];
 
   productCategoryId: number | null = null;
 
-  constructor(private route: ActivatedRoute, private fb: FormBuilder, private adminProductHttp: AdminProductHttp) { }
+  constructor(
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+  ) { }
 
-  ngOnInit() {
-    this.productId = Number(this.route.snapshot.paramMap.get('id'));
-    this.isEditMode = !!this.productId;
-
+  ngOnInit(): void {
     this.buildForm();
 
-    forkJoin({
-      categories: this.adminProductHttp.getCategories(),
-      models: this.adminProductHttp.getModels()
-    }).subscribe(({ categories, models }) => {
-      this.categories = categories;
-      this.models = models;
+    const data = this.route.snapshot.data['data'];
 
-      this.setupCategoryAutoSync();
+    // reference data
+    this.categories = data.categories;
+    this.models = data.models;
 
-      if (this.isEditMode) {
-        this.loadProduct(this.productId!);
+    this.setupCategoryAutoSync();
+
+    // edit mode
+    if (data.product) {
+      this.isEditMode = true;
+      this.hasOrders = data.product.hasOrders;
+
+      this.form.patchValue({
+        name: data.product.name,
+        productNumber: data.product.productNumber,
+        categoryId: data.product.categoryId,
+        productModelId: data.product.productModelId,
+
+        listPrice: data.product.listPrice,
+        standardCost: data.product.standardCost,
+
+        color: data.product.color,
+        size: data.product.size,
+        weight: data.product.weight,
+
+        sellStartDate: data.product.sellStartDate,
+        sellEndDate: data.product.sellEndDate,
+        discontinuedDate: data.product.discontinuedDate
+      });
+
+      if (this.hasOrders) {
+        this.form.get('productNumber')?.disable();
       }
-    });
+    }
   }
 
   private buildForm() {
     this.form = this.fb.group({
+
+      // General
       name: ['', Validators.required],
       productNumber: ['', Validators.required],
       categoryId: [null, Validators.required],
-      // parentCategoryId: [{ value:null, disabled: true }],
       productModelId: [null],
-    });
-  }
 
-  loadProduct(id: number) {
-    this.adminProductHttp.getProduct(id).subscribe({
-      next: product => {
-        this.hasOrders = product.hasOrders;
+      // Pricing
+      listPrice: [0, [Validators.required, Validators.min(0)]],
+      standardCost: [0, [Validators.required, Validators.min(0)]],
 
-        this.form.patchValue({
-          name: product.name,
-          productNumber: product.productNumber,
-          categoryId: product.categoryId,
-          productModelId: product.productModelId
-        });
+      // Attributes
+      color: [''],
+      size: [''],
+      weight: [null, Validators.min(0)],
 
-        if (product.hasOrders) {
-          this.form.get('productNumber')?.disable();
-        }
-      }
+      // Availability
+      sellStartDate: [null, Validators.required],
+      sellEndDate: [null],
+      discontinuedDate: [null],
     });
   }
 
   submit() {
     if (this.form.invalid) return;
 
-    const payload = this.form.getRawValue();
+    const payload = {
+      ...this.form.getRawValue(),
+      parentCategoryId: this.productCategoryId
+    };
 
     if (this.isEditMode) {
 

@@ -6,46 +6,106 @@
 
     <form class="edit-create-form" [formGroup]="form" (ngSubmit)="submit()">
 
-        <h3>General</h3>
+        <section class="form-section">
+            <h3>General</h3>
 
-        <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" class="form-control" formControlName="name" id="name" name="name">
-        </div>
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" formControlName="name" id="name" name="name">
+            </div>
 
-        <div class="form-group">
-            <label for="productNumber">Product Number</label>
-            <input type="text" class="form-control" formControlName="productNumber" id="productNumber"
-                name="productNumber">
-            <small class="text-muted" *ngIf="hasOrders">
-                Product number cannot be changed because this product has orders
-            </small>
-        </div>
+            <div class="form-group">
+                <label for="productNumber">Product Number</label>
+                <input type="text" class="form-control" formControlName="productNumber" id="productNumber"
+                    name="productNumber">
+                <small class="text-muted" *ngIf="hasOrders">
+                    Not editable. Product has orders.
+                </small>
+            </div>
 
-        <div class="form-group">
-            <label for="category">Category</label>
-            <select class="form-control" formControlName="categoryId" id="category" name="category">
-                <option [ngValue]="null">-- Select category --</option>
-                <option *ngFor="let c of categories" [ngValue]="c.productCategoryId">
-                    {{ c.name }}
-                </option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="category">Category</label>
+                <select class="form-control" formControlName="categoryId" id="category" name="category">
+                    <option [ngValue]="null">-- Select category --</option>
+                    <option *ngFor="let c of categories" [ngValue]="c.productCategoryId">
+                        {{ c.name }}
+                    </option>
+                </select>
+            </div>
 
-        <div class="form-group">
-            <label for="model">Model</label>
-            <select class="form-control" formControlName="productModelId" id="model" name="model">
-                <option [ngValue]="null">Select model</option>
-                <option *ngFor="let m of models" [ngValue]="m.productModelId">
-                    {{ m.name }}
-                </option>
-            </select>
-        </div>
+            <div class="form-group">
+                <label for="model">Model</label>
+                <select class="form-control" formControlName="productModelId" id="model" name="model">
+                    <option [ngValue]="null">Select model</option>
+                    <option *ngFor="let m of models" [ngValue]="m.productModelId">
+                        {{ m.name }}
+                    </option>
+                </select>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h3>Pricing</h3>
+
+            <div class="row">
+                <div class="col">
+                    <label>List Price</label>
+                    <input type="number" class="form-control" formControlName="listPrice" step="0.01">
+                </div>
+
+                <div class="col">
+                    <label>Standard Cost</label>
+                    <input type="number" class="form-control" formControlName="standardCost" step="0.01">
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h3>Attributes</h3>
+
+            <div class="row">
+                <div class="col">
+                    <label>Color</label>
+                    <input type="text" class="form-control" formControlName="color">
+                </div>
+
+                <div class="col">
+                    <label>Size</label>
+                    <input type="text" class="form-control" formControlName="size">
+                </div>
+
+                <div class="col">
+                    <label>Weight</label>
+                    <input type="number" class="form-control" formControlName="weight" step="0.01">
+                </div>
+            </div>
+        </section>
+
+        <section class="form-section">
+            <h3>Availability</h3>
+
+            <div class="row flex-column gap-4">
+                <div class="col">
+                    <label>Sell Start Date</label>
+                    <input type="date" class="form-control" formControlName="sellStartDate" />
+                </div>
+
+                <div class="col">
+                    <label>Sell End Date</label>
+                    <input type="date" class="form-control" formControlName="sellEndDate" />
+                </div>
+
+                <div class="col">
+                    <label>Discontinued Date</label>
+                    <input type="date" class="form-control" formControlName="discontinuedDate" />
+                </div>
+            </div>
+        </section>
 
         <button class="btn btn-primary mt-3">
             {{ isEditMode ? 'Update' : 'Create' }}
         </button>
 
     </form>
-    
+
 </div>
