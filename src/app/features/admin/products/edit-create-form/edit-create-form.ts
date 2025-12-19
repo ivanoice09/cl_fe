@@ -36,6 +36,8 @@ export class EditCreateForm {
 
   productCategoryId: number | null = null;
 
+  isSubmitting = false;
+
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -59,6 +61,11 @@ export class EditCreateForm {
   }
 
   submit() {
+
+    // Prevent double submitting
+    if (this.isSubmitting) return;
+
+    // Gaurd: block invalid form (includes custom validators)
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
