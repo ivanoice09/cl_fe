@@ -17,11 +17,11 @@ import { AlertService } from '../../../../shared/services/alert-service';
 import { AdminProductHttp } from '../../../../shared/services/admin/admin-product-http';
 
 @Component({
-  selector: 'app-edit-create-form',
+  selector: 'app-edit-form',
   standalone: true,
   imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, CommonModule, RouterModule],
-  templateUrl: './edit-create-form.html',
-  styleUrl: './edit-create-form.css',
+  templateUrl: './edit-form.html',
+  styleUrl: './edit-form.css',
 })
 export class EditCreateForm {
   // Variables
@@ -241,29 +241,50 @@ export class EditCreateForm {
     return date.split('T')[0];
   }
 
+  // Helper function:
+  /**
+   * to make the update preview from 5 -> 6
+   * to Mountain Bikes -> Road Bikes
+   * @param id 
+   * @returns the product category stringified through mapping of id's
+   */
+  getProductCategoryName(id: number | null): string {
+    if (id == null) return '-';
+    return this.categories.find(c => c.productCategoryId === id)?.name ?? 'Unknown';
+  }
+
+  getProductModelName(id: number | null): string {
+    if (id == null) return '-';
+    return this.models.find(m => m.productModelId === id)?.name ?? 'Unknown';
+  }
+
   private computeChanges(
     original: AdminProductFormSnapshot,
     updated: AdminProductFormSnapshot
   ): ChangeItem[] {
     const changes: ChangeItem[] = [];
 
-    const addIfChanged = (key: keyof AdminProductFormSnapshot, label: string) => {
+    const addIfChanged = (
+      key: keyof AdminProductFormSnapshot,
+      label: string,
+      formatter?: (value: any) => string
+    ) => {
       const before = original[key];
       const after = updated[key];
 
       if (before !== after) {
         changes.push({
           label,
-          before: String(before ?? '—'),
-          after: String(after ?? '—'),
+          before: formatter ? formatter(before) : String(before ?? '—'),
+          after: formatter ? formatter(after) : String(after ?? '—'),
         });
       }
     };
 
     addIfChanged('name', 'Name');
     addIfChanged('productNumber', 'Product number');
-    addIfChanged('productCategoryId', 'Category');
-    addIfChanged('productModelId', 'Model');
+    addIfChanged('productCategoryId', 'Category', (id) => this.getProductCategoryName(id));
+    addIfChanged('productModelId', 'Model', (id) => this.getProductModelName(id));
     addIfChanged('standardCost', 'Standard cost');
     addIfChanged('listPrice', 'List price');
     addIfChanged('color', 'Color');

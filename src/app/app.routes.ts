@@ -9,7 +9,7 @@ import { OrderDetailComponent } from './features/orders/order-detail/order-detai
 import { Register } from './features/auth/register/register';
 import { NotFound } from './pages/not-found/not-found';
 import { Products } from './features/admin/products/products';
-import { EditCreateForm } from './features/admin/products/edit-create-form/edit-create-form';
+import { EditCreateForm } from './features/admin/products/edit-form/edit-form';
 import { ProductFormResolver } from './shared/services/admin/product-form-resolver';
 
 export const routes: Routes = [
