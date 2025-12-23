@@ -5,10 +5,41 @@
 }
 
 .section-title {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #333;
-  margin: 0;
+  font-size: 2rem;
+  font-weight: 700; /* Leggermente più marcato per risaltare al centro */
+  color: #1e1e1e;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centra il contenuto */
+  gap: 20px; /* Spazio tra le linee e il testo */
+  margin: 3rem auto;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Linea a Sinistra */
+.section-title::before {
+  content: "";
+  display: inline-block;
+  height: 30px; /* Altezza della linea */
+  width: 5px;   /* Spessore della linea */
+  background: #ff5700; /* Il tuo arancione coerente */
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+
+/* EFFETTO ACCATTIVANTE: Al passaggio del mouse le linee si allungano */
+.section-title:hover::before,
+.section-title:hover::after {
+  transform: scaleY(1.5); /* La linea si allunga verticalmente */
+  background: #1e1e1e;    /* Cambia colore verso il viola della tua CTA */
+}
+
+.section-title:hover {
+  color: #ff5700;
+  transition: color 0.3s ease;
 }
 
 /* BOTTONI NAVIGAZIONE CUSTOM */

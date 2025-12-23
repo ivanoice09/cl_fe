@@ -1,0 +1,104 @@
+<h2 class="customer-title">Lista Customer (Admin)</h2>
+
+<div class="search-container">
+  <div class="search-box">
+    <i class="bi bi-search"></i>
+    <input
+      type="text"
+      [(ngModel)]="searchTerm"
+      (input)="onSearch()"
+      placeholder="Cerca per nome o cognome..."
+      class="search-input"
+    />
+    <i class="bi bi-x-lg clear-icon" *ngIf="searchTerm" (click)="searchTerm = ''; onSearch()"></i>
+  </div>
+</div>
+
+<ul *ngIf="customers.length > 0" class="customers-list">
+  <li *ngFor="let c of customers" class="customer-item">
+    <div class="customer-row" (click)="selectCustomer(c.customerId)">
+      <span class="customer-name">{{ c.firstName }} {{ c.lastName }}</span>
+
+      <div class="row-actions">
+        <button
+          class="btn-delete-small"
+          (click)="deleteCustomer(c.customerId); $event.stopPropagation()"
+        >
+          Elimina
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="customer-details-box"
+      *ngIf="selectedCustomerId === c.customerId && selectedCustomer"
+    >
+      <div *ngIf="!isEditing" class="view-header">
+        <h4>Dettagli Cliente</h4>
+        <button class="btn-edit-small" (click)="startEdit()">Modifica</button>
+      </div>
+
+      <div class="edit-actions" *ngIf="isEditing">
+        <button class="btn-save" (click)="save()" [disabled]="editForm.invalid">Salva</button>
+        <button class="btn-cancel" (click)="isEditing = false">Annulla</button>
+      </div>
+
+      <div *ngIf="!isEditing" class="view-mode">
+        <p><strong>Email:</strong> {{ selectedCustomer.emailAddress }}</p>
+        <p><strong>Telefono:</strong> {{ selectedCustomer.phone }}</p>
+
+        <div *ngIf="selectedCustomer.addresses && selectedCustomer.addresses.length > 0">
+          <h4>Indirizzi:</h4>
+          <ul class="address-list">
+            <li *ngFor="let addr of selectedCustomer.addresses">
+              {{ addr.addressLine1 }} - {{ addr.city }} ({{ addr.postalCode }})
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <form *ngIf="isEditing" [formGroup]="editForm" class="edit-form">
+        <div class="edit-grid">
+          <div class="field">
+            <label>Nome</label>
+            <input formControlName="firstName" />
+          </div>
+          <div class="field">
+            <label>Cognome</label>
+            <input formControlName="lastName" />
+          </div>
+          <div class="field">
+            <label>Email</label>
+            <input formControlName="emailAddress" />
+          </div>
+          <div class="field">
+            <label>Telefono</label>
+            <input formControlName="phone" />
+          </div>
+        </div>
+      </form>
+    </div>
+  </li>
+</ul>
+
+<div *ngIf="customers.length > 0" class="pagination-container">
+  <div class="pagination-wrapper">
+    <button class="btn-pag" (click)="prevPage()" [disabled]="!hasPrevious">
+      <i class="bi bi-chevron-left"></i> Precedente
+    </button>
+
+    <div class="page-counter">
+      <span
+        >Pagina <strong>{{ page }}</strong> di <strong>{{ totalPages }}</strong></span
+      >
+    </div>
+
+    <button class="btn-pag" (click)="nextPage()" [disabled]="!hasNext">
+      Successiva <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
+</div>
+
+<div *ngIf="customers.length === 0" class="no-results">
+  <p>Nessun cliente trovato per la ricerca effettuata.</p>
+</div>

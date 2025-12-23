@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-cart',
-  imports: [],
+  selector: 'app-cart-stub',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './cart.html',
-  styleUrl: './cart.css',
+  styleUrls: ['./cart.css'],
 })
-export class Cart {
-
-}
+export class CartStub {}

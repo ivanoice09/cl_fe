@@ -1,0 +1,7 @@
+<div class="cart-badge-container" (click)="navigateToCart()" role="button" tabindex="0">
+  <i class="bi bi-cart-fill cart-icon"></i>
+  
+  @if (cartCount > 0) {
+    <span class="cart-count-badge">{{ cartCount }}</span>
+  }
+</div>
