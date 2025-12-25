@@ -20,8 +20,8 @@ import { AdminProductHttp } from '../../../../shared/services/admin/admin-produc
   selector: 'app-edit-form',
   standalone: true,
   imports: [ɵInternalFormsSharedModule, ReactiveFormsModule, CommonModule, RouterModule],
-  templateUrl: './edit-form-v2.html',
-  styleUrl: './edit-form-v2.css',
+  templateUrl: './edit-form.html',
+  styleUrl: './edit-form.css',
 })
 export class EditForm {
   // Variables
