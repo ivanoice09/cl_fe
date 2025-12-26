@@ -1,0 +1,70 @@
+<h2 class="product-title">Lista Product (Admin)</h2>
+
+<div class="search-container">
+    <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()"
+            placeholder="Cerca per product number o product name..." class="search-input" />
+        <i class="bi bi-x-lg clear-icon" *ngIf="searchTerm" (click)="searchTerm = ''; onSearch()"></i>
+    </div>
+</div>
+
+<ul *ngIf="products.length > 0" class="product-list">
+    <li *ngFor="let p of products" class="product-item">
+        <!-- implementa il cliccaggio delle righe -->
+        <div class="product-row" (click)="selectProduct(p.productId)">
+            <div class="product-info">
+                <span class="product-number">{{ p.productNumber }}</span>
+                <small class="product-name">{{ p.name }}</small>
+            </div>
+
+            <div class="row-actions">
+                <button class="btn-delete-small" (click)="deleteProduct(p.productId); $event.stopPropagation()">
+                    Elimina
+                </button>
+            </div>
+        </div>
+
+        <div class="product-details-box" *ngIf="selectedProductId === p.productId && selectedProduct">
+            <div *ngIf="!isEditing" class="view-header">
+                <h4>Dettagli Prodotto</h4>
+                <button class="btn-edit-small" (click)="startEdit()">Modifica</button>
+            </div>
+
+            <div class="edit-actions" *ngIf="isEditing">
+                <button class="btn-save" (click)="save()" [disabled]="editForm.invalid">Salva</button>
+                <button class="btn-cancel" (click)="isEditing = false">Annulla</button>
+            </div>
+
+            <div *ngIf="!isEditing" class="view-mode">
+                <p><strong>Id:</strong> {{ selectedProduct.productId }} </p>
+                <p><strong>Category:</strong> {{ selectedProduct.productCategoryId }} </p>
+                <p><strong>Model:</strong> {{ selectedProduct.productModelId }} </p>
+                <p><strong>Product number:</strong> {{ selectedProduct.productNumber }} </p>
+                <p><strong>Name:</strong> {{ selectedProduct.name }} </p>
+            </div>
+
+            <!-- Qua si dovrebbe fare il form -->
+        </div>
+    </li>
+</ul>
+
+<div *ngIf="products.length > 0" class="pagination-container">
+    <div class="pagination-wrapper">
+        <button class="btn-page" (click)="prevPage()" [disabled]="!hasPrevious">
+            <i class="bi bi-chevron-left"></i> Precendente
+        </button>
+
+        <div class="page-counter">
+            <span>Pagina <strong>{{ page }}</strong> di <strong>{{ totalPages }}</strong></span>
+        </div>
+
+        <button class="btn-page" (click)="nextPage()" [disabled]="!hasNext">
+            Successiva <i class="bi-chevron-right"></i>
+        </button>
+    </div>
+</div>
+
+<div *ngIf="products.length === 0" class="no-results">
+    <p>Nessun prodotto trovato per la ricerca effettuata.</p>
+</div>

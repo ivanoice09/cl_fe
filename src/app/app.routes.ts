@@ -11,6 +11,7 @@ import { NotFound } from './pages/not-found/not-found';
 import { Cart } from './pages/cart/cart';
 import { AdminCustomer } from './features/admin/customers/admin-customer';
 import { AdminOrder } from './features/admin/orders/admin-order';
+import { AdminProduct } from './features/admin/products/admin-product/admin-product';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -39,6 +40,7 @@ export const routes: Routes = [
   },
   { path: 'admin/customers', component: AdminCustomer },
   { path: 'admin/orders', component: AdminOrder },
+  { path: 'admin/products', component: AdminProduct },
 
   { path: '404', component: NotFound },
   { path: '**', component: NotFound },
