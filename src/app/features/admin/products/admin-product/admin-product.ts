@@ -4,6 +4,7 @@ import { AdminProductHttp } from '../../../../shared/services/admin/admin-produc
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ProductDetailDto } from '../../../../shared/models/admin/products/ProductDetailDto';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin-product',
@@ -26,7 +27,7 @@ export class AdminProduct {
   hasPrevious = false;
   searchTerm: string = '';
 
-  constructor(private adminProductHttp: AdminProductHttp) {}
+  constructor(private adminProductHttp: AdminProductHttp, private router: Router) {}
 
   loadProducts() {
     this.adminProductHttp
@@ -74,7 +75,12 @@ export class AdminProduct {
     this.adminProductHttp.getProductDetail(productId).subscribe((detail) => {
       this.selectedProductId = productId;
       this.selectedProduct = detail;
-    })
+    });
+  }
+
+  goToEdit(productId: number, event: MouseEvent) {
+    event.stopPropagation();
+    this.router.navigate(['admin/products/edit', productId]);
   }
 
   deleteProduct(productId: number) {

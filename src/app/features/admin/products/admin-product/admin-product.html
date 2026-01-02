@@ -12,7 +12,7 @@
 <ul *ngIf="products.length > 0" class="product-list">
     <li *ngFor="let p of products" class="product-item">
         <!-- implementa il cliccaggio delle righe -->
-        <div class="product-row" (click)="selectProduct(p.productId)">
+        <div class="product-row" (click)="goToEdit(p.productId, $event)">
             <div class="product-info">
                 <span class="product-number">{{ p.productNumber }}</span>
                 <small class="product-name">{{ p.name }}</small>
@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="product-details-box" *ngIf="selectedProductId === p.productId && selectedProduct">
+        <!-- <div class="product-details-box" *ngIf="selectedProductId === p.productId && selectedProduct">
             <div *ngIf="!isEditing" class="view-header">
                 <h4>Dettagli Prodotto</h4>
                 <button class="btn-edit-small" (click)="startEdit()">Modifica</button>
@@ -38,14 +38,14 @@
 
             <div *ngIf="!isEditing" class="view-mode">
                 <p><strong>Id:</strong> {{ selectedProduct.productId }} </p>
-                <p><strong>Category:</strong> {{ selectedProduct.productCategoryId }} </p>
-                <p><strong>Model:</strong> {{ selectedProduct.productModelId }} </p>
+                <p><strong>Parent category:</strong> {{ selectedProduct.parentCategoryName }} </p>
+                <p><strong>Category:</strong> {{ selectedProduct.categoryName }} </p>
+                <p><strong>Model:</strong> {{ selectedProduct.modelName }} </p>
                 <p><strong>Product number:</strong> {{ selectedProduct.productNumber }} </p>
                 <p><strong>Name:</strong> {{ selectedProduct.name }} </p>
             </div>
+        </div> -->
 
-            <!-- Qua si dovrebbe fare il form -->
-        </div>
     </li>
 </ul>
 

@@ -16,4 +16,8 @@ export interface ProductDetailDto {
     sellStartDate: string;
     sellEndDate: string;
     discontinuedDate: string;
+    // Display-only fields
+    categoryName: string;
+    parentCategoryName: string;
+    modelName: string;
 }
