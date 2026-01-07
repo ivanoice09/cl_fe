@@ -6,7 +6,7 @@
                 ← Back to products
             </button>
             
-            <h2>Update product</h2>
+            <h2>Create new product</h2>
             
         </div>
 
@@ -24,7 +24,7 @@
             <div class="form-group">
                 <label for="model">Model</label>
                 <select class="form-control" formControlName="productModelId" id="model" name="model">
-                    <option [ngValue]="null">Select model</option>
+                    <option [ngValue]="null">-- Select model --</option>
                     <option *ngFor="let m of models" [ngValue]="m.productModelId">
                         {{ m.name }}
                     </option>
@@ -34,9 +34,6 @@
                 <label for="productNumber">Product Number</label>
                 <input type="text" class="form-control" formControlName="productNumber" id="productNumber"
                     name="productNumber">
-                <small class="text-muted" *ngIf="hasOrders">
-                    Not editable. Product has orders.
-                </small>
             </div>
             <div class="form-group">
                 <label for="name">Name</label>
@@ -111,39 +108,10 @@
             </div>
         </section>
 
-        <button class="btn btn-primary mt-3" type="submit" [disabled]="form.invalid || isSubmitting"
-            (click)="onUpdateClick()">
-            {{ isEditMode ? 'Update' : 'Create' }}
+        <button class="btn btn-primary mt-3" type="submit" [disabled]="form.invalid || isSubmitting">
+            Create
         </button>
 
     </form>
-
-    <!-- MODAL SHOW DIFFERENCE -->
-    <div class="modal-backdrop" *ngIf="isConfirmModalOpen">
-        <div class="modal-card">
-
-            <h3>Confirm changes</h3>
-
-            <ul class="changes-list">
-                <li *ngFor="let c of confirmationChanges">
-                    <strong>{{ c.label }}</strong>:
-                    <span class="before">{{ c.before }}</span>
-                    →
-                    <span class="after">{{ c.after }}</span>
-                </li>
-            </ul>
-
-            <div class="modal-actions">
-                <button class="btn btn-secondary" (click)="isConfirmModalOpen = false">
-                    Cancel
-                </button>
-
-                <button class="btn btn-primary" (click)="confirmUpdate()">
-                    Confirm update
-                </button>
-            </div>
-
-        </div>
-    </div>
 
 </div>

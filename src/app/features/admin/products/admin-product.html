@@ -7,6 +7,11 @@
             class="search-input" />
         <i class="bi bi-x-lg clear-icon" *ngIf="searchTerm" (click)="searchTerm = ''; onSearch()"></i>
     </div>
+    <div class="action-buttons">
+      <button class="btn btn-success" type="button" (click)="goToCreate($event)">
+        Create
+      </button>
+    </div>
 </div>
 
 <ul *ngIf="products.length > 0" class="customers-list">

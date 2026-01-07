@@ -55,27 +55,6 @@ export class EditForm {
     private router: Router,
   ) { }
 
-  scrollTo(id: string) {
-    const container = document.querySelector('.section-scrollspy') as HTMLElement;
-    const target = container?.querySelector('#' + id) as HTMLElement;
-
-    if (!container || !target) return;
-
-    const containerTop = container.getBoundingClientRect().top;
-    const targetTop = target.getBoundingClientRect().top;
-
-    const offset =
-      targetTop - containerTop +
-      container.scrollTop -
-      container.clientHeight / 2 +
-      target.clientHeight / 2;
-
-    container.scrollTo({
-      top: offset,
-      behavior: 'smooth'
-    });
-  }
-
   //-----------
   // functions:
   //-----------

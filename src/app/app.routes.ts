@@ -14,6 +14,7 @@ import { AdminOrder } from './features/admin/orders/admin-order';
 import { Products } from './features/admin/products/products';
 import { EditForm } from './features/admin/products/edit-form/edit-form';
 import { ProductFormResolver } from './shared/services/admin/product-form-resolver';
+import { CreateForm } from './features/admin/products/create-form/create-form';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -33,7 +34,7 @@ export const routes: Routes = [
   // Admin routes:
   { path: 'admin/products', component: Products },
   { path: 'admin/products/edit/:id', component: EditForm, resolve: { data: ProductFormResolver} },
-  { path: 'admin/products/create', component: EditForm, resolve: { data: ProductFormResolver} },
+  { path: 'admin/products/create', component: CreateForm, resolve: { data: ProductFormResolver} },
 
   { 
     path: 'profile', 
