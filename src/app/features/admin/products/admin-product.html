@@ -1,102 +1,135 @@
-<h2 class="customer-title">Product List (Admin)</h2>
-
-<div class="search-container">
-    <div class="search-box">
-        <i class="bi bi-search"></i>
-        <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Cerca per nome o cognome..."
-            class="search-input" />
-        <i class="bi bi-x-lg clear-icon" *ngIf="searchTerm" (click)="searchTerm = ''; onSearch()"></i>
-    </div>
+<div class="admin-product-header">
+  <div class="container-header">
+    <h2 class="customer-title">Product List (Admin)</h2>
     <div class="action-buttons">
-      <button class="btn btn-success" type="button" (click)="goToCreate($event)">
+
+      <button title="create new product" class="btn btn-success my-btn-create" type="button" (click)="goToCreate($event)">
         Create
       </button>
+
+      <div class="dropdown">
+        <button class="btn btn-secondary dropdown-toggle my-dropdown" type="button" data-bs-toggle="dropdown"
+          aria-expanded="false">
+          Sort by: {{ sortLabel }}
+        </button>
+
+        <ul class="dropdown-menu">
+          <li>
+            <button class="dropdown-item" (click)="applySort('name')">
+              Name
+            </button>
+          </li>
+
+          <li>
+            <button class="dropdown-item" (click)="applySort('price')">
+              Price
+            </button>
+          </li>
+
+          <li>
+            <button class="dropdown-item" (click)="applySort('category')">
+              Sub Category
+            </button>
+          </li>
+
+          <li>
+            <button class="dropdown-item" (click)="applySort('parentcategory')">
+              Parent Category
+            </button>
+          </li>
+
+          <li>
+            <button class="dropdown-item" (click)="applySort('modifieddate')">
+              Modified Date
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
+  </div>
 </div>
 
-<ul *ngIf="products.length > 0" class="customers-list">
-    <li *ngFor="let p of products" class="customer-item">
-        <div class="customer-row" (click)="goToEdit(p.productId, $event)">
-            <div class="product-info">
-                <span class="customer-name">{{ p.productNumber }} </span>
-                <small class="order-date">{{ p.name }}</small>
-            </div>
+<div class="search-container">
+  <div class="search-box">
+    <i class="bi bi-search"></i>
+    <input type="text" [(ngModel)]="searchTerm" (input)="onSearch()" placeholder="Cerca per product number or name..."
+      class="search-input" />
+    <i class="bi bi-x-lg clear-icon" *ngIf="searchTerm" (click)="searchTerm = ''; onSearch()"></i>
+  </div>
+</div>
 
-            <div class="row-actions">
-                <button class="btn-delete-small" (click)="deleteProduct(p.productId); $event.stopPropagation()">
-                    Elimina
-                </button>
-            </div>
-        </div>
-
-        <!-- <div
-      class="customer-details-box"
-      *ngIf="selectedCustomerId === c.customerId && selectedCustomer"
-    >
-      <div *ngIf="!isEditing" class="view-header">
-        <h4>Dettagli Cliente</h4>
-        <button class="btn-edit-small" (click)="startEdit()">Modifica</button>
+<ul *ngIf="products.length > 0" class="product-list">
+  <li *ngFor="let p of products" class="product-item">
+    <div class="product-row" title="click to show details" (click)="selectProduct(p.productId)">
+      <div class="product-info">
+        <span class="product-name">{{ p.name }} </span>
+        <small class="product-number">{{ p.productNumber }}</small>
       </div>
 
-      <div class="edit-actions" *ngIf="isEditing">
-        <button class="btn-save" (click)="save()" [disabled]="editForm.invalid">Salva</button>
-        <button class="btn-cancel" (click)="isEditing = false">Annulla</button>
+      <div class="row-actions">
+        <button class="btn-edit-small" (click)="goToEdit(p.productId, $event)">
+          Modify
+        </button>
+        <button class="btn-delete-small" (click)="deleteProduct(p.productId); $event.stopPropagation()">
+          Delete
+        </button>
       </div>
-
-      <div *ngIf="!isEditing" class="view-mode">
-        <p><strong>Email:</strong> {{ selectedCustomer.emailAddress }}</p>
-        <p><strong>Telefono:</strong> {{ selectedCustomer.phone }}</p>
-
-        <div *ngIf="selectedCustomer.addresses && selectedCustomer.addresses.length > 0">
-          <h4>Indirizzi:</h4>
-          <ul class="address-list">
-            <li *ngFor="let addr of selectedCustomer.addresses">
-              {{ addr.addressLine1 }} - {{ addr.city }} ({{ addr.postalCode }})
-            </li>
-          </ul>
-        </div>
-      </div> -->
-
-        <!-- <form *ngIf="isEditing" [formGroup]="editForm" class="edit-form">
-        <div class="edit-grid">
-          <div class="field">
-            <label>Nome</label>
-            <input formControlName="firstName" />
-          </div>
-          <div class="field">
-            <label>Cognome</label>
-            <input formControlName="lastName" />
-          </div>
-          <div class="field">
-            <label>Email</label>
-            <input formControlName="emailAddress" />
-          </div>
-          <div class="field">
-            <label>Telefono</label>
-            <input formControlName="phone" />
-          </div>
-        </div>
-      </form> 
     </div>
-  </li>-->
+
+    <div class="product-details-box" *ngIf="selectedProductId === p.productId && selectedProduct">
+      <div class="view-header">
+        <h4>General</h4>
+      </div>
+      <div class="view-details">
+        <p><strong>Parent category: </strong> {{ selectedProduct.productParentCategoryName }}</p>
+        <p><strong>Sub category: </strong> {{ selectedProduct.productCategoryName }}</p>
+        <p><strong>Model: </strong>{{ selectedProduct.productModelName }}</p>
+        <p><strong>Number: </strong>{{ selectedProduct.productNumber }}</p>
+        <p><strong>Name: </strong>{{ selectedProduct.name }}</p>
+      </div>
+      <div class="view-header">
+        <h4>Pricing</h4>
+      </div>
+      <div class="view-details">
+        <p><strong>List price: </strong>{{ selectedProduct.listPrice }}</p>
+        <p><strong>Standard cost: </strong>{{ selectedProduct.standardCost }}</p>
+      </div>
+      <div class="view-header">
+        <h4>Attributes</h4>
+      </div>
+      <div class="view-details">
+        <p><strong>Color: </strong>{{ selectedProduct.color || 'undefined' }}</p>
+        <p><strong>Size: </strong>{{ selectedProduct.size || 'undefined' }}</p>
+        <p><strong>Weight: </strong>{{ selectedProduct.weight || 'undefined' }}</p>
+      </div>
+      <div class="view-header">
+        <h4>Availability:</h4>
+      </div>
+      <div class="view-details">
+        <p><strong>Sell start date: </strong>{{ selectedProduct.sellStartDate }}</p>
+        <p><strong>Sell end date: </strong>{{ selectedProduct.sellEndDate || 'undefined' }}</p>
+        <p><strong>Discontinued date: </strong>{{ selectedProduct.discontinuedDate || 'undefined' }}</p>
+      </div>
+    </div>
+  </li>
 </ul>
 
 <div *ngIf="products.length > 0" class="pagination-container">
-    <div class="pagination-wrapper">
-        <button class="btn-pag" (click)="prevPage()" [disabled]="!hasPrevious">
-            <i class="bi bi-chevron-left"></i> Precedente
-        </button>
+  <div class="pagination-wrapper">
+    <button class="btn-pag" (click)="prevPage()" [disabled]="!hasPrevious">
+      <i class="bi bi-chevron-left"></i> Precedente
+    </button>
 
-        <div class="page-counter">
-            <span>Pagina <strong>{{ page }}</strong> di <strong>{{ totalPages }}</strong></span>
-        </div>
-
-        <button class="btn-pag" (click)="nextPage()" [disabled]="!hasNext">
-            Successiva <i class="bi bi-chevron-right"></i>
-        </button>
+    <div class="page-counter">
+      <span>Pagina <strong>{{ page }}</strong> di <strong>{{ totalPages }}</strong></span>
     </div>
+
+    <button class="btn-pag" (click)="nextPage()" [disabled]="!hasNext">
+      Successiva <i class="bi bi-chevron-right"></i>
+    </button>
+  </div>
 </div>
 
 <div *ngIf="products.length === 0" class="no-results">
-    <p>Nessun cliente trovato per la ricerca effettuata.</p>
+  <p>Nessun cliente trovato per la ricerca effettuata.</p>
 </div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, share, shareReplay } from 'rxjs';
-import { AdminCategoryDto } from '../../models/AdminCategoryDto';
-import { AdminProductModelDto } from '../../models/AdminProductModelDto';
+import { AdminCategoryDto } from '../../models/admin/product/AdminProductCategoryDto';
+import { AdminProductModelDto } from '../../models/admin/product/AdminProductModelDto';
 import { AdminProductHttp } from './admin-product-http';
 
 @Injectable({

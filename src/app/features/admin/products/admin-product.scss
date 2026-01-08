@@ -1,22 +1,69 @@
-/* --- TITOLO --- */
-.customer-title {
-  color: #1e1e1e;
-  font-weight: bold;
-  margin: 20px 0 25px 10px;
-  text-align: center;
+.admin-product-header {
+  display: flex;
+  justify-content: center;
+
+  // justify-content: space-evenly;
+  // gap: 10px;
+  // padding: 10px;
+  .container-header {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+
+    /* --- TITOLO --- */
+    .customer-title {
+      color: #1e1e1e;
+      font-weight: bold;
+      margin: 20px 0 25px 10px;
+      text-align: center;
+    }
+
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      // border: 1px solid #eee;
+      // box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      // border-radius: 50px;
+      gap: 8px;
+      padding: 0px 10px;
+
+      // .btn-create {
+      //   border-radius: 20px;
+      //   border: none;
+      //   background-color: green;
+      //   font-weight: bold;
+      //   font-size: 12px;
+      //   color: #f0f0f0;
+      //   padding: 6px 14px;
+      // }
+
+      // .btn-toggle-mode {
+      //   border-radius: 20px;
+      //   border: none;
+      //   background-color: gray;
+      //   font-weight: bold;
+      //   font-size: 12px;
+      //   color: #f0f0f0;
+      //   padding: 6px 14px;
+      // }
+
+
+    }
+  }
 }
 
 /* --- RICERCA (Pillola superiore) --- */
 .search-container {
   display: flex;
   justify-content: center;
-  margin: 20px 0 30px 0;
+  margin: 5px 0 30px 0;
 
   .search-box {
     position: relative;
-    width: 65%;
     display: flex;
     align-items: center;
+    width: 70%;
 
     i.bi-search {
       position: absolute;
@@ -45,6 +92,7 @@
       right: 20px;
       cursor: pointer;
       color: #ccc;
+
       &:hover {
         color: #ff5700;
       }
@@ -52,13 +100,14 @@
   }
 }
 
+
 /* --- LISTA E ITEM --- */
-.customers-list {
+.product-list {
   list-style: none;
   padding: 0;
 }
 
-.customer-item {
+.product-item {
   background: #ffffff;
   border-radius: 14px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
@@ -67,7 +116,7 @@
   border: 1px solid #eee;
   width: 70%;
 
-  .customer-row {
+  .product-row {
     padding: 15px 25px;
     display: flex;
     justify-content: space-between;
@@ -77,7 +126,8 @@
 
     &:hover {
       background-color: #fcfcfc;
-      .customer-name {
+
+      .product-info .product-name {
         color: #ff5700;
       }
     }
@@ -86,13 +136,13 @@
       display: flex;
       flex-direction: column;
 
-      .customer-name {
+      .product-name {
         font-weight: 600;
         font-size: 1rem;
         color: #1e1e1e;
       }
 
-      .order-date {
+      .product-number {
         color: #95a5a6;
         font-size: 0.85rem;
       }
@@ -105,6 +155,21 @@
   display: flex;
   gap: 8px;
 
+  .btn-edit-small {
+    background-color: #7f7f7f;
+    color: white;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #ff5700;
+    }
+  }
+
   .btn-delete-small {
     border: none;
     padding: 6px 14px;
@@ -115,6 +180,7 @@
     color: white;
     background-color: #ff4d4d;
     transition: 0.2s;
+
     &:hover {
       background-color: #cc3d3d;
     }
@@ -122,7 +188,7 @@
 }
 
 /* --- BOX DETTAGLIO --- */
-.customer-details-box {
+.product-details-box {
   padding: 20px 25px;
   border-top: 1px solid #eee;
   background-color: #fdfdfd;
@@ -131,8 +197,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
     border-bottom: 1px solid #f0f0f0;
 
     h4 {
@@ -141,20 +207,13 @@
       color: #7f8c8d;
       text-transform: uppercase;
     }
+  }
 
-    .btn-edit-small {
-      background-color: #1e1e1e;
-      color: white;
-      border: none;
-      padding: 6px 16px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      cursor: pointer;
-      &:hover {
-        background-color: #ff5700;
-      }
-    }
+  .view-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-bottom: 15px;
   }
 
   .edit-actions {
@@ -172,12 +231,15 @@
 
       &.btn-save {
         background-color: #ff5700;
+
         &:hover {
           background-color: #e64e00;
         }
       }
+
       &.btn-cancel {
         background-color: #7f8c8d;
+
         &:hover {
           background-color: #666;
         }
@@ -206,6 +268,7 @@
     border-radius: 10px;
     border: 1px solid #ccc;
     outline: none;
+
     &:focus {
       border-color: #ff5700;
     }
@@ -259,6 +322,7 @@
   .page-counter {
     color: #1e1e1e;
     font-size: 15px;
+
     strong {
       color: #ff5700;
     }
@@ -267,6 +331,7 @@
 
 /* --- RESPONSIVE --- */
 @media (max-width: 768px) {
+
   .customer-item,
   .search-box {
     width: 90%;
@@ -277,9 +342,11 @@
   .edit-grid {
     grid-template-columns: 1fr;
   }
+
   .pagination-wrapper {
     gap: 10px;
     padding: 8px 15px;
+
     .btn-pag {
       padding: 8px 10px;
       font-size: 12px;

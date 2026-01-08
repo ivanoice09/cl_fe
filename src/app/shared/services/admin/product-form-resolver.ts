@@ -20,7 +20,7 @@ export class ProductFormResolver implements Resolve<any> {
     return forkJoin({
       categories: this.referenceData.getCategories(),
       models: this.referenceData.getModels(),
-      product: id ? this.adminProductHttp.getProduct(+id) : of(null)
+      product: id ? this.adminProductHttp.getProductToEdit(+id) : of(null)
     });
   }
 }

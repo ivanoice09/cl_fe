@@ -4,6 +4,8 @@ import { AdminProductHttp } from '../../../shared/services/admin/admin-product-h
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AdminProductListDto } from '../../../shared/models/admin/product/AdminProductListDto';
+import { AdminProductDetailDto } from '../../../shared/models/admin/product/AdminProductDetailDto';
 
 @Component({
   selector: 'app-products',
@@ -13,19 +15,26 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   styleUrl: './admin-product.scss',
 })
 export class Products implements OnInit {
-  products: ProductList[] = [];
+  products: AdminProductListDto[] = [];
 
   page = 1;
-  pageSize = 15;
+  pageSize = 20;
   totalPages = 0;
-
-  activeProductId: number | null = null;
-
   hasNext = false;
   hasPrevious = false;
   searchTerm: string = '';
+  activeProductId: number | null = null;
+  sortBy: string = 'name';
+  sortDirection: 'asc' | 'desc' = 'asc';
+  sortLabel = 'Name';
+  isLoading = false;
+  modifiedFrom?: Date;
+  modifiedTo?: Date;
 
-  constructor(private productService: AdminProductHttp, private router: Router) {}
+  selectedProduct?: AdminProductDetailDto;
+  selectedProductId?: number;
+
+  constructor(private http: AdminProductHttp, private router: Router) { }
 
   goToEdit(productId: number, event: MouseEvent) {
     event.stopPropagation();
@@ -45,6 +54,7 @@ export class Products implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
+    console.log(this.selectedProduct);
   }
 
   onSearch() {
@@ -52,15 +62,79 @@ export class Products implements OnInit {
     this.loadProducts();
   }
 
-  loadProducts() {
-    this.productService
-      .getProductList(this.page, this.pageSize, this.searchTerm)
-      .subscribe((res) => {
-        this.products = res.items;
-        this.totalPages = res.totalPages;
-        this.hasNext = res.hasNext;
-        this.hasPrevious = res.hasPrevious;
+  loadProducts(): void {
+    this.isLoading = true;
+
+    this.http
+      .getProductList(
+        this.page,
+        this.pageSize,
+        this.sortBy,
+        this.sortDirection,
+        this.searchTerm,
+      )
+      .subscribe({
+        next: (res) => {
+          this.products = res.items ?? [];
+          this.totalPages = res.totalPages;
+          this.hasNext = res.hasNext;
+          this.hasPrevious = res.hasPrevious;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('GET /products ERROR:', err);
+          this.isLoading = false;
+        }
       });
+  }
+
+  applySort(column: string): void {
+    if (this.sortBy === column) {
+      // toggle direction
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortBy = column;
+      this.sortDirection = 'asc';
+    }
+
+    this.sortLabel = this.getSortLabel(column, this.sortDirection);
+    this.page = 1; // reset pagination
+    this.loadProducts();
+  }
+
+  private getSortLabel(
+    column: string,
+    direction: 'asc' | 'desc'
+  ): string {
+    const arrow = direction === 'asc' ? '↑' : '↓';
+
+    switch (column) {
+      case 'name':
+        return `Name ${arrow}`;
+      case 'price':
+        return `Price ${arrow}`;
+      case 'category':
+        return `Category ${arrow}`;
+      case 'parentcategory':
+        return `Parent Category ${arrow}`;
+      case 'modifieddate':
+        return `Modified Date ${arrow}`; 
+      default:
+        return `ID ${arrow}`;
+    }
+  }
+
+  selectProduct(productId: number) {
+    if (this.selectedProductId === productId) {
+      this.selectedProductId = undefined;
+      this.selectedProduct = undefined;
+      return;
+    }
+
+    this.http.getProductDetail(productId).subscribe((detail) => {
+      this.selectedProductId = productId;
+      this.selectedProduct = detail;
+    });
   }
 
   nextPage() {

@@ -5,18 +5,28 @@
             <button class="btn btn-link" routerLink="/admin/products">
                 ← Back to products
             </button>
-            
+
             <h2>Update product</h2>
-            
+
         </div>
 
         <section class="form-section">
             <h3>General</h3>
             <div class="form-group">
-                <label for="category">Category</label>
-                <select class="form-control" formControlName="productCategoryId" id="category" name="category">
-                    <option [ngValue]="null">-- Select category --</option>
-                    <option *ngFor="let c of categories" [ngValue]="c.productCategoryId">
+                <label for="parentCategory">Parent category</label>
+                <select class="form-control" id="parentCategory" formControlName="parentCategoryId"
+                    (change)="onParentCategoryChange()">
+                    <option [ngValue]="null">-- Select parent category --</option>
+                    <option *ngFor="let p of parentCategories" [ngValue]="p.productCategoryId">
+                        {{ p.name }}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="category">Sub category</label>
+                <select class="form-control" id="category" formControlName="productCategoryId">
+                    <option [ngValue]="null">-- Select sub category --</option>
+                    <option *ngFor="let c of filteredSubCategories" [ngValue]="c.productCategoryId">
                         {{ c.name }}
                     </option>
                 </select>
@@ -113,7 +123,7 @@
 
         <button class="btn btn-primary mt-3" type="submit" [disabled]="form.invalid || isSubmitting"
             (click)="onUpdateClick()">
-            {{ isEditMode ? 'Update' : 'Create' }}
+            Update
         </button>
 
     </form>

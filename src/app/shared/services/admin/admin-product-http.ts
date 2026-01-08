@@ -1,12 +1,15 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AdminProductEditDto } from '../../models/AdminProductEditDto';
-import { AdminCategoryDto } from '../../models/AdminCategoryDto';
-import { AdminProductModelDto } from '../../models/AdminProductModelDto';
-import { AdminProductUpdateDto } from '../../models/AdminProductUpdateDto';
+import { AdminProductEditDto } from '../../models/admin/product/AdminProductEditDto';
+import { AdminCategoryDto } from '../../models/admin/product/AdminProductCategoryDto';
+import { AdminProductModelDto } from '../../models/admin/product/AdminProductModelDto';
+import { AdminProductUpdateDto } from '../../models/admin/product/AdminProductUpdateDto';
 import { ProductList } from '../../models/ProductList';
 import { Page } from '../../models/Page';
+import { AdminProductCreateDto } from '../../models/admin/product/AdminProductCreateDto';
+import { AdminProductDetailDto } from '../../models/admin/product/AdminProductDetailDto';
+import { AdminProductListDto } from '../../models/admin/product/AdminProductListDto';
 
 @Injectable({
   providedIn: 'root',
@@ -14,37 +17,43 @@ import { Page } from '../../models/Page';
 export class AdminProductHttp {
   private readonly apiUrl = 'https://localhost:7000/api/admin/products';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  // getProducts(
-  //   page: number,
-  //   pageSize: number,
-  //   sortBy?: string,
-  //   sortDirection?: 'asc' | 'desc'
-  // ) {
-  //   return this.http.get<any>(this.apiUrl, {
-  //     params:  {
-  //       pageNumber: page,
-  //       pageSize: pageSize,
-  //       sortBy: sortBy ?? '',
-  //       sortDirection: sortDirection ?? 'asc'
-  //     }
-  //   });
-  // }
+  getProductList(
+    page: number,
+    pageSize: number,
+    sortBy?: string,
+    sortDirection?: 'asc' | 'desc',
+    search?: string
+  ): Observable<Page<AdminProductListDto>> {
 
-  getProductList(page: number, pageSize: number, search?: string): Observable<Page<ProductList>> {
-    let url = `${this.apiUrl}/?page=${page}&pageSize=${pageSize}`;
+    let params = new HttpParams()
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
 
-    // Se 'search' esiste e non è una stringa vuota, la aggiungiamo all'URL
+    // search
     if (search && search.trim() !== '') {
-      url += `&search=${encodeURIComponent(search)}`;
+      params = params.set('search', search.trim());
     }
 
-    return this.http.get<Page<ProductList>>(url);
+    // sorting
+    if (sortBy) {
+      params = params.set('sortBy', sortBy);
+    }
+
+    if (sortDirection) {
+      params = params.set('sortDirection', sortDirection);
+    }
+
+    return this.http.get<Page<ProductList>>(this.apiUrl, { params });
   }
 
-  getProduct(id: number): Observable<AdminProductEditDto> {
-    return this.http.get<AdminProductEditDto>(`${this.apiUrl}/${id}`);
+  getProductDetail(productId: number): Observable<AdminProductDetailDto> {
+    return this.http.get<AdminProductDetailDto>(`${this.apiUrl}/GetProductDetail/${productId}`);
+  }
+
+  getProductToEdit(productId: number): Observable<AdminProductEditDto> {
+    return this.http.get<AdminProductEditDto>(`${this.apiUrl}/GetProductToEdit/${productId}`);
   }
 
   getCategories() {
@@ -55,8 +64,13 @@ export class AdminProductHttp {
     return this.http.get<AdminProductModelDto[]>(`${this.apiUrl}/models`);
   }
 
-  // Update call
+  // UPDATE
   updateProduct(dto: AdminProductUpdateDto) {
     return this.http.put(`${this.apiUrl}/${dto.productId}`, dto);
+  }
+
+  // CREATE
+  createProduct(dto: AdminProductCreateDto) {
+    return this.http.post<number>(this.apiUrl, dto);
   }
 }

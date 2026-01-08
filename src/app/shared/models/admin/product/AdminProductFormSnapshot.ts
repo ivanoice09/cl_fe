@@ -1,4 +1,5 @@
 interface AdminProductFormSnapshot {
+  parentCategoryId: number | null;
   productCategoryId: number | null;
   productModelId: number | null;
   productNumber: string;

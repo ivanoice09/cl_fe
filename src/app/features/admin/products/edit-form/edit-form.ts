@@ -1,4 +1,4 @@
-import { AfterViewInit, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,10 +11,12 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { AdminProductUpdateDto } from '../../../../shared/models/AdminProductUpdateDto';
-import { AdminProductEditDto } from '../../../../shared/models/AdminProductEditDto';
+import { AdminProductUpdateDto } from '../../../../shared/models/admin/product/AdminProductUpdateDto';
+import { AdminProductEditDto } from '../../../../shared/models/admin/product/AdminProductEditDto';
 import { AlertService } from '../../../../shared/services/alert-service';
 import { AdminProductHttp } from '../../../../shared/services/admin/admin-product-http';
+import { AdminCategoryDto } from '../../../../shared/models/admin/product/AdminProductCategoryDto';
+import { AdminProductModelDto } from '../../../../shared/models/admin/product/AdminProductModelDto';
 
 @Component({
   selector: 'app-edit-form',
@@ -27,11 +29,17 @@ export class EditForm {
   // Variables
   form!: FormGroup;
 
-  isEditMode = false;
+  // isEditMode = false;
   hasOrders = false;
 
-  categories: any[] = [];
-  models: any[] = [];
+  // raw
+  categories: AdminCategoryDto[] = [];
+  models: AdminProductModelDto[] = [];
+
+  // derived (UI-only)
+  parentCategories: AdminCategoryDto[] = [];
+  subCategories: AdminCategoryDto[] = [];
+  filteredSubCategories: AdminCategoryDto[] = [];
 
   productCategoryId: number | null = null;
 
@@ -68,11 +76,14 @@ export class EditForm {
     this.categories = data.categories;
     this.models = data.models;
 
+    this.initCategoryHierarchy();
+
     this.setupCategoryAutoSync();
 
     // edit mode
     if (data.product) {
       this.enterEditMode(data.product);
+      this.patchCategoryForEdit(data.product.productCategoryId);
     }
   }
 
@@ -113,6 +124,25 @@ export class EditForm {
     });
   }
 
+  onParentCategoryChange() {
+    const parentId = this.form.get('parentCategoryId')?.value;
+
+    if (!parentId) {
+      this.filteredSubCategories = [];
+      this.form.get('productCategoryId')?.reset();
+      this.form.get('productCategoryId')?.disable();
+      return;
+    }
+
+    this.filteredSubCategories = this.subCategories.filter(
+      c => c.parentProductCategoryId === parentId
+    );
+
+    this.form.get('productCategoryId')?.enable();
+    this.form.get('productCategoryId')?.reset();
+  }
+
+
   //-----------------
   // Private methods:
   //-----------------
@@ -121,7 +151,8 @@ export class EditForm {
     this.form = this.fb.group(
       {
         // General
-        productCategoryId: [null, Validators.required],
+        parentCategoryId: [{ value: null, disabled: false }, Validators.required],
+        productCategoryId: [{ value: null, disabled: false }, Validators.required],
         productModelId: [null],
         productNumber: ['', Validators.required],
         name: ['', Validators.required],
@@ -147,7 +178,7 @@ export class EditForm {
   }
 
   private enterEditMode(product: AdminProductEditDto & any) {
-    this.isEditMode = true;
+    // this.isEditMode = true;
     this.hasOrders = product.hasOrders;
     this.currentProductId = product.productId; // IMPORTANT
 
@@ -164,6 +195,7 @@ export class EditForm {
 
   private mapEditDtoToSnapshot(product: AdminProductEditDto & any): AdminProductFormSnapshot {
     return {
+      parentCategoryId: product.parentCategoryId,
       productCategoryId: product.productCategoryId,
       productModelId: product.productModelId,
       productNumber: product.productNumber,
@@ -186,6 +218,7 @@ export class EditForm {
     const raw = this.form.getRawValue();
 
     return {
+      parentCategoryId: raw.parentCategoryId,
       productCategoryId: raw.productCategoryId,
       productModelId: raw.productModelId,
       productNumber: raw.productNumber,
@@ -285,7 +318,8 @@ export class EditForm {
 
     addIfChanged('name', 'Name');
     addIfChanged('productNumber', 'Product number');
-    addIfChanged('productCategoryId', 'Category', (id) => this.getProductCategoryName(id));
+    addIfChanged('parentCategoryId', 'Parent category', (id) => this.getProductCategoryName(id));
+    addIfChanged('productCategoryId', 'Sub category', (id) => this.getProductCategoryName(id));
     addIfChanged('productModelId', 'Model', (id) => this.getProductModelName(id));
     addIfChanged('standardCost', 'Standard cost');
     addIfChanged('listPrice', 'List price');
@@ -298,7 +332,36 @@ export class EditForm {
 
     return changes;
   }
-}
+
+  private initCategoryHierarchy() {
+    this.parentCategories = this.categories.filter(
+      c => c.parentProductCategoryId === null
+    );
+
+    this.subCategories = this.categories.filter(
+      c => c.parentProductCategoryId !== null
+    );
+  }
+
+  private patchCategoryForEdit(subCategoryId: number) {
+    const sub = this.subCategories.find(
+      c => c.productCategoryId === subCategoryId
+    );
+    if (!sub) return;
+
+    const parentId = sub.parentProductCategoryId;
+
+    this.form.patchValue({
+      parentCategoryId: parentId,
+    });
+
+    this.onParentCategoryChange();
+
+    this.form.patchValue({
+      productCategoryId: subCategoryId,
+    });
+  }
+} // Outside the class
 
 // Custom validators
 export const priceConsistencyValidator: ValidatorFn = (
