@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { LoginCredentials } from '../../../shared/models/LoginCredentials';
 import { LoginHttp } from '../../../shared/services/login-http';
 import { HttpStatusCode } from '@angular/common/http';
 import * as jwt_decode from 'jwt-decode';
@@ -36,6 +35,13 @@ export class Login {
     private alertService: AlertService
   ) {}
 
+  ngOnInit() {
+    const savedEmail = localStorage.getItem('userEmail');
+    if (savedEmail) {
+      this.loginForm.patchValue({email:savedEmail})
+    }
+  }
+
   loginBackend(remember?: HTMLInputElement) {
     this.submitted = true;
 
@@ -56,13 +62,15 @@ export class Login {
             const persistent = remember ? remember.checked : true;
             this.auth.SetJwtInfo(true, this.jwtToken, this.jwtTokenPayload.email, persistent);
 
-            console.log('Decoded JWT payload:', this.jwtTokenPayload);
-            console.log('Customer ID from token:', this.jwtTokenPayload.CustomerId);
-            console.log('Email from token:', this.jwtTokenPayload.email);
-            console.log('Role from token:', this.jwtTokenPayload.role);
-            console.log('Expiration from token:', this.jwtTokenPayload.exp);
-            console.log('Issuer from token:', this.jwtTokenPayload.iss);
-            console.log('Audience from token:', this.jwtTokenPayload.aud);
+            // Decommentare per vedere dal console i valori ritornati nel token:
+
+            // console.log('Decoded JWT payload:', this.jwtTokenPayload);
+            // console.log('Customer ID from token:', this.jwtTokenPayload.CustomerId);
+            // console.log('Email from token:', this.jwtTokenPayload.email);
+            // console.log('Role from token:', this.jwtTokenPayload.role);
+            // console.log('Expiration from token:', this.jwtTokenPayload.exp);
+            // console.log('Issuer from token:', this.jwtTokenPayload.iss);
+            // console.log('Audience from token:', this.jwtTokenPayload.aud);
 
             this.router.navigate(['/profile']);
             this.alertService.showAlert('logged in successfully', 'success');
@@ -79,7 +87,7 @@ export class Login {
       },
       error: (err) => {
 
-        // Wrong email or password
+        // email e password sbagliato
         if (err.status === 401) { 
           this.alertService.showAlert('Invalid email or password', 'error');
           this.wrongCredentials = true;
@@ -88,23 +96,18 @@ export class Login {
           return;
         }
 
-        // Force reset password
+        // se il client incontra l'errore 409 (conflict) fa uscire un modal
+        // che chiederà all'utente di cambiare la password
         if (err.status === 409 && err.error?.requiresPasswordUpdate) {
           localStorage.setItem('userEmail', email);
           this.showResetPasswordModal = true;
           return;
         }
-
-        // console.error('Login failed with status:', err.status);
       },
 
     });
 
   }
-
-  //------------------
-  // Useful functions:
-  //------------------
 
   togglePasswordVisibility() {
     this.showPassword = !this.showPassword;
@@ -113,13 +116,6 @@ export class Login {
   goToResetPassword() {
     this.showResetPasswordModal = false;
     this.router.navigate(['/reset-password']);
-  }
-
-  ngOnInit() {
-    const savedEmail = localStorage.getItem('userEmail');
-    if (savedEmail) {
-      this.loginForm.patchValue({email:savedEmail})
-    }
   }
 
   clearErrors() {
